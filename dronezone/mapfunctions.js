@@ -66,3 +66,6 @@ function sortCoordinates(coords) {
 }
 
 map.on('click', onMapClick);
+
+// Temporary for adding markers in future
+var marker = L.marker([59.3293, 18.0686]).addTo(map);
