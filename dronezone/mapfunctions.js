@@ -116,8 +116,6 @@ function isPointInForbiddenZone(point) {
 }
 
 function onMapClick(e) {
-
-    
     if (circleLimit) {
         return;
     }
@@ -129,7 +127,7 @@ function onMapClick(e) {
                     circles[i].remove();
                     coords.splice(i, 1);
                     circles.splice(i, 1);
-                    if (pathSegments[i] != null) pathSegments[i].remove();
+                    if (pathSegments[i]) pathSegments[i].remove();
                     pathSegments.splice(i, 1);
                     drawPolyline(coords);
                     return;
@@ -138,7 +136,7 @@ function onMapClick(e) {
                 circleLimit = true;
                 circles = [];
                 return;
-            }
+                }
             }
         }
     }
@@ -156,7 +154,7 @@ function onMapClick(e) {
                 circleLimit = true;
                 forbiddenCircles = [];
                 return;
-            }
+                }
             }
         }
     }
@@ -201,12 +199,9 @@ function onMapClick(e) {
         circleLimit = true;
         circles = [];
     }
-    
-    
 }
 
 function onButtonClick() {
-
     if(removeButtonIsOn){
         removeButtonIsOn= false;
 
@@ -218,29 +213,24 @@ function onButtonClick() {
     }
 }
 
+map.on('click', onMapClick);
+
 var lastPolyline;
 function drawPolyline(coords) {
-    
-    if (lastPolyline != null) lastPolyline.remove();
+    if (lastPolyline) lastPolyline.remove();
    
-    sortCoordinates(coords);
     lastPolyline = L.polyline(coords).addTo(map);
     updatePathSegments();
 }
 
 var lastPolygon;
 function drawForbiddenPoly(coords) {
-    
-    if (lastPolygon != null) lastPolygon.remove();
+    if (lastPolygon) lastPolygon.remove();
    
     sortCoordinates(coords);
     lastPolygon = L.polygon(coords, {color: 'red', fillColor: '#f03'}).addTo(map);
     
-    // Add the polygon to our array of forbidden polygons
-    if (coords.length >= 3) {
-        // Store the polygon in our array
-        forbiddenPolygons.push(lastPolygon);
-    }
+    forbiddenPolygons.push(lastPolygon);
 }
 
 // Function to calculate the centroid of a set of coordinates
@@ -265,10 +255,9 @@ function calculateAngle(point, center) {
 
 // Function to sort the coordinates in counterclockwise order
 function sortCoordinates(coords) {
-    // Step 1: Calculate the centroid
     const centroid = calculateCentroid(coords);
 
-    // Step 2: Sort the points by angle relative to the centroid
+    // Sort the points by angle relative to the centroid
     circles.sort(function(a, b) {
         let angleA = calculateAngle(a, centroid);
         let angleB = calculateAngle(b, centroid);
@@ -277,11 +266,6 @@ function sortCoordinates(coords) {
 
     return coords;
 }
-
-map.on('click', onMapClick);
-
-// Temporary for adding markers in future
-var marker = L.marker([59.3293, 18.0686]).addTo(map);
 
 function onForbiddenClick() {
     if(forbiddenZoneDrawing){
