@@ -1,8 +1,11 @@
+import { Footer } from "@/componets/footer";
+import { Header } from "@/componets/header";
 
 export function AboutUs() {
   return (
     <div>
-      <h1>About Us</h1>
+      <Header />
+      <Footer />
     </div>
   )
 }
