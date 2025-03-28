@@ -5,29 +5,35 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var numOfCircles = 5;
-var indx = 0;
-let coords = new Array (numOfCircles);
+var maxCircles = 5;
+let coords = [];
+var circleRadius = 20;
 function onMapClick(e) {
-    if (indx < numOfCircles) {
-        coords[indx++] = e.latlng;
-        var circle = L.circle(e.latlng, {
-            color: 'blue',
-            fillColor: '#5224',
-            fillOpacity: 0.5,
-            radius: 20
-        }).addTo(map);
+    for (var i = 0; i < coords.length; i++) {
+        if (coords[i].distanceTo(e.latlng) <= circleRadius * 2) {
+            drawPolygon(coords);
+            coords = [];
+            return;
+        }
     }
-    else {
+
+    coords.push(e.latlng);
+    var circle = L.circle(e.latlng, {
+        color: 'blue',
+        fillColor: '#5224',
+        fillOpacity: 0.5,
+        radius: circleRadius
+    }).addTo(map);
+
+    if (coords.length == maxCircles) {
         drawPolygon(coords);
-        indx = 0;
+        coords = [];
     }
 }
 
 function drawPolygon(coords) {
     sortCoordinates(coords);
-    var latlngs = [coords[0],coords[1],coords[2],coords[3],coords[4]];
-    var polygon = L.polygon(latlngs).addTo(map);
+    L.polygon(coords).addTo(map);
 }
 
 // Function to calculate the centroid of a set of coordinates
