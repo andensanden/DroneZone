@@ -12,6 +12,7 @@ let coords = [];
 var circleRadius = 20;
 
 var forbiddenCoords = [];
+var forbiddenCircles = [];
 
 var forbiddenZoneDrawing = false;
 var removeButtonIsOn = false;
@@ -121,27 +122,45 @@ function onMapClick(e) {
         return;
     }
 
-    for (var i = 0; i < circles.length; i++) {
-        if (circles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
-            if(removeButtonIsOn){
-                circles[i].remove();
-                coords.splice(i, 1);
-                circles.splice(i, 1);
-                if (!forbiddenZoneDrawing) drawPolyline(coords);
-                else drawForbiddenPoly(forbiddenCoords);
+    if (!forbiddenZoneDrawing) {
+        for (var i = 0; i < circles.length; i++) {
+            if (circles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
+                if(removeButtonIsOn){
+                    circles[i].remove();
+                    coords.splice(i, 1);
+                    circles.splice(i, 1);
+                    if (pathSegments[i] != null) pathSegments[i].remove();
+                    pathSegments.splice(i, 1);
+                    drawPolyline(coords);
+                    return;
+                }
+                else{
+                circleLimit = true;
+                circles = [];
                 return;
-                
-
-
             }
-            else{
-            circleLimit = true;
-            circles = [];
-            return;
+            }
         }
-        }
-
     }
+    else {
+        for (var i = 0; i < forbiddenCircles.length; i++) {
+            if (forbiddenCircles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
+                if(removeButtonIsOn){
+                    forbiddenCircles[i].remove();
+                    forbiddenCoords.splice(i, 1);
+                    forbiddenCircles.splice(i, 1);
+                    drawForbiddenPoly(forbiddenCoords);
+                    return;
+                }
+                else{
+                circleLimit = true;
+                forbiddenCircles = [];
+                return;
+            }
+            }
+        }
+    }
+    
     if(removeButtonIsOn){
         return;
     }
@@ -168,16 +187,15 @@ function onMapClick(e) {
     else {
         forbiddenCoords.push(e.latlng);
         // Draw circle
-        circles.push(L.circle(e.latlng, {
+        forbiddenCircles.push(L.circle(e.latlng, {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
             radius: circleRadius
         }));
-        circles[circles.length - 1].addTo(map);
+        forbiddenCircles[forbiddenCircles.length - 1].addTo(map);
         drawForbiddenPoly(forbiddenCoords);
     }
-    //updatePathSegments();
 
     if (circles.length == maxCircles) {
         circleLimit = true;
@@ -207,6 +225,7 @@ function drawPolyline(coords) {
    
     sortCoordinates(coords);
     lastPolyline = L.polyline(coords).addTo(map);
+    updatePathSegments();
 }
 
 var lastPolygon;
@@ -271,8 +290,8 @@ function onForbiddenClick() {
         document.getElementById("forbiddenButton").style.backgroundColor ="white";
         
         // Reset forbidden coordinates for the next forbidden zone
-        forbiddenCoords = [];
-        circles = [];
+        //forbiddenCoords = [];
+        //forbiddenCircles = [];
     }
     else{
     forbiddenZoneDrawing = true;
@@ -280,8 +299,7 @@ function onForbiddenClick() {
     }
 }
 
-// WORK IN PROGRESS FOR BUFFER ZONE
-/*var pathSegments = [];
+var pathSegments = [];
 function updatePathSegments() {
     // Clear all existing path segments
     pathSegments.forEach(segment => map.removeLayer(segment));
@@ -302,10 +320,10 @@ function updatePathSegments() {
         pathSegments.push(segment);
         
         // Optional: Add center line for each segment
-        pathSegments.push(L.polyline(segmentCoords, {
+        /*pathSegments.push(L.polyline(segmentCoords, {
             color: 'blue',
             weight: 2
-        }).addTo(map));
+        }).addTo(map));*/
     }
 }
 
@@ -340,4 +358,4 @@ function createBufferedPath(coords, widthMeters) {
     ]);
     
     return leftSide.concat(rightSide.reverse());
-}*/
+}
