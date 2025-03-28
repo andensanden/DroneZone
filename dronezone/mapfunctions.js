@@ -7,42 +7,81 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var maxCircles = 20;
 var circleLimit = false;
+let circles = [];
 let coords = [];
 var circleRadius = 20;
+
+var removeButtonIsOn = false;
 function onMapClick(e) {
+
+    
     if (circleLimit) {
         return;
     }
 
-    for (var i = 0; i < coords.length; i++) {
-        if (coords[i].distanceTo(e.latlng) <= circleRadius * 2) {
+    for (var i = 0; i < circles.length; i++) {
+        if (circles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
+            if(removeButtonIsOn){
+                circles[i].remove();
+                coords.splice(i, 1);
+                circles.splice(i, 1);
+                drawPolygon(coords);
+                return;
+                
+
+
+            }
+            else{
             circleLimit = true;
-            coords = [];
+            circles = [];
             return;
         }
+        }
+
+    }
+    if(removeButtonIsOn){
+        return;
     }
 
+    
     coords.push(e.latlng);
     // Draw circle
-    var circle = L.circle(e.latlng, {
+     circles.push ( L.circle(e.latlng, {
         color: 'blue',
         fillColor: '#5224',
         fillOpacity: 0.5,
         radius: circleRadius
-    }).addTo(map);
+    }));
+    circles[circles.length - 1].addTo(map);
     drawPolygon(coords);
 
-    if (coords.length == maxCircles) {
+    if (circles.length == maxCircles) {
         circleLimit = true;
-        coords = [];
+        circles = [];
     }
+    
+    
+}
+
+function onButtonClick(){
+    
+    if(removeButtonIsOn){
+        removeButtonIsOn= false;
+    }
+    else
+    removeButtonIsOn = true;
+    
+
 }
 
 var lastPolygon;
 function drawPolygon(coords) {
-    sortCoordinates(coords);
+    
     if (lastPolygon != null) lastPolygon.remove();
+   
+    sortCoordinates(coords);
     lastPolygon = L.polygon(coords).addTo(map);
+    
 }
 
 // Function to calculate the centroid of a set of coordinates
@@ -71,7 +110,7 @@ function sortCoordinates(coords) {
     const centroid = calculateCentroid(coords);
 
     // Step 2: Sort the points by angle relative to the centroid
-    coords.sort(function(a, b) {
+    circles.sort(function(a, b) {
         let angleA = calculateAngle(a, centroid);
         let angleB = calculateAngle(b, centroid);
         return angleA - angleB; // Sort in counterclockwise direction
