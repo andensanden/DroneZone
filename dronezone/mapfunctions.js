@@ -11,6 +11,9 @@ let circles = [];
 let coords = [];
 var circleRadius = 20;
 
+var forbiddenCoords = [];
+
+var forbiddenZoneDrawing = false;
 var removeButtonIsOn = false;
 function onMapClick(e) {
 
@@ -25,7 +28,8 @@ function onMapClick(e) {
                 circles[i].remove();
                 coords.splice(i, 1);
                 circles.splice(i, 1);
-                drawPolyline(coords);
+                if (!forbiddenZoneDrawing) drawPolyline(coords);
+                else drawForbiddenPoly(forbiddenCoords);
                 return;
                 
 
@@ -44,7 +48,8 @@ function onMapClick(e) {
     }
 
     
-    coords.push(e.latlng);
+    if (!forbiddenZoneDrawing) coords.push(e.latlng);
+    else forbiddenCoords.push(e.latlng);
     // Draw circle
      circles.push ( L.circle(e.latlng, {
         color: 'blue',
@@ -53,7 +58,8 @@ function onMapClick(e) {
         radius: circleRadius
     }));
     circles[circles.length - 1].addTo(map);
-    drawPolyline(coords);
+    if (!forbiddenZoneDrawing) drawPolyline(coords);
+    else drawForbiddenPoly(forbiddenCoords);
     //updatePathSegments();
 
     if (circles.length == maxCircles) {
@@ -77,13 +83,22 @@ function onButtonClick() {
     }
 }
 
-var lastPolygon;
+var lastPolyline;
 function drawPolyline(coords) {
+    
+    if (lastPolyline != null) lastPolyline.remove();
+   
+    sortCoordinates(coords);
+    lastPolyline = L.polyline(coords).addTo(map);
+}
+
+var lastPolygon;
+function drawForbiddenPoly(coords) {
     
     if (lastPolygon != null) lastPolygon.remove();
    
     sortCoordinates(coords);
-    lastPolygon = L.polyline(coords).addTo(map);
+    lastPolygon = L.polygon(coords, {color: 'red', fillColor: '#f03'}).addTo(map);
 }
 
 // Function to calculate the centroid of a set of coordinates
@@ -125,6 +140,18 @@ map.on('click', onMapClick);
 
 // Temporary for adding markers in future
 var marker = L.marker([59.3293, 18.0686]).addTo(map);
+
+function onForbiddenClick() {
+    if(forbiddenZoneDrawing){
+        forbiddenZoneDrawing= false;
+
+        document.getElementById("forbiddenButton").style.backgroundColor ="white";
+    }
+    else{
+    forbiddenZoneDrawing = true;
+    document.getElementById("forbiddenButton").style.backgroundColor = "green";
+    }
+}
 
 // WORK IN PROGRESS FOR BUFFER ZONE
 /*var pathSegments = [];
