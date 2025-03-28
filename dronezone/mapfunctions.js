@@ -5,35 +5,44 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var maxCircles = 5;
+var maxCircles = 20;
+var circleLimit = false;
 let coords = [];
 var circleRadius = 20;
 function onMapClick(e) {
+    if (circleLimit) {
+        return;
+    }
+
     for (var i = 0; i < coords.length; i++) {
         if (coords[i].distanceTo(e.latlng) <= circleRadius * 2) {
-            drawPolygon(coords);
+            circleLimit = true;
             coords = [];
             return;
         }
     }
 
     coords.push(e.latlng);
+    // Draw circle
     var circle = L.circle(e.latlng, {
         color: 'blue',
         fillColor: '#5224',
         fillOpacity: 0.5,
         radius: circleRadius
     }).addTo(map);
+    drawPolygon(coords);
 
     if (coords.length == maxCircles) {
-        drawPolygon(coords);
+        circleLimit = true;
         coords = [];
     }
 }
 
+var lastPolygon;
 function drawPolygon(coords) {
     sortCoordinates(coords);
-    L.polygon(coords).addTo(map);
+    if (lastPolygon != null) lastPolygon.remove();
+    lastPolygon = L.polygon(coords).addTo(map);
 }
 
 // Function to calculate the centroid of a set of coordinates
