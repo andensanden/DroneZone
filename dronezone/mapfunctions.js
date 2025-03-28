@@ -63,15 +63,17 @@ function onMapClick(e) {
     
 }
 
-function onButtonClick(){
-    
+function onButtonClick() {
+
     if(removeButtonIsOn){
         removeButtonIsOn= false;
-    }
-    else
-    removeButtonIsOn = true;
-    
 
+        document.getElementById("buttonColor").style.backgroundColor ="white";
+    }
+    else{
+    removeButtonIsOn = true;
+    document.getElementById("buttonColor").style.backgroundColor = "green";
+    }
 }
 
 var lastPolygon;
