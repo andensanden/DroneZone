@@ -1,8 +1,10 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
 
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; 
   line-height: 1.5;
   font-weight: 400;
 
@@ -19,7 +21,15 @@
 
 
 
+@theme {
+  --color-primary-yellow: #FFCC00; 
+  --color-primary-blue:#2137F8;
 
+
+  /* Fonts & text related */
+  --font-primary: 'Jersey 20', sans-serif;
+
+}
 
 
 /*Starter CSS*/
