@@ -1,6 +1,4 @@
  
-
-
 //Here will the real map component e
 export function Map() {
   return (
