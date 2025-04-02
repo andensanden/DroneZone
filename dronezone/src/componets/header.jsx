@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { FaRegUser } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement } from "@/Redux/dummy/dummySlice";
+
 
 export function Header() {
-  const navigate = useNavigate();
 
   return (
     <div className="bg-white h-25 flex items-center justify-between ">
@@ -15,6 +17,7 @@ export function Header() {
           Real time map of all registered active drones, provided by DroneZone
         </p>
       </div>
+
       <div className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
         <button
           className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 w-16 hover:scale-107 transition-all duration-200"

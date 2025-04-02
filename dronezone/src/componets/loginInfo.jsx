@@ -16,7 +16,6 @@ export function LoginInfo() {
         <div className="w-100 h-100 flex items-center justify-center mb-2">
           <Logo />
         </div>
-
         <input
           type="email"
           placeholder="Email"
