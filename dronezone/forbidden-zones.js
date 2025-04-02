@@ -1,15 +1,15 @@
-var forbiddenCoords = [];
-var forbiddenCircles = [];
-var forbiddenPolygons = [];
+var fCoords = [];
+var fNodes = [];
+var fPolys = [];
 
 var lastPolygon;
 function drawForbiddenPoly(coords) {
     if (lastPolygon) lastPolygon.remove();
    
-    sortCoordinates(coords);
+    coords = sortCoordinates(coords);
     lastPolygon = L.polygon(coords, {color: 'red', fillColor: '#f03'}).addTo(map);
     
-    forbiddenPolygons.push(lastPolygon);
+    fPolys.push(lastPolygon);
 }
 
 // Function to calculate the centroid of a set of coordinates
@@ -37,7 +37,7 @@ function sortCoordinates(coords) {
     const centroid = calculateCentroid(coords);
 
     // Sort the points by angle relative to the centroid
-    circles.sort(function(a, b) {
+    coords.sort(function(a, b) {
         let angleA = calculateAngle(a, centroid);
         let angleB = calculateAngle(b, centroid);
         return angleA - angleB; // Sort in counterclockwise direction
@@ -122,8 +122,8 @@ function wouldLineIntersectForbiddenZone(newPoint) {
     const lastPoint = coords[coords.length - 1];
     
     // Check if the line segment intersects with any forbidden polygon
-    for (var i = 0; i < forbiddenPolygons.length; i++) {
-        if (doesLineIntersectPolygon(lastPoint, newPoint, forbiddenPolygons[i])) {
+    for (var i = 0; i < fPolys.length; i++) {
+        if (doesLineIntersectPolygon(lastPoint, newPoint, fPolys[i])) {
             return true;
         }
     }
@@ -133,8 +133,8 @@ function wouldLineIntersectForbiddenZone(newPoint) {
 
 // Function to check if a point is in any forbidden zone
 function isPointInForbiddenZone(point) {
-    for (var i = 0; i < forbiddenPolygons.length; i++) {
-        if (isPointInPolygon(point, forbiddenPolygons[i])) {
+    for (var i = 0; i < fPolys.length; i++) {
+        if (isPointInPolygon(point, fPolys[i])) {
             return true;
         }
     }
