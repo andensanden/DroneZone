@@ -1,19 +1,56 @@
+import { useState } from "react";
 import { Logo } from "@/componets/logo";
 
 export function LoginInfo() {
-    return (
-      <div >
-        <div className="min-h-screen flex flex-col items-center justify-center">
-              <div className="w-100 h-100">
-              <Logo />
-          </div>
-          <div className="flex items-center justify-center p-10">
-  
-  </div>
-</div>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-<button className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 hover:underline w-16" onClick={() => navigate('/')}>Hej</button>
+  const handleLogin = () => {
+    // You can replace this with actual logic (like API call)
+    console.log("Logging in with:", email, password);
+  };
+
+  return (
+    <div className="w-screen h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center">
+        <div className="w-110 h-110  flex items-center justify-center">
+          <Logo />
+        </div>
+
+        <input
+          type="email"
+          placeholder="Email"
+          className="mb-6 px-4 py-1 border border-gray-300 rounded-md w-72 focus:outline-none focus:ring-2 focus:ring-yellow-400 "
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          className="mb-6 px-4 py-1 border border-gray-300 rounded-md w-72 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          onClick={handleLogin}
+          className="mb-20 bg-[#FFCC00] text-gray-700 rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#e6b800] w-42"
+        >
+          Sign In
+        </button>
+        
+        <button
+          className="mb-64 bg-[#FFCC00] text-gray-700 rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#e6b800] w-72"
+          onClick={() => navigate("/")}
+        >
+          Create Account
+        </button>
+      
       </div>
-    )
-  }
-  /*className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl"*/
+    </div>
+  );
+}
+
+
+
