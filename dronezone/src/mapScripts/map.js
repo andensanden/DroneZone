@@ -2,17 +2,15 @@ var forbiddenZoneDrawing = false;
 var removeButtonIsOn = false;
 var map;
 
-drawMap();  // TEMPORARY, move to main file or something
-
-function drawMap() {
-    map = L.map('map').setView([59.3293, 18.0686], 13);
+export function drawMap() {
+    /*map = L.map('map').setView([59.3293, 18.0686], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    }).addTo(map);*/
 }
-
+/*
 function onMapClick(e) {
     if (circleLimit) {
         return;
@@ -126,5 +124,5 @@ function onForbiddenClick() {
     document.getElementById("forbiddenButton").style.backgroundColor = "green";
     }
 }
-
+*/
 map.on('click', onMapClick);
