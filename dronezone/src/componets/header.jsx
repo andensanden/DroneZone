@@ -2,11 +2,16 @@ import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { FaRegUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement } from "@/Redux/dummy/dummySlice";
+import { TbCircleNumber1Filled } from "react-icons/tb";
+
+import { LuInbox } from "react-icons/lu";
+
 
 
 export function Header() {
   const navigate = useNavigate();
+
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   return (
     <div className="bg-white h-25 flex items-center justify-between ">
@@ -19,31 +24,40 @@ export function Header() {
         </p>
       </div>
 
-      <div className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
-        <button
-          className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 w-16 hover:scale-107 transition-all duration-200"
-          onClick={() => navigate("/")}
-        >
-          Home
-        </button>
-        <button
-          className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2  w-16 hover:scale-107 transition-all duration-200"
-          onClick={() => navigate("/about")}
-        >
-          About
-        </button>
-        <button
-          className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2  w-16 hover:scale-107 transition-all duration-200 mr-6"
-          onClick={() => navigate("/guidelines")}
-        >
-          Guidelines
-        </button>
-        <button
-          className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
-          onClick={() => navigate("/login")}
-        >
-          <GrLogin size={20} />
-        </button>
+      {/*Navigation bar*/}
+      <div className="flex items-center gap-4">
+
+        {isAuth ? <div className="relative hover:scale-107 transition-all duration-200">
+          <button className="bg-primary-blue p-3 rounded-xl"><LuInbox size={20} className="text-white"/> </button> 
+        <span className="text-white text-sm font-bold bg-red-600 rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0">1</span>
+        </div> : null}
+
+        <div className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
+          <button
+            className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 w-16 hover:scale-107 transition-all duration-200"
+            onClick={() => navigate("/")}
+          >
+            Home
+          </button>
+          <button
+            className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2  w-16 hover:scale-107 transition-all duration-200"
+            onClick={() => navigate("/about")}
+          >
+            About
+          </button>
+          <button
+            className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2  w-16 hover:scale-107 transition-all duration-200 mr-6"
+            onClick={() => navigate("/guidelines")}
+          >
+            Guidelines
+          </button>
+          <button
+            className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
+            onClick={() => navigate("/login")}
+          >
+            {isAuth ? <FaRegUser size={20} /> : <GrLogin size={20} />}
+          </button>
+        </div>
       </div>
     </div>
   );
