@@ -161,7 +161,7 @@ var locButton = L.control.locate({
         watch: true  // Native API's watch mode
       },
     position: 'topleft',
-    drawCircle: false,
+    drawCircle: true,
     follow: true,  // Don't auto-follow (more like your original)
     setView: "always",
     keepCurrentZoomLevel: false,
@@ -174,12 +174,11 @@ var locButton = L.control.locate({
         weight: 2
     },
     markerStyle: {
-        color: '#136AEC',
+        color: '#FFFFFF',
         fillColor: '#136AEC',
         fillOpacity: 1,
         weight: 3,
         radius: 8
-
     },
     onLocationError: function(err) {
         console.log("Location error:", err.message);
