@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
 
 
 :root {
@@ -22,7 +21,6 @@
 
 @theme {
   --color-primary-yellow: #FFCC00; 
-  --color-primary-blue:#2137F8;
   --color-primary-white: #FFFFFF;
   --color-primary-blue: #2137F8;
   --color-primary-light-blue: #00BFFF;
@@ -30,12 +28,8 @@
   --color-primary-light-gray:#9CA3AF;
 
   
-
-
   /* Fonts & text related */
-  --font-primary: 'Jersey 20', sans-serif;
- 
-
+  /* --font-primary: 'Jersey 20', sans-serif; */
 }
 
 #root {
@@ -65,7 +59,6 @@ a:hover {
 }
 
 
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -82,6 +75,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
