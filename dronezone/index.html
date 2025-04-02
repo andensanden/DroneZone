@@ -5,7 +5,6 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
     <!-- Necessary links for map -->
-    <script src="mapfunctions.js" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""/>
@@ -20,9 +19,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="map.js" defer></script>
+    <script src="paths.js" defer></script>
+    <script src="forbidden-zones.js" defer></script>
 
     <div id="map"></div>
-    <button type="button", onclick="onButtonClick()", id="buttonColor">remove circle</button>
+    <button type="button", onclick="onRemoveClick()", id="removeButton">remove circle</button>
     <button type="button", onclick="onForbiddenClick()", id="forbiddenButton">draw forbidden zone</button>
 
   </body>
