@@ -1,8 +1,3 @@
-
- 
-//Here will the real map component e
-export function Map() {
-
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
