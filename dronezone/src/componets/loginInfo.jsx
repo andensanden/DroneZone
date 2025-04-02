@@ -12,8 +12,8 @@ export function LoginInfo() {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center">
-        <div className="w-100 h-100 flex items-center justify-center mb-2">
+      <div className="flex flex-col items-center mt-24">
+        <div className="w-60 h-60 flex items-center justify-center [&>svg]:w-30 [&>svg]:h-30">
           <Logo />
         </div>
         <input
