@@ -2,7 +2,7 @@ var forbiddenZoneDrawing = false;
 var removeButtonIsOn = false;
 var map;
 
-drawMap();  // TEMPORARY, for testing purposes
+//drawMap();  // TEMPORARY, for testing purposes
 
 /*
     Sets a starting point for the map and chooses a tile layer for it

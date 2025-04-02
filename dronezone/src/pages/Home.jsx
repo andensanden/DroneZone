@@ -1,9 +1,11 @@
-
+import { Header } from "@/componets/header";
+import Map from "@/componets/map";
 
 export function Home() {
   return (
     <div>
-      <h1>Home</h1>
+      <Header />
+      <Map />
     </div>
   )
 }
