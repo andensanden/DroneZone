@@ -6,6 +6,7 @@ import { increment, decrement } from "@/Redux/dummy/dummySlice";
 
 
 export function Header() {
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white h-25 flex items-center justify-between ">
@@ -30,6 +31,12 @@ export function Header() {
           onClick={() => navigate("/about")}
         >
           About
+        </button>
+        <button
+          className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2  w-16 hover:scale-107 transition-all duration-200 mr-6"
+          onClick={() => navigate("/guidelines")}
+        >
+          Guidelines
         </button>
         <button
           className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
