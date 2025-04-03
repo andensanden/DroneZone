@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router";
+import { GrLogin } from "react-icons/gr";
+import { FaRegUser } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { Logo } from "@/componets/logo";
 
@@ -9,7 +13,7 @@ export function LoginInfo() {
     // You can replace this with actual logic (like API call)
     console.log("Logging in with:", email, password);
   };
-
+  const navigate = useNavigate();
   return (
     
     <div className="w-screen h-screen flex items-center justify-center">
@@ -43,7 +47,8 @@ export function LoginInfo() {
 
         <button
           className="mb-64 bg-[#FFCC00] text-gray-700 rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#e6b800] w-72 hover:scale-105 transition-all duration-200"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/createaccount")}
+          
         >
           Create Account
         </button>

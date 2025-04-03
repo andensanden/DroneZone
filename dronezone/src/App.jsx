@@ -4,6 +4,8 @@ import { AboutUs } from "./pages/AboutUs";
 import { Login } from "./pages/Login";
 import {Guidelines} from "./pages/Guidelines";
 import { Account } from "./pages/account";
+import { CreateAccount } from "./pages/CreateAccount";
+
 
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/guidelines" element={<Guidelines/>}/>
         <Route path="/account" element={<Account/>}/>
+        <Route path="/createaccount" element={<CreateAccount/>}/>
       </Routes>
     </BrowserRouter>
     </>
