@@ -2,64 +2,66 @@ var forbiddenZoneDrawing = false;
 var removeButtonIsOn = false;
 var map;
 
-export function drawMap() {
-    /*map = L.map('map').setView([59.3293, 18.0686], 13);
+//drawMap();  // TEMPORARY, for testing purposes
+
+/*
+    Sets a starting point for the map and chooses a tile layer for it
+*/
+function drawMap() {
+    map = L.map('map').setView([59.3293, 18.0686], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);*/
+    }).addTo(map);
 }
+
 /*
+    User presses a point on the map and one of the following occurs:
+    1. A node is placed.
+    2. A node is removed.
+    3. A forbidden node is placed.
+    4. A forbidden node is removed.
+*/
 function onMapClick(e) {
-    if (circleLimit) {
-        return;
-    }
+    if (!forbiddenZoneDrawing) {    // Normal nodes
+        if (nodeLimit) {
+            return;
+        }
 
-    if (!forbiddenZoneDrawing) {
-        for (var i = 0; i < circles.length; i++) {
-            if (circles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
-                if(removeButtonIsOn){
-                    circles[i].remove();
-                    coords.splice(i, 1);
-                    circles.splice(i, 1);
-                    if (pathSegments[i]) pathSegments[i].remove();
-                    pathSegments.splice(i, 1);
+        for (var i = 0; i < nodes.length; i++) {
+            if (inNode(e.latlng, nodes[i])) {
+                if (removeButtonIsOn) {
+                    removeNode(i, nodes, coords, pathSegments);
+                }
+                else {
+                    coords.push(nodes[i].getLatLng());
                     drawPolyline(coords);
+                    nodeLimit = true;
+                    nodes = [];
                     return;
-                }
-                else{
-                circleLimit = true;
-                circles = [];
-                return;
                 }
             }
         }
     }
-    else {
-        for (var i = 0; i < forbiddenCircles.length; i++) {
-            if (forbiddenCircles[i].getLatLng().distanceTo(e.latlng) <= circleRadius * 2) { 
-                if(removeButtonIsOn){
-                    forbiddenCircles[i].remove();
-                    forbiddenCoords.splice(i, 1);
-                    forbiddenCircles.splice(i, 1);
-                    drawForbiddenPoly(forbiddenCoords);
-                    return;
+    else {  // Forbidden nodes
+        for (var i = 0; i < fNodes.length; i++) {
+            if (inNode(e.latlng, fNodes[i])) { 
+                if(removeButtonIsOn) {
+                    removeNode(i, fNodes, fCoords)
                 }
-                else{
-                circleLimit = true;
-                forbiddenCircles = [];
+                else {
+                fNodes = [];
                 return;
                 }
             }
         }
     }
     
-    if(removeButtonIsOn){
+    if(removeButtonIsOn) {
         return;
     }
 
-    
     if (!forbiddenZoneDrawing) {
         // Check if the point is in a forbidden zone or if the line would intersect a forbidden zone
         if (wouldLineIntersectForbiddenZone(e.latlng)) {
@@ -68,35 +70,59 @@ function onMapClick(e) {
         }
         
         coords.push(e.latlng);
-        // Draw circle
-        circles.push(L.circle(e.latlng, {
-            color: 'blue',
-            fillColor: '#0000ff',
-            fillOpacity: 0.5,
-            radius: circleRadius
-        }));
-        circles[circles.length - 1].addTo(map);
+        drawNode(e.latlng, nodes, 'blue', '#0000ff');
         drawPolyline(coords);
     }
     else {
-        forbiddenCoords.push(e.latlng);
-        // Draw circle
-        forbiddenCircles.push(L.circle(e.latlng, {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: circleRadius
-        }));
-        forbiddenCircles[forbiddenCircles.length - 1].addTo(map);
-        drawForbiddenPoly(forbiddenCoords);
+        fCoords.push(e.latlng);
+        drawNode(e.latlng, fNodes, 'red', '#f03');
+        drawForbiddenPoly(fCoords);
     }
 
-    if (circles.length == maxCircles) {
-        circleLimit = true;
-        circles = [];
+    if (nodes.length == maxNodes) {
+        nodeLimit = true;
+        nodes = [];
     }
 }
 
+/*
+    Check if the current position is inside a node
+*/
+function inNode(pos, node) {
+    return node.getLatLng().distanceTo(pos) <= circleRadius * 2
+}
+
+/*
+    Push a circle of a specified color and fill color to an array of nodes, draw it on the map at pos
+*/
+function drawNode(pos, circleArray, color, fillColor) {
+    circleArray.push(L.circle(pos, {
+        color: color,
+        fillColor: fillColor,
+        fillOpacity: 0.5,
+        radius: circleRadius
+    }));
+    circleArray[circleArray.length - 1].addTo(map);
+}
+
+/*
+    Removes a node and its coordinates
+*/
+function removeNode(index, nodes, coords, pathSegments) {
+    nodes[index].remove();
+    coords.splice(index, 1);
+    nodes.splice(index, 1);
+    if (pathSegments) {
+        if (pathSegments[index]) pathSegments[index].remove();
+        pathSegments.splice(index, 1);
+        drawPolyline(coords);
+    }
+    else drawForbiddenPoly(fCoords);
+}
+
+/*
+    Function for remove nodes button
+*/
 function onRemoveClick() {
     if(removeButtonIsOn){
         removeButtonIsOn= false;
@@ -109,6 +135,9 @@ function onRemoveClick() {
     }
 }
 
+/*
+    Function for draw forbidden zones button
+*/
 function onForbiddenClick() {
     if(forbiddenZoneDrawing){
         forbiddenZoneDrawing= false;
@@ -116,13 +145,44 @@ function onForbiddenClick() {
         document.getElementById("forbiddenButton").style.backgroundColor ="white";
         
         // Reset forbidden coordinates for the next forbidden zone
-        //forbiddenCoords = [];
-        //forbiddenCircles = [];
+        //fCoords = [];
+        //fNodes = [];
     }
     else{
     forbiddenZoneDrawing = true;
     document.getElementById("forbiddenButton").style.backgroundColor = "green";
     }
 }
-*/
+
 map.on('click', onMapClick);
+
+var locButton = L.control.locate({
+    locateOptions: {
+        watch: true  // Native API's watch mode
+      },
+    position: 'topleft',
+    drawCircle: true,
+    follow: true,  // Don't auto-follow (more like your original)
+    setView: "always",
+    keepCurrentZoomLevel: false,
+    drawMarker: true,
+    markerClass: L.circleMarker,
+    circleStyle: {
+        color: '#136AEC',
+        fillColor: '#136AEC',
+        fillOpacity: 0.15,
+        weight: 2
+    },
+    markerStyle: {
+        color: '#FFFFFF',
+        fillColor: '#136AEC',
+        fillOpacity: 1,
+        weight: 3,
+        radius: 8
+    },
+    onLocationError: function(err) {
+        console.log("Location error:", err.message);
+    }
+}).addTo(map);
+
+locButton.start();

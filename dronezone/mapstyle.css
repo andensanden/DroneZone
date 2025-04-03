@@ -1,1 +1,14 @@
 #map { height: 560px; background-color: blue;}
+
+.leaflet-control-locate a {
+    padding: 3px 6px !important;
+    background: white !important;
+    border: 1px solid #ccc !important;
+}
+
+.leaflet-control-locate.active a {
+    background: #f0f0f0 !important;
+}
+.leaflet-control-locate {
+    z-index: 1000 !important;
+}

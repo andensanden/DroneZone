@@ -1,8 +1,8 @@
-var maxCircles = 20;
-var circleLimit = false;
-let circles = [];
+const maxNodes = 20;
+const circleRadius = 20;
+var nodeLimit = false;
+let nodes = [];
 let coords = [];
-var circleRadius = 20;
 
 var lastPolyline;
 function drawPolyline(coords) {
@@ -18,7 +18,7 @@ function updatePathSegments() {
     pathSegments.forEach(segment => map.removeLayer(segment));
     pathSegments = [];
 
-    // Create individual segments for each pair of circles
+    // Create individual segments for each pair of nodes
     for (let i = 0; i < coords.length - 1; i++) {
         const segmentCoords = [coords[i], coords[i+1]];
         const pathWidthMeters = 40;
