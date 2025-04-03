@@ -5,10 +5,10 @@ import { GuidelineInfo } from "../componets/guidelinesInfo"
 export function Guidelines(){
 
     return (
-        <div className="flex flex-col grow">
+        <>
             <Header/>
             <GuidelineInfo/>
             <Footer/>
-        </div>
+        </>
     )
 }
