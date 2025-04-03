@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Circle, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 
+// MOVE THESE THINGS TO ANOTHER FILE
 // Fix default marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -16,6 +17,7 @@ const LocationTracker = ({ trackingEnabled }) => {
   const [position, setPosition] = useState(null);
   const [accuracy, setAccuracy] = useState(null);
   const [watchId, setWatchId] = useState(null);
+  const [mapCentered, setMapCentered] = useState(false);
 
   useEffect(() => {
     // Start or stop tracking based on the trackingEnabled prop
@@ -31,8 +33,11 @@ const LocationTracker = ({ trackingEnabled }) => {
           setPosition(newPos);
           setAccuracy(pos.coords.accuracy);
           
-          // Optionally center map on new position
-          map.flyTo(newPos, map.getZoom());
+          // Center map if it has not already been centered
+          if (!mapCentered) {
+            map.flyTo(newPos, map.getZoom());
+            setMapCentered(true);
+          }
         },
         (err) => {
           console.error("Geolocation error:", err);
@@ -55,13 +60,14 @@ const LocationTracker = ({ trackingEnabled }) => {
       // Clear the watch when tracking is disabled
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
+      setMapCentered(false);
       // We don't clear position to keep the last known location visible
     }
-  }, [trackingEnabled, map]);
+  }, [trackingEnabled, map, mapCentered]);
 
   return (
     <>
-      {position && (
+      {trackingEnabled && position && (
         <>
           <Marker position={position} />
           {accuracy && (
