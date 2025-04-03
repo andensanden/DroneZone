@@ -1,6 +1,8 @@
+import { BsPaperclip } from "react-icons/bs";
+
 
 export function AccountInfo(){
-
+			//! add value and user integration when we have users
 	return(
 		<div className="bg-primary-yellow flex grow ">
             <div className="flex grow-0 p-10 w-full">
@@ -40,7 +42,7 @@ export function AccountInfo(){
                 <div className="ml-50 flex flex-col">
 					<h2 className="text-3xl font-bold my-4">Drone Licence</h2>
 					<label
-					className="bg-primary-white w-16 h-16 text-gray-700 my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
+					className="flex item-center bg-primary-white w-12 h-12 text-gray-700 my-2 px-2 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
 					>
 						<input
 						class="hidden"
@@ -48,7 +50,7 @@ export function AccountInfo(){
 						id="fileUpload" 
 						accept=".pdf, .png"
 						></input>
-
+							<BsPaperclip size={40}/>
 					</label>
 				</div>
             </div>
