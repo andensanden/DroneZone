@@ -66,9 +66,10 @@ const ForbiddenZonesInitializer = () => {
 
 // Main Map Component
 const Map = () => {
-  const initialPosition = [59.3293, 18.0686]; // Stockholm coordinates
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState('path');
+
+  const position = [51.505, -0.09]; // Coordinates for the map's center
 
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
@@ -85,7 +86,7 @@ const Map = () => {
         setDrawingMode={setDrawingMode}
       />
       <MapContainer 
-        center={initialPosition} 
+        center={position} 
         zoom={13} 
         style={{ height: '100%', width: '100%' }}
       >
@@ -97,12 +98,19 @@ const Map = () => {
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">
       <LayersControl.Overlay name="Display Current Location">
+        <Marker position={position}>
+          <Popup>
+            Current Location <br />
+          </Popup>
+        </Marker>
       </LayersControl.Overlay>
         <LayersControl.Overlay name="Display Current Restricted Areas">
         {/*Generate places with restricted flight zones */}
+        <Circle position={position} radius={200}/>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Show Active Drones">
         {/*Generate locations of active drones*/}
+        <Circle position={position} radius={200}/>
         </LayersControl.Overlay>
       </LayersControl>
         
