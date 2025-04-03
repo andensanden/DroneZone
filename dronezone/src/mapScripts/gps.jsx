@@ -78,35 +78,6 @@ const LocationTracker = ({ trackingEnabled }) => {
     );
   };
   
-/*
-    Control component used to toggle location tracking.
-*/
-/*const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
-    return (
-      <div className="gps-control" style={{
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        zIndex: 1000,
-      }}>
-        <button 
-          onClick={toggleTracking}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: trackingEnabled ? '#f44336' : '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-          }}
-        >
-          {trackingEnabled ? 'Stop GPS Tracking' : 'Start GPS Tracking'}
-        </button>
-      </div>
-    );
-  };*/
-
   // GPS Toggle Control
 const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
     return (
@@ -126,48 +97,5 @@ const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
       </div>
     );
   };
-
-  // LocationTracker component
-/*const LocationTracker = ({ trackingEnabled }) => {
-    const map = useMap();
-    const [position, setPosition] = useState(null);
-    const [accuracy, setAccuracy] = useState(null);
-  
-    useEffect(() => {
-      if (!trackingEnabled) return;
-  
-      let watchId;
-      const handleSuccess = (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        const newPos = L.latLng(latitude, longitude);
-        setPosition(newPos);
-        setAccuracy(accuracy);
-        map.flyTo(newPos, 18);
-      };
-  
-      const handleError = (err) => {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-      };
-  
-      if (navigator.geolocation) {
-        watchId = navigator.geolocation.watchPosition(
-          handleSuccess,
-          handleError,
-          { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
-        );
-      }
-  
-      return () => {
-        if (watchId) navigator.geolocation.clearWatch(watchId);
-      };
-    }, [trackingEnabled, map]);
-  
-    return position ? (
-      <>
-        <Marker position={position} />
-        {accuracy && <Circle center={position} radius={accuracy} />}
-      </>
-    ) : null;
-  };*/
 
 export { LocationTracker, GPSToggleControl };

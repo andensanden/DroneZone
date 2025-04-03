@@ -1,7 +1,6 @@
-// src/mapScripts/ForbiddenZoneDrawing.jsx
+// src/mapScripts/forbiddenZoneDrawing.jsx
 import { useEffect, useState } from 'react';
 import { useMap, Circle } from 'react-leaflet';
-import L from 'leaflet';
 
 const nodeRadius = 20;
 

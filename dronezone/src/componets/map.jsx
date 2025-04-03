@@ -3,8 +3,7 @@ import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl, Circle }
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
-import ForbiddenZoneDrawing from '@/mapScripts/ForbiddenZoneDrawing';
-
+import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZone';
 
 // Drawing Mode Control
