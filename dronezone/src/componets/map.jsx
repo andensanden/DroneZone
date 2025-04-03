@@ -63,7 +63,7 @@ const ForbiddenZonesInitializer = () => {
 
   return null;
 };
-
+const initialPosition = [59.3293, 18.0686];
 // Main Map Component
 const Map = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
@@ -86,7 +86,7 @@ const Map = () => {
         setDrawingMode={setDrawingMode}
       />
       <MapContainer 
-        center={position} 
+        center={initialPosition} 
         zoom={13} 
         style={{ height: '100%', width: '100%' }}
       >
