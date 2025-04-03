@@ -3,7 +3,7 @@ import { Home } from "./pages/Home";
 import { AboutUs } from "./pages/AboutUs";
 import { Login } from "./pages/Login";
 import {Guidelines} from "./pages/Guidelines";
-import { Account } from "./pages/account";
+import { Account } from "./pages/Account";
 
 
 function App() {
