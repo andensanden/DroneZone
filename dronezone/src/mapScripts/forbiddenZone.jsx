@@ -12,7 +12,6 @@ class ForbiddenZonesManager {
 
   // Draw a forbidden polygon with the given coordinates
   drawForbiddenPoly(coords) {
-    if (this.lastPolygon) this.lastPolygon.remove();
    
     coords = this.sortCoordinates(coords);
     this.lastPolygon = L.polygon(coords, {
