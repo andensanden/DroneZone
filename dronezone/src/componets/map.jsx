@@ -12,8 +12,8 @@ const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
   return (
     <div className="drawing-mode-control" style={{
       position: 'absolute',
-      top: '400px',
-      right: '10px',
+      top: '85%',
+      right: '0%',
       zIndex: 1000,
     }}>
       <button 
@@ -75,15 +75,8 @@ const Map = () => {
   };
 
   return (
-    <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
-      <GPSToggleControl 
-        trackingEnabled={trackingEnabled} 
-        toggleTracking={toggleTracking} 
-      />
-      <DrawingModeControl 
-        drawingMode={drawingMode}
-        setDrawingMode={setDrawingMode}
-      />
+    <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
+      
       <MapContainer 
         center={position} 
         zoom={13} 
@@ -93,6 +86,15 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+
+      <GPSToggleControl 
+        trackingEnabled={trackingEnabled} 
+        toggleTracking={toggleTracking} 
+      />
+      <DrawingModeControl 
+        drawingMode={drawingMode}
+        setDrawingMode={setDrawingMode}
+      />
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">

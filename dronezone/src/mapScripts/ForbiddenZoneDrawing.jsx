@@ -3,20 +3,21 @@ import { useEffect, useState } from 'react';
 import { useMap, Circle } from 'react-leaflet';
 import L from 'leaflet';
 
-const nodeRadius =20;
+const nodeRadius = 20;
 
 const ForbiddenZoneDrawing = () => {
   const map = useMap();
   let clickPoints = [];
   let tempPolygon = null;
   const [nodes, setNodes] = useState([]);
+  let doubleClickHandler = null; // Track the double-click handler
 
   useEffect(() => {
     const handleClick = (e) => {
       if (!map.forbiddenManager) return;
 
       clickPoints.push(e.latlng);
-        AddNode(e, setNodes);
+      AddNode(e, setNodes);
 
       // Draw temporary polygon
       if (tempPolygon) tempPolygon.remove();
@@ -24,38 +25,44 @@ const ForbiddenZoneDrawing = () => {
         tempPolygon = map.forbiddenManager.drawForbiddenPoly(clickPoints);
       }
 
-      // Handle double click to finish
-      const handleDoubleClick = () => {
-        if (clickPoints.length >= 3) {
-          map.forbiddenManager.drawForbiddenPoly(clickPoints);
-          clickPoints = [];
-          if (tempPolygon) {
-            tempPolygon.remove();
-            tempPolygon = null;
+      // Only set up double-click handler if not already set
+      if (!doubleClickHandler) {
+        doubleClickHandler = () => {
+          if (map.forbiddenManager && clickPoints.length >= 3) {
+            map.forbiddenManager.drawForbiddenPoly(clickPoints);
+            clickPoints = [];
+            if (tempPolygon) {
+              tempPolygon.remove();
+              tempPolygon = null;
+            }
+            map.doubleClickZoom.enable();
+            map.off('dblclick', doubleClickHandler);
+            doubleClickHandler = null;
           }
-          map.doubleClickZoom.enable();
-          map.off('dblclick', handleDoubleClick);
-        }
-      };
-
-      map.doubleClickZoom.disable();
-      map.on('dblclick', handleDoubleClick);
+        };
+        map.doubleClickZoom.disable();
+        map.on('dblclick', doubleClickHandler);
+      }
     };
 
     map.on('click', handleClick);
+    
     return () => {
+      // Clean up ALL event handlers when component unmounts
       map.off('click', handleClick);
+      if (doubleClickHandler) {
+        map.off('dblclick', doubleClickHandler);
+        map.doubleClickZoom.enable();
+      }
       if (tempPolygon) tempPolygon.remove();
     };
   }, [map]);
 
-  return(<>
-  <DrawNodes nodes = {nodes}/>
- 
-  
-  </>)
-  
-  
+  return (
+    <>
+      <DrawNodes nodes={nodes}/>
+    </>
+  );
 };
 
 function AddNode(e, setNodes) {
@@ -63,12 +70,9 @@ function AddNode(e, setNodes) {
         position: e.latlng,
         radius: nodeRadius,
     }
-    setNodes((prevNodes) => [...prevNodes, newNode])
+    setNodes((prevNodes) => [...prevNodes, newNode]);
 }
 
-/*
-    Draws the existing nodes on the map
-*/
 function DrawNodes({nodes}) {
     return (
         <>
@@ -79,8 +83,7 @@ function DrawNodes({nodes}) {
                 )
             })}
         </>
-    )
+    );
 }
-
 
 export default ForbiddenZoneDrawing;
