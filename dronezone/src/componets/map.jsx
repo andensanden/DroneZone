@@ -3,10 +3,72 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
+import ForbiddenZoneDrawing from '@/mapScripts/ForbiddenZoneDrawing';
 
+import ForbiddenZonesManager from '@/mapScripts/forbiddenZone';
+
+// Drawing Mode Control
+const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
+  return (
+    <div className="drawing-mode-control" style={{
+      position: 'absolute',
+      top: '60px',
+      right: '10px',
+      zIndex: 1000,
+    }}>
+      <button 
+        onClick={() => setDrawingMode('path')}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: drawingMode === 'path' ? '#4CAF50' : '#ccc',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px 0 0 4px',
+          cursor: 'pointer',
+          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+        }}
+      >
+        Draw Path
+      </button>
+      <button 
+        onClick={() => setDrawingMode('forbidden')}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: drawingMode === 'forbidden' ? '#f44336' : '#ccc',
+          color: 'white',
+          border: 'none',
+          borderRadius: '0 4px 4px 0',
+          cursor: 'pointer',
+          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+        }}
+      >
+        Draw Forbidden Zone
+      </button>
+    </div>
+  );
+};
+
+// Forbidden Zones Initializer
+const ForbiddenZonesInitializer = () => {
+  const map = useMap();
+  
+  useEffect(() => {
+    const forbiddenManager = new ForbiddenZonesManager(map);
+    map.forbiddenManager = forbiddenManager;
+    
+    return () => {
+      forbiddenManager.clearForbiddenZones();
+    };
+  }, [map]);
+
+  return null;
+};
+
+// Main Map Component
 const Map = () => {
   const initialPosition = [59.3293, 18.0686]; // Stockholm coordinates
   const [trackingEnabled, setTrackingEnabled] = useState(true);
+  const [drawingMode, setDrawingMode] = useState('path');
 
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
@@ -17,6 +79,10 @@ const Map = () => {
       <GPSToggleControl 
         trackingEnabled={trackingEnabled} 
         toggleTracking={toggleTracking} 
+      />
+      <DrawingModeControl 
+        drawingMode={drawingMode}
+        setDrawingMode={setDrawingMode}
       />
       <MapContainer 
         center={initialPosition} 
@@ -29,7 +95,13 @@ const Map = () => {
         />
         
         <LocationTracker trackingEnabled={trackingEnabled} />
-        <MapClick/>
+        <ForbiddenZonesInitializer />
+        
+        {drawingMode === 'path' ? (
+          <MapClick />
+        ) : (
+          <ForbiddenZoneDrawing />
+        )}
       </MapContainer>
     </div>
   );
