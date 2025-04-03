@@ -15,7 +15,7 @@ export function CreateInfo() {
   
     const handleLogin = () => {
       // You can replace this with actual logic (like API call)
-      console.log("Creating with:" ,name, pnummer, adress, city, zip, email, password),confirmpassword;
+      console.log("Creating with:" ,name, pnummer, adress, city, zip, email, password,confirmpassword);
     };
   
     return (
@@ -100,7 +100,7 @@ export function CreateInfo() {
             onChange={(e) => setPassword(e.target.value)}
           />
            <input
-            type="confirmpassword"
+            type="password"
             placeholder="Confirm Password"
             className="mb-15 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
             value={confirmpassword}
