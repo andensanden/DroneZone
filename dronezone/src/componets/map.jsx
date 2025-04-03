@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';

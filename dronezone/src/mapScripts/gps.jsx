@@ -81,7 +81,7 @@ const LocationTracker = ({ trackingEnabled }) => {
 /*
     Control component used to toggle location tracking.
 */
-const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
+/*const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
     return (
       <div className="gps-control" style={{
         position: 'absolute',
@@ -105,6 +105,69 @@ const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
         </button>
       </div>
     );
+  };*/
+
+  // GPS Toggle Control
+const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
+    return (
+      <div className="leaflet-bar leaflet-control" style={{ marginRight: '10px' }}>
+        <button
+          onClick={toggleTracking}
+          style={{
+            backgroundColor: trackingEnabled ? '#4CAF50' : '#fff',
+            padding: '8px',
+            border: '2px solid rgba(0,0,0,0.2)',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          📍
+        </button>
+      </div>
+    );
   };
+
+  // LocationTracker component
+/*const LocationTracker = ({ trackingEnabled }) => {
+    const map = useMap();
+    const [position, setPosition] = useState(null);
+    const [accuracy, setAccuracy] = useState(null);
+  
+    useEffect(() => {
+      if (!trackingEnabled) return;
+  
+      let watchId;
+      const handleSuccess = (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
+        const newPos = L.latLng(latitude, longitude);
+        setPosition(newPos);
+        setAccuracy(accuracy);
+        map.flyTo(newPos, 18);
+      };
+  
+      const handleError = (err) => {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      };
+  
+      if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(
+          handleSuccess,
+          handleError,
+          { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+        );
+      }
+  
+      return () => {
+        if (watchId) navigator.geolocation.clearWatch(watchId);
+      };
+    }, [trackingEnabled, map]);
+  
+    return position ? (
+      <>
+        <Marker position={position} />
+        {accuracy && <Circle center={position} radius={accuracy} />}
+      </>
+    ) : null;
+  };*/
 
 export { LocationTracker, GPSToggleControl };
