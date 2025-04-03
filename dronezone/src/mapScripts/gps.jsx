@@ -110,7 +110,8 @@ const LocationTracker = ({ trackingEnabled }) => {
   // GPS Toggle Control
 const GPSToggleControl = ({ trackingEnabled, toggleTracking }) => {
     return (
-      <div className="leaflet-bar leaflet-control" style={{ marginRight: '10px' }}>
+      <div className="leaflet-bar leaflet-control" style={{ marginRight: '10px', position: "absolute", top: "10%",
+}}>
         <button
           onClick={toggleTracking}
           style={{
