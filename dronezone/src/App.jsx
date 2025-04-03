@@ -3,6 +3,7 @@ import { Home } from "./pages/Home";
 import { AboutUs } from "./pages/AboutUs";
 import { Login } from "./pages/Login";
 import {Guidelines} from "./pages/Guidelines";
+import { Account } from "./pages/account";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/guidelines" element={<Guidelines/>}/>
+        <Route path="/account" element={<Account/>}/>
       </Routes>
     </BrowserRouter>
     </>

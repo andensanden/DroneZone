@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
@@ -12,7 +12,7 @@ const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
   return (
     <div className="drawing-mode-control" style={{
       position: 'absolute',
-      top: '60px',
+      top: '400px',
       right: '10px',
       zIndex: 1000,
     }}>
@@ -93,6 +93,18 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+
+        {/*This is the overlay HAMBURGER button */}
+      <LayersControl position="topright">
+      <LayersControl.Overlay name="Display Current Location">
+      </LayersControl.Overlay>
+        <LayersControl.Overlay name="Display Current Restricted Areas">
+        {/*Generate places with restricted flight zones */}
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Show Active Drones">
+        {/*Generate locations of active drones*/}
+        </LayersControl.Overlay>
+      </LayersControl>
         
         <LocationTracker trackingEnabled={trackingEnabled} />
         <ForbiddenZonesInitializer />
@@ -106,5 +118,24 @@ const Map = () => {
     </div>
   );
 };
+
+{/*This is the overlay HAMBURGER button */}
+/*<LayersControl position="topright">
+<LayersControl.Overlay name="Display Current Location">
+  <Marker position={position}>
+    <Popup>
+      Current Location <br />
+    </Popup>
+  </Marker>
+</LayersControl.Overlay>
+  <LayersControl.Overlay name="Display Current Restricted Areas">
+  {/*Generate places with restricted flight zones *///}
+  /*<Circle position={position} radius={200}/>
+  </LayersControl.Overlay>
+  <LayersControl.Overlay name="Show Active Drones">
+  {/*Generate locations of active drones*///}
+  /*<Circle position={position} radius={200}/>
+  </LayersControl.Overlay>
+</LayersControl>*/
 
 export default Map;
