@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useMap, Circle } from 'react-leaflet'
+import { useMap, Circle, Polyline } from 'react-leaflet'
 
 const nodeRadius = 20;
 
@@ -9,10 +9,18 @@ const nodeRadius = 20;
 function MapClick() {
     const map = useMap()
     const [nodes, setNodes] = useState([])
+    const [paths, setPaths] = useState([])
 
     const onMapClick = (e) => {
         AddNode(e, setNodes)
     }
+
+    // Update paths whenever nodes is updated
+    useEffect(() => {
+        if (nodes.length > 1) {
+            AddPath(nodes[nodes.length-2], nodes[nodes.length-1], setPaths)
+        }
+    }, [nodes])
 
     useEffect(() => {
         map.on('click', onMapClick) 
@@ -22,7 +30,12 @@ function MapClick() {
         }
     }, [map])
 
-    return DrawNodes(nodes)
+    return (
+        <>
+            <DrawNodes nodes={nodes}/>
+            <DrawPaths paths={paths}/>
+        </>
+    )
 }
 
 /*
@@ -39,21 +52,41 @@ function AddNode(e, setNodes) {
 /*
     Draws the existing nodes on the map
 */
-function DrawNodes(nodes) {
+function DrawNodes({nodes}) {
     return (
         <>
             {nodes.map((node, index) => { return(
                 <Circle 
                 key={index} center={node.position} radius={node.radius}
-                color="blue" fillColor="blue" fillOpacity={0.5}>
-                </Circle>)
+                color="blue" fillColor="blue" fillOpacity={0.5}/>
+                )
             })}
         </>
     )
 }
 
-function DrawPath(nodes) {
-    
+/*
+    Add a new path to the array of paths
+*/
+function AddPath(startNode, endNode, setPaths) {
+    const newPath = [startNode.position, endNode.position]
+    setPaths((prevPaths) => [...prevPaths, newPath])
+}
+
+/*
+    Draws the existing paths on the map
+*/
+function DrawPaths({paths}) {
+    return (
+        <>
+            {paths.map((path, index) => { return(
+                <Polyline 
+                key={index} positions={path}
+                color="blue" weight={1}/>
+                )
+            })}
+        </>
+    )
 }
 
 export default MapClick
