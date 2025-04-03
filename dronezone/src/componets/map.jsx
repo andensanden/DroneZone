@@ -1,22 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import MapClick from '@/mapScripts/pathDrawing';
 
 /*
-  Clicking on the map causes the map to zoom to your location and place a marker
+  Locate the users location and place a marker at location upon start of program
 */
 function LocationMarker() {
   const [position, setPosition] = useState(null)
-  const map = useMapEvents({
-    click() {
-      map.locate()
-    },
-    locationfound(e) {
+  const map = useMap()
+  useEffect(() => {
+    map.locate()
+    map.on('locationfound', (e) => {
       setPosition(e.latlng)
       map.flyTo(e.latlng, map.getZoom())
-    },
-  })
+    })
+  }, [map])
 
   return position === null ? null : (
     <Marker position={position}>
@@ -34,7 +33,8 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <LocationMarker />
+      <LocationMarker/>
+      <MapClick/>
     </MapContainer>
   );
 };
