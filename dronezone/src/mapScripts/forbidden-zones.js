@@ -1,142 +1,136 @@
-var forbiddenCoords = [];
-var forbiddenCircles = [];
-var forbiddenPolygons = [];
+import L from 'leaflet';
 
-var lastPolygon;
-function drawForbiddenPoly(coords) {
-    if (lastPolygon) lastPolygon.remove();
+class ForbiddenZonesManager {
+  constructor(map) {
+    this.map = map;
+    this.fCoords = [];
+    this.fNodes = [];
+    this.fPolys = [];
+    this.lastPolygon = null;
+  }
+
+  drawForbiddenPoly(coords) {
+    if (this.lastPolygon) this.lastPolygon.remove();
    
-    sortCoordinates(coords);
-    lastPolygon = L.polygon(coords, {color: 'red', fillColor: '#f03'}).addTo(map);
+    coords = this.sortCoordinates(coords);
+    this.lastPolygon = L.polygon(coords, {color: 'red', fillColor: '#f03'}).addTo(this.map);
     
-    forbiddenPolygons.push(lastPolygon);
-}
+    this.fPolys.push(this.lastPolygon);
+    return this.lastPolygon;
+  }
 
-// Function to calculate the centroid of a set of coordinates
-function calculateCentroid(coords) {
+  calculateCentroid(coords) {
     let latSum = 0;
     let lonSum = 0;
     for (let i = 0; i < coords.length; i++) {
-        latSum += coords[i].lat;
-        lonSum += coords[i].lng;
+      latSum += coords[i].lat;
+      lonSum += coords[i].lng;
     }
     return {
-        lat: latSum / coords.length,
-        lng: lonSum / coords.length
+      lat: latSum / coords.length,
+      lng: lonSum / coords.length
     };
-}
+  }
 
-// Function to calculate the angle between two points
-function calculateAngle(point, center) {
-    // Use atan2 to calculate the angle
+  calculateAngle(point, center) {
     return Math.atan2(point.lat - center.lat, point.lng - center.lng);
-}
+  }
 
-// Function to sort the coordinates in counterclockwise order
-function sortCoordinates(coords) {
-    const centroid = calculateCentroid(coords);
-
-    // Sort the points by angle relative to the centroid
-    circles.sort(function(a, b) {
-        let angleA = calculateAngle(a, centroid);
-        let angleB = calculateAngle(b, centroid);
-        return angleA - angleB; // Sort in counterclockwise direction
+  sortCoordinates(coords) {
+    const centroid = this.calculateCentroid(coords);
+    return [...coords].sort((a, b) => {
+      let angleA = this.calculateAngle(a, centroid);
+      let angleB = this.calculateAngle(b, centroid);
+      return angleA - angleB;
     });
+  }
 
-    return coords;
-}
-
-// Function to check if a line segment intersects with a polygon edge
-function doLineSegmentsIntersect(p1, p2, p3, p4) {
-    // Calculate the direction of the vectors
+  doLineSegmentsIntersect(p1, p2, p3, p4) {
     const d1x = p2.lng - p1.lng;
     const d1y = p2.lat - p1.lat;
     const d2x = p4.lng - p3.lng;
     const d2y = p4.lat - p3.lat;
-
-    // Calculate the determinant
     const det = d1x * d2y - d1y * d2x;
     
-    // If det is zero, lines are parallel
     if (det === 0) return false;
     
     const dx = p3.lng - p1.lng;
     const dy = p3.lat - p1.lat;
-    
-    // Calculate parameters for the intersection point
     const t = (dx * d2y - dy * d2x) / det;
     const u = (dx * d1y - dy * d1x) / det;
     
-    // Check if the intersection point is within both line segments
     return (t >= 0 && t <= 1 && u >= 0 && u <= 1);
-}
+  }
 
-// Function to check if a line segment intersects with a polygon
-function doesLineIntersectPolygon(p1, p2, polygon) {
+  doesLineIntersectPolygon(p1, p2, polygon) {
     const polygonCoords = polygon.getLatLngs()[0];
     
-    // Check if either endpoint is inside the polygon
-    if (isPointInPolygon(p1, polygon) || isPointInPolygon(p2, polygon)) {
-        return true;
+    if (this.isPointInPolygon(p1, polygon) || this.isPointInPolygon(p2, polygon)) {
+      return true;
     }
     
-    // Check if the line segment intersects with any polygon edge
     for (let i = 0; i < polygonCoords.length; i++) {
-        const j = (i + 1) % polygonCoords.length;
-        if (doLineSegmentsIntersect(p1, p2, polygonCoords[i], polygonCoords[j])) {
-            return true;
-        }
+      const j = (i + 1) % polygonCoords.length;
+      if (this.doLineSegmentsIntersect(p1, p2, polygonCoords[i], polygonCoords[j])) {
+        return true;
+      }
     }
     
     return false;
-}
+  }
 
-// Function to check if a point is inside a polygon
-function isPointInPolygon(point, polygon) {
-    // Get the polygon's coordinates
-    var polygonCoords = polygon.getLatLngs()[0];
+  isPointInPolygon(point, polygon) {
+    const polygonCoords = polygon.getLatLngs()[0];
+    let inside = false;
+    const x = point.lat, y = point.lng;
     
-    // Ray casting algorithm for point in polygon detection
-    var inside = false;
-    var x = point.lat, y = point.lng;
-    
-    for (var i = 0, j = polygonCoords.length - 1; i < polygonCoords.length; j = i++) {
-        var xi = polygonCoords[i].lat, yi = polygonCoords[i].lng;
-        var xj = polygonCoords[j].lat, yj = polygonCoords[j].lng;
-        
-        var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
+    for (let i = 0, j = polygonCoords.length - 1; i < polygonCoords.length; j = i++) {
+      const xi = polygonCoords[i].lat, yi = polygonCoords[i].lng;
+      const xj = polygonCoords[j].lat, yj = polygonCoords[j].lng;
+      
+      const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
     }
     
     return inside;
-}
+  }
 
-// Function to check if a new point would create a line that intersects with any forbidden zone
-function wouldLineIntersectForbiddenZone(newPoint) {
-    // If this is the first point, just check if it's in a forbidden zone
+  wouldLineIntersectForbiddenZone(newPoint, coords) {
     if (coords.length === 0) {
-        return isPointInForbiddenZone(newPoint);
+      return this.isPointInForbiddenZone(newPoint);
     }
     
-    // Get the last point to form a line segment
     const lastPoint = coords[coords.length - 1];
     
-    // Check if the line segment intersects with any forbidden polygon
-    for (var i = 0; i < forbiddenPolygons.length; i++) {
-        if (doesLineIntersectPolygon(lastPoint, newPoint, forbiddenPolygons[i])) {
-            return true;
-        }
+    for (let i = 0; i < this.fPolys.length; i++) {
+      if (this.doesLineIntersectPolygon(lastPoint, newPoint, this.fPolys[i])) {
+        return true;
+      }
     }
     
     return false;
-}
+  }
 
-// Function to check if a point is in any forbidden zone
-function isPointInForbiddenZone(point) {
-    for (var i = 0; i < forbiddenPolygons.length; i++) {
-        if (isPointInPolygon(point, forbiddenPolygons[i])) {
-            return true;
-        }
+  isPointInForbiddenZone(point) {
+    for (let i = 0; i < this.fPolys.length; i++) {
+      if (this.isPointInPolygon(point, this.fPolys[i])) {
+        return true;
+      }
     }
     return false;
+  }
+
+  clearForbiddenZones() {
+    this.fPolys.forEach(poly => poly.remove());
+    this.fPolys = [];
+    this.fCoords = [];
+    this.fNodes = [];
+    this.lastPolygon = null;
+  }
+
+  getForbiddenPolygons() {
+    return this.fPolys;
+  }
 }
+
+export default ForbiddenZonesManager;
