@@ -1,4 +1,4 @@
-import '@/utils/leafletIconFix';
+
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
