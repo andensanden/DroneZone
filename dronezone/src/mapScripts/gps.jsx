@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 const LocationTracker = ({ trackingEnabled }) => {
     const map = useMap();
     const [position, setPosition] = useState(null);
-    const [accuracy, setAccuracy] = useState(null);
+    //const [accuracy, setAccuracy] = useState(null); REMOVE ALL MENTIONS OF ACCURACY IF NOT DESIRED
     const [watchId, setWatchId] = useState(null);
     const [mapCentered, setMapCentered] = useState(false);
   
@@ -24,7 +24,7 @@ const LocationTracker = ({ trackingEnabled }) => {
           (pos) => {
             const newPos = [pos.coords.latitude, pos.coords.longitude];
             setPosition(newPos);
-            setAccuracy(pos.coords.accuracy);
+            //setAccuracy(pos.coords.accuracy);
             
             // Center map if it has not already been centered
             if (!mapCentered) {
@@ -63,7 +63,7 @@ const LocationTracker = ({ trackingEnabled }) => {
         {trackingEnabled && position && (
           <>
             <Marker position={position} />
-            {accuracy && (
+            {/*accuracy && (
               <Circle
                 center={position}
                 radius={accuracy}
@@ -71,7 +71,7 @@ const LocationTracker = ({ trackingEnabled }) => {
                 fillColor="blue"
                 fillOpacity={0.2}
               />
-            )}
+            )*/}
           </>
         )}
       </>
