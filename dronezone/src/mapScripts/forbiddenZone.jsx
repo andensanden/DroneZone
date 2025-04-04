@@ -1,4 +1,4 @@
-// forbiddenZonesManager.js
+// forbiddenZonesManager.jsx
 import L from 'leaflet';
 
 class ForbiddenZonesManager {

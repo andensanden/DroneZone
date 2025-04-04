@@ -15,7 +15,7 @@ function MapClick() {
     const onMapClick = (e) => {
         // Only trigger AddNode upon clicking map, not buttons or other UI elements
         if (e.originalEvent.target.classList.contains('leaflet-container'))
-            AddNode(e, setNodes)
+            AddNode(e, setNodes, nodes);
     }
 
     // Update paths whenever nodes is updated
@@ -46,12 +46,34 @@ function MapClick() {
 /*
     Add a new node to the array of nodes
 */
-function AddNode(e, setNodes) {
-    const newNode = {
+function AddNode(e, setNodes, nodes) {
+    var newNode = {
         position: e.latlng,
         radius: nodeRadius,
     }
-    setNodes((prevNodes) => [...prevNodes, newNode])
+    NodeOverlap(newNode, nodes);
+    setNodes((prevNodes) => [...prevNodes, newNode]);
+}
+
+/*
+    Remove a node based on its index in the nodes array
+*/
+function RemoveNode(index, setNodes) {
+    setNodes((prevNodes) => prevNodes.filter((_, i) => i !== index));
+}
+
+/*
+    If two nodes overlap, set their positions to be the same
+*/
+function NodeOverlap(node, nodes) {
+    const nodePos = node.position;
+    for (var i = 0; i < nodes.length; i++) {
+        /*if (node == nodes[i])
+            continue;*/
+        if (nodePos.distanceTo(nodes[i].position) <= nodeRadius * 2)
+            //node.position = nodes[i].position;
+            console.log("Hello");
+    }
 }
 
 /*
