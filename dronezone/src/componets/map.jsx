@@ -1,5 +1,5 @@
+import '@/utils/leafletIconFix';
 import { useState, useEffect } from 'react';
-import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
@@ -7,15 +7,18 @@ import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
 import ForbiddenZoneDrawing from '@/mapScripts/ForbiddenZoneDrawing';
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZone';
 import L from 'leaflet';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix leaflet's default icon path issue (especially on production builds)
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconUrl: iconRetinaUrl,
-  shadowUrl: markerShadow,
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
+
 // Drawing Mode Control
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
   return (
