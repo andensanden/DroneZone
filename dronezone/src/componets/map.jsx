@@ -1,11 +1,23 @@
+
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, useMap, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
 import ForbiddenZoneDrawing from '@/mapScripts/ForbiddenZoneDrawing';
-
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZone';
+import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
 
 // Drawing Mode Control
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
