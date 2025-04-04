@@ -5,7 +5,17 @@ import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
 import ForbiddenZoneDrawing from '@/mapScripts/ForbiddenZoneDrawing';
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZone';
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
+// Fix leaflet's default icon path issue (especially on production builds)
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 // Drawing Mode Control
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
   return (
