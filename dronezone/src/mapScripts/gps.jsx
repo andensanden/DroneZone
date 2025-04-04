@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Marker, Circle, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+// Fix leaflet's default icon path issue (especially on production builds)
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 /*
     Tracks the users location and adds a marker at their position
