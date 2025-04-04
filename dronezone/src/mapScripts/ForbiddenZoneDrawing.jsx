@@ -14,7 +14,8 @@ const ForbiddenZoneDrawing = () => {
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (!map.forbiddenManager) return;
+      // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
+      if (!map.forbiddenManager || !e.originalEvent.target.classList.contains('leaflet-container')) return;
 
       clickPoints.push(e.latlng);
       AddNode(e, setNodes);

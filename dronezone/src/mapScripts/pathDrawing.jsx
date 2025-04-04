@@ -13,7 +13,9 @@ function MapClick() {
     const [bufferZones, setBufferZones] = useState([])
 
     const onMapClick = (e) => {
-        AddNode(e, setNodes)
+        // Only trigger AddNode upon clicking map, not buttons or other UI elements
+        if (e.originalEvent.target.classList.contains('leaflet-container'))
+            AddNode(e, setNodes)
     }
 
     // Update paths whenever nodes is updated
