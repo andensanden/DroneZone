@@ -4,10 +4,10 @@ import { SignUpForm } from "@/components/signUpForm";
 
 export function CreateAccount() {
   return (
-    <div>
+    <>
       <Header></Header>
       <SignUpForm />
       <Footer></Footer>
-    </div>
+    </>
   );
 }

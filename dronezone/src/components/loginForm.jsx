@@ -4,6 +4,7 @@ import { supabase } from "@/supabase/config.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { login } from "@/Redux/auth/authSlice";
+import { toast } from "react-toastify";
 
 
 export function LoginForm() {
@@ -24,14 +25,13 @@ export function LoginForm() {
     });
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
+      return;
     }
 
-    console.log(data);
-
+    dispatch(login(data.user.email));
+    toast.success("You have been logged in");
     navigate("/");
-    //TODO: Redirect to home
-
   };
 
 

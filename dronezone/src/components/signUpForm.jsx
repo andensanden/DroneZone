@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Logo } from "@/components/logo";
 import { supabase } from "@/supabase/config.js";
+import { useDispatch} from "react-redux";
+
 
 export function SignUpForm() {
   const [name, setName] = useState("");
@@ -11,6 +13,8 @@ export function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   async function handleSignUp() {
 

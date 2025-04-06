@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ToastContainer } from 'react-toastify';
 import { Home } from "./pages/Home";
 import { AboutUs } from "./pages/AboutUs";
 import { Login } from "./pages/Login";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/createaccount" element={<CreateAccount/>}/>
       </Routes>
     </BrowserRouter>
+    <ToastContainer position="bottom-right" />
     </>
   )
 }
