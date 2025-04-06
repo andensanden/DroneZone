@@ -6,11 +6,15 @@ import { Login } from "./pages/Login";
 import {Guidelines} from "./pages/Guidelines";
 import { Account } from "./pages/Account";
 import { CreateAccount } from "./pages/CreateAccount";
+import { useGetUserAuth } from "@/hooks/useGetUserAuth";
 
 
 
 function App() {
 
+  //Hook that gets user auth state / listens for auth changes. 
+  // Always keeps application state in sync and ensures correct user experience
+  useGetUserAuth();
 
   return (
     <>

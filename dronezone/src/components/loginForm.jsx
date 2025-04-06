@@ -15,10 +15,6 @@ export function LoginForm() {
 
   async function handleLogin() {
 
-
-    console.log(email, password);
-    //TODO: Application state management 
-
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,

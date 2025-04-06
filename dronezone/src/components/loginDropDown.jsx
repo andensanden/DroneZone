@@ -1,4 +1,4 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { FaRegUser } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
 import { useNavigate } from "react-router";
@@ -36,6 +36,7 @@ export function LoginDropDown(){
 					Account
                     <FaRegUser size={20}/>
 				</DropdownMenuItem>
+				<DropdownMenuSeparator/>
 				<DropdownMenuItem onClick={handleLogout} className="flex items-center justify-start gap-2 cursor-pointer">
 					Logout
 					<TbLogout size={20}/>
