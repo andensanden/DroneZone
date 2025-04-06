@@ -1,7 +1,7 @@
 
-import { Header } from "@/componets/header";
-import { AboutInfo } from "@/componets/aboutInfo";
-import { Footer } from "@/componets/footer";
+import { Header } from "@/components/header";
+import { AboutInfo } from "@/components/aboutInfo";
+import { Footer } from "@/components/footer";
 
 
 export function AboutUs() {
