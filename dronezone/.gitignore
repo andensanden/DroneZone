@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Own files that we dont want to track
+.env
+.env.local
+

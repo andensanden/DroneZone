@@ -1,14 +1,14 @@
 
-import { Header } from "@/componets/header";
-import { LoginInfo } from "@/componets/loginInfo";
-import { Footer } from "@/componets/footer";
+import { Header } from "@/components/header";
+import { LoginForm } from "@/components/loginForm";
+import { Footer } from "@/components/footer";
 
 
 export function Login() {
   return (
     <>
       <Header />
-      <LoginInfo/>
+      <LoginForm/>
       <Footer />
     </>
   )

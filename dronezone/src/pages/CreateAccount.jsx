@@ -1,14 +1,13 @@
-import { Header } from "@/componets/header"
-import {Footer} from "@/componets/footer"
-import { CreateInfo } from "@/componets/createInfo"
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { SignUpForm } from "@/components/signUpForm";
 
-export function CreateAccount(){
-
-    return(
-        <div>
-            <Header></Header>
-            <CreateInfo></CreateInfo>
-            <Footer></Footer>
-        </div>
-    )
+export function CreateAccount() {
+  return (
+    <div>
+      <Header></Header>
+      <SignUpForm />
+      <Footer></Footer>
+    </div>
+  );
 }
