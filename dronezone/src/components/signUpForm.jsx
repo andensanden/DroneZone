@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Logo } from "@/components/logo";
 import { supabase } from "@/supabase/config.js";
-import { useDispatch} from "react-redux";
-
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { Link } from "react-router";
 
 export function SignUpForm() {
   const [name, setName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [pnummer, setPersonnummer] = useState("");
   const [adress, setAdress] = useState("");
   const [city, setCity] = useState("");
@@ -14,32 +17,58 @@ export function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
 
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   async function handleSignUp() {
+    //Some basic password validation
+    if (password !== confirmpassword) {
+      toast.error("Passwords do not match");
+      return;
+    } else if (password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
 
-      const {error, data} = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp(
+      {
         email,
         password,
-      }, {
-      data: {
-        name,
-        pnummer,
-        adress,
-        city,
-        zip,
       },
-    });
 
+      //TODO: Send this data to the database instead on profile table
+      {
+        data: {
+          name,
+          lastname,
+          phone,
+          pnummer,
+          adress,
+          city,
+          zip,
+        },
+      }
+    );
+
+    //TODO: Implement error handling and displaying message with help of application state
     if (error) {
       console.error(error);
     }
 
-    
-    //TODO: Implement redirect to login
-    //TODO: Implement error handling and displaying message with help of application state
+    //reset the form
+    setName("");
+    setLastName("");
+    setPhone("");
+    setPersonnummer("");
+    setAdress("");
+    setCity("");
+    setZip("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
 
-  };
+    navigate("/home");
+    console.log(data);
+  }
 
   return (
     <div className="flex items-center justify-center mt-10">
@@ -58,10 +87,18 @@ export function SignUpForm() {
 
         <input
           type="name"
-          placeholder="Full Name"
-          className="mb-4 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
+          placeholder="First Name"
+          className="mb-4 px-4 py-1 border border-gray-300 w-36 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
           value={name}
           onChange={(e) => setName(e.target.value)}
+        />
+
+        <input
+          type="name"
+          placeholder="Last Name"
+          className="mb-4 px-4 py-1 border border-gray-300 w-36 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
+          value={lastname}
+          onChange={(e) => setLastName(e.target.value)}
         />
 
         <div className="flex space-x-4 mb-1">
@@ -108,6 +145,14 @@ export function SignUpForm() {
         />
 
         <input
+          type="phone"
+          placeholder="Phone Number"
+          className="mb-4 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:scale-105 transition-all duration-200"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
+        <input
           type="password"
           placeholder="Create Password"
           className="mb-4 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
@@ -117,17 +162,23 @@ export function SignUpForm() {
         <input
           type="password"
           placeholder="Confirm Password"
-          className="mb-10 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
+          className="mb-6 px-4 py-1 border border-gray-300 rounded-md w-77 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:shadow-xl hover:scale-105 transition-all duration-200"
           value={confirmpassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <button
           onClick={handleSignUp}
-          className="mb-10 bg-primary-yellow text-gray-700 rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#e6b800] w-77 hover:scale-105 transition-all duration-200"
+          className=" bg-primary-yellow text-gray-700 rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#e6b800] w-77 hover:scale-105 transition-all duration-200"
         >
           Create Account
         </button>
+        <p className="mt-4 text-sm text-gray-500">
+          Already have an account?{" "}
+          <Link to="/login" className="underline text-primary-light-blue">
+            Sign in here
+          </Link>
+        </p>
 
         <button
           className=" bg-[#FFFFFF] text-white rounded-lg ml-2 font-bold text-sm p-2 hover:bg-[#ff0000] w-32 hover:scale-105 transition-all duration-200"
