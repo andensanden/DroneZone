@@ -7,7 +7,7 @@ function LaunchButton() {
             zIndex: 1000,
           }}>
             <button 
-              onClick={Launch()}
+              onClick={() => Launch()}
               style={{
                 padding: '8px 16px',
                 backgroundColor: 'blue',
@@ -25,7 +25,7 @@ function LaunchButton() {
 }
 
 function Launch() {
-
+    alert("LAUNCHING");
 }
 
 export default LaunchButton;
