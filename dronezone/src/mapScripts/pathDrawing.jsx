@@ -10,18 +10,31 @@ function MapClick() {
     const [nodes, setNodes] = useState([])
     const [paths, setPaths] = useState([])
     const [bufferZones, setBufferZones] = useState([])
+    let newNode;
 
     const onMapClick = (e) => {
         // Only create a new node upon clicking map, not buttons or other UI elements
-        if (e.originalEvent.target.classList.contains('leaflet-container'))
-            new Node(e.latlng).addNode(nodes, setNodes);
+        if (e.originalEvent.target.classList.contains('leaflet-container')) {
+            newNode = new Node(e.latlng);
+            newNode.addNode(nodes, setNodes);
+        }
     }
 
     // Update paths whenever nodes is updated
     useEffect(() => {
+        let n = nodes[nodes.length-1];
+        // Check if nodes overlap
+        if (n) {
+            let overlapNode = n.overlapNode(nodes);
+            if (overlapNode) {
+                n.position = overlapNode.position;
+                n.visible = false;
+            }
+        }
+
         if (nodes.length > 1) {
-            AddPath(nodes[nodes.length-2], nodes[nodes.length-1], setPaths)
-            AddBufferZone(nodes[nodes.length-2], nodes[nodes.length-1], setBufferZones)
+            AddPath(nodes[nodes.length-2], n, setPaths)
+            AddBufferZone(nodes[nodes.length-2], n, setBufferZones)
         }
     }, [nodes])
 
@@ -42,19 +55,13 @@ function MapClick() {
     )
 }
 
-
-
-
-
-
-
 /*
     Draws the existing nodes on the map
 */
 function DrawNodes({nodes}) {
     return (
         <>
-            {nodes.map((node, index) => { return(
+            {nodes.map((node, index) => { if (node.visible) return(
                 <Circle 
                 key={index} center={node.position} radius={node.radius}
                 color="blue" fillColor="blue" fillOpacity={0.5}/>

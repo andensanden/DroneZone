@@ -1,6 +1,21 @@
 export class Dronepath {
-    constructor(owner, nodes) {
+    nodes = [];
+
+    constructor(owner) {
         this.owner = owner;
-        this.nodes = nodes;
+    }
+
+    /*
+        Add a node
+    */
+    addNode(node) {
+        this.nodes.push(node);
+    }
+
+    /*
+        Remove a node at index i
+    */
+    removeNode(i) {
+        this.nodes.splice(i, 1);
     }
 }
