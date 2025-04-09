@@ -5,6 +5,7 @@ import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
 import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
+import LaunchButton from '@/mapScripts/launchButton';
 import { ForbiddenZoneDrawing, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing';
 
 // Main Map Component
@@ -38,6 +39,7 @@ const Map = () => {
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
       />
+      <LaunchButton/>
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">

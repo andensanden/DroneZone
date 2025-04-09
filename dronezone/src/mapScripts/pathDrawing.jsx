@@ -15,7 +15,7 @@ function MapClick() {
     const onMapClick = (e) => {
         // Only create a new node upon clicking map, not buttons or other UI elements
         if (e.originalEvent.target.classList.contains("leaflet-container")
-            || e.originalEvent.target.classList.contains("mapClickable")) {
+            || e.originalEvent.target.classList.contains("map-clickable")) {
             newNode = new Node(e.latlng);
             newNode.addNode(nodes, setNodes);
         }
@@ -63,7 +63,7 @@ function DrawNodes({nodes}) {
     return (
         <>
             {nodes.map((node, index) => { if (node.visible) return(
-                <Circle className = "mapClickable"
+                <Circle className = "map-clickable"
                 key={index} center={node.position} radius={node.radius}
                 color="blue" fillColor="blue" fillOpacity={0.5}/>
                 )
@@ -87,7 +87,7 @@ function DrawPaths({paths}) {
     return (
         <>
             {paths.map((path, index) => { return(
-                <Polyline className = "mapClickable"
+                <Polyline className = "map-clickable"
                 key={index} positions={path}
                 color="blue" weight={1}/>
                 )
@@ -112,7 +112,7 @@ function DrawBufferZones({bufferZones}) {
     return (
         <>
             {bufferZones.map((zone, index) => { return(
-                <Polygon className = "mapClickable"
+                <Polygon className = "map-clickable"
                 key={index} positions={zone}
                 color="blue" fillOpacity={0.3} weight={1}/>
                 )
