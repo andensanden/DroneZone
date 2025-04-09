@@ -59,6 +59,30 @@ function MapClick() {
             <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
+
+            <div className="undo-button" style={{
+                        position: 'absolute',
+                        top: '78%',
+                        right: '0%',
+                        zIndex: 1000,
+                    }}>
+                        <button
+                            onClick={() => undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones) }
+            
+                            style={{
+                                padding: '8px 16px',
+                                backgroundColor: 'grey',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px 0 0 4px',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                            }}
+            
+                        >
+                            Undo
+                        </button>
+                    </div>
         </>
     )
 }
@@ -71,6 +95,10 @@ function AddPath(startNode, endNode, setPaths) {
     setPaths((prevPaths) => [...prevPaths, newPath])
 }
 
+function RemovePath(index, setPaths) {
+    setPaths((prevPaths) => prevPaths.filter((_, i) => i !== index));
+}
+
 /*
     Add a new buffer zone to the buffer zone array
 */
@@ -78,6 +106,10 @@ function AddBufferZone(startNode, endNode, setBufferZones) {
     const bufferWidth = 40;
     const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth)
     setBufferZones((prevZones) => [...prevZones, newZone])
+}
+
+function RemoveBufferZone(index, setBufferZones) {
+    setBufferZones((prevBuffer) => prevBuffer.filter((_, i) => i !== index));
 }
 
 /*
@@ -117,4 +149,12 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-export default MapClick
+function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones) {
+    if (nodes.length === 0) alert("Working");
+
+    nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
+    RemovePath(paths.length - 1, setPaths);
+    RemoveBufferZone(bufferZones.length - 1, setBufferZones);
+}
+
+export { MapClick }
