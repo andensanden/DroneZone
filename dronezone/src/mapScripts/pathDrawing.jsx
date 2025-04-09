@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
+import ForbiddenZonesManager from './forbiddenZonesManager.js'
 
 /*
     Handles what happens when the user clicks on the map
@@ -12,13 +13,18 @@ function MapClick() {
     const [paths, setPaths] = useState([])
     const [bufferZones, setBufferZones] = useState([])
     let newNode;
+    let zonesManager = new ForbiddenZonesManager(useMap());
 
     const onMapClick = (e) => {
         // Only create a new node upon clicking map, not buttons or other UI elements
         if (e.originalEvent.target.classList.contains("leaflet-container")
             || e.originalEvent.target.classList.contains("map-clickable")) {
+            if (!zonesManager.wouldLineIntersectForbiddenZone(e.latlng, nodes))
+            {
             newNode = new Node(e.latlng);
             newNode.addNode(nodes, setNodes);
+            }
+            else alert("Cannot place point or draw line through forbidden zone!");
         }
     }
 
