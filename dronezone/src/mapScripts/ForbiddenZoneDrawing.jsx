@@ -1,8 +1,9 @@
 // src/mapScripts/forbiddenZoneDrawing.jsx
 import { useEffect, useState } from 'react';
-import { useMap, Circle } from 'react-leaflet';
+import { useMap } from 'react-leaflet';
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZonesManager.js';
 import { Node } from './node.js'
+import { DrawNodes } from './drawFunctions.jsx';
 
 function ForbiddenZoneDrawing() {
   const map = useMap();
@@ -60,22 +61,9 @@ function ForbiddenZoneDrawing() {
 
   return (
     <>
-      <DrawNodes nodes={nodes} />
+      <DrawNodes nodes={nodes} color="red" />
     </>
   );
-}
-
-function DrawNodes({nodes}) {
-    return (
-        <>
-            {nodes.map((node, index) => { return(
-                <Circle 
-                key={index} center={node.position} radius={node.radius}
-                color="red" fillColor="red" fillOpacity={0.5}/>
-                )
-            })}
-        </>
-    );
 }
 
 // Forbidden Zones Initializer

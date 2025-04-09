@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useMap, Circle, Polyline, Polygon } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
+import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 
 /*
     Handles what happens when the user clicks on the map
@@ -49,25 +50,9 @@ function MapClick() {
 
     return (
         <>
-            <DrawNodes nodes={nodes}/>
+            <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
-        </>
-    )
-}
-
-/*
-    Draws the existing nodes on the map
-*/
-function DrawNodes({nodes}) {
-    return (
-        <>
-            {nodes.map((node, index) => { if (node.visible) return(
-                <Circle className = "map-clickable"
-                key={index} center={node.position} radius={node.radius}
-                color="blue" fillColor="blue" fillOpacity={0.5}/>
-                )
-            })}
         </>
     )
 }
@@ -81,44 +66,12 @@ function AddPath(startNode, endNode, setPaths) {
 }
 
 /*
-    Draws the existing paths on the map
-*/
-function DrawPaths({paths}) {
-    return (
-        <>
-            {paths.map((path, index) => { return(
-                <Polyline className = "map-clickable"
-                key={index} positions={path}
-                color="blue" weight={1}/>
-                )
-            })}
-        </>
-    )
-}
-
-/*
     Add a new buffer zone to the buffer zone array
 */
 function AddBufferZone(startNode, endNode, setBufferZones) {
     const bufferWidth = 40;
     const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth)
     setBufferZones((prevZones) => [...prevZones, newZone])
-}
-
-/*
-    Draws the existing buffer zones on the map
-*/
-function DrawBufferZones({bufferZones}) {
-    return (
-        <>
-            {bufferZones.map((zone, index) => { return(
-                <Polygon className = "map-clickable"
-                key={index} positions={zone}
-                color="blue" fillOpacity={0.3} weight={1}/>
-                )
-            })}
-        </>
-    )
 }
 
 /*
