@@ -1,7 +1,7 @@
-// forbiddenZonesManager.jsx
+// forbiddenZonesManager.js
 import L from 'leaflet';
 
-class ForbiddenZonesManager {
+export class ForbiddenZonesManager {
   constructor(map) {
     this.map = map;
     this.fCoords = [];

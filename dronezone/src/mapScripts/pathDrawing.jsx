@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useMap, Circle, Polyline, Polygon } from 'react-leaflet'
-
-const nodeRadius = 20;
+import { Node } from './node.js'
 
 /*
     Handles what happens when the user clicks on the map
@@ -13,9 +12,9 @@ function MapClick() {
     const [bufferZones, setBufferZones] = useState([])
 
     const onMapClick = (e) => {
-        // Only trigger AddNode upon clicking map, not buttons or other UI elements
+        // Only create a new node upon clicking map, not buttons or other UI elements
         if (e.originalEvent.target.classList.contains('leaflet-container'))
-            AddNode(e, setNodes, nodes);
+            new Node(e.latlng).addNode(nodes, setNodes);
     }
 
     // Update paths whenever nodes is updated
@@ -43,38 +42,11 @@ function MapClick() {
     )
 }
 
-/*
-    Add a new node to the array of nodes
-*/
-function AddNode(e, setNodes, nodes) {
-    var newNode = {
-        position: e.latlng,
-        radius: nodeRadius,
-    }
-    NodeOverlap(newNode, nodes);
-    setNodes((prevNodes) => [...prevNodes, newNode]);
-}
 
-/*
-    Remove a node based on its index in the nodes array
-*/
-function RemoveNode(index, setNodes) {
-    setNodes((prevNodes) => prevNodes.filter((_, i) => i !== index));
-}
 
-/*
-    If two nodes overlap, set their positions to be the same
-*/
-function NodeOverlap(node, nodes) {
-    const nodePos = node.position;
-    for (var i = 0; i < nodes.length; i++) {
-        /*if (node == nodes[i])
-            continue;*/
-        if (nodePos.distanceTo(nodes[i].position) <= nodeRadius * 2)
-            //node.position = nodes[i].position;
-            console.log("Hello");
-    }
-}
+
+
+
 
 /*
     Draws the existing nodes on the map
