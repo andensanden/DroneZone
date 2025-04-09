@@ -1,15 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ToastContainer } from 'react-toastify';
 import { Home } from "./pages/Home";
 import { AboutUs } from "./pages/AboutUs";
 import { Login } from "./pages/Login";
 import {Guidelines} from "./pages/Guidelines";
-import { Account } from "./pages/account";
+import { Account } from "./pages/Account";
 import { CreateAccount } from "./pages/CreateAccount";
+import { useGetUserAuth } from "@/hooks/useGetUserAuth";
 
 
 
 function App() {
 
+  //Hook that gets user auth state / listens for auth changes. 
+  // Always keeps application state in sync and ensures correct user experience
+  useGetUserAuth();
 
   return (
     <>
@@ -23,6 +28,7 @@ function App() {
         <Route path="/createaccount" element={<CreateAccount/>}/>
       </Routes>
     </BrowserRouter>
+    <ToastContainer position="bottom-right" />
     </>
   )
 }

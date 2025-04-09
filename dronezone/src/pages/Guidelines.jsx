@@ -1,6 +1,6 @@
-import { Header } from "@/componets/header"
-import {Footer} from "@/componets/footer"
-import { GuidelineInfo } from "../componets/guidelinesInfo"
+import { Header } from "@/components/header"
+import {Footer} from "@/components/footer"
+import { GuidelineInfo } from "@/components/guidelinesInfo"
 
 export function Guidelines(){
 

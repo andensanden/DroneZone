@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
+
 /*
     Tracks the users location and adds a marker at their position
 */

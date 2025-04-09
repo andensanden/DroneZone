@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
-import { FaRegUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { TbCircleNumber1Filled } from "react-icons/tb";
+import { LoginDropDown } from "@/components/loginDropDown"; 
 
 import { LuInbox } from "react-icons/lu";
 
@@ -53,9 +52,8 @@ export function Header() {
           </button>
           <button
             className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
-            onClick={() => navigate("/login")}
           >
-            {isAuth ? <FaRegUser size={20} /> : <GrLogin size={20} />}
+            {isAuth ? <LoginDropDown /> : <GrLogin size={20} onClick={() => navigate("/login")}/>}
           </button>
         </div>
       </div>

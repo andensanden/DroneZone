@@ -5,7 +5,7 @@ export function AccountInfo(){
 			//! add value and user integration when we have users
 	return(
 		<div className="bg-primary-yellow flex grow ">
-            <div className="flex grow-0 p-10 w-full">
+            <div className="flex p-10 w-full">
 				<div className="flex flex-col">
             	    <h2 className="text-3xl font-bold my-4">My Account</h2>
 					<input
