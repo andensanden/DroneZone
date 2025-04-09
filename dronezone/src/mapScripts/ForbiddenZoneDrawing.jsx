@@ -2,10 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useMap, Circle } from 'react-leaflet';
 import ForbiddenZonesManager from '@/mapScripts/forbiddenZonesManager.js';
+import { Node } from './node.js'
 
-const nodeRadius = 20;
-
-const ForbiddenZoneDrawing = () => {
+function ForbiddenZoneDrawing() {
   const map = useMap();
   let clickPoints = [];
   let tempPolygon = null;
@@ -18,7 +17,7 @@ const ForbiddenZoneDrawing = () => {
       if (!map.forbiddenManager || !e.originalEvent.target.classList.contains('leaflet-container')) return;
 
       clickPoints.push(e.latlng);
-      AddNode(e, setNodes);
+      new Node(e.latlng).addNode(nodes, setNodes);
 
       // Draw temporary polygon
       if (tempPolygon) tempPolygon.remove();
@@ -47,7 +46,7 @@ const ForbiddenZoneDrawing = () => {
     };
 
     map.on('click', handleClick);
-    
+
     return () => {
       // Clean up ALL event handlers when component unmounts
       map.off('click', handleClick);
@@ -61,17 +60,9 @@ const ForbiddenZoneDrawing = () => {
 
   return (
     <>
-      <DrawNodes nodes={nodes}/>
+      <DrawNodes nodes={nodes} />
     </>
   );
-};
-
-function AddNode(e, setNodes) {
-    const newNode = {
-        position: e.latlng,
-        radius: nodeRadius,
-    }
-    setNodes((prevNodes) => [...prevNodes, newNode]);
 }
 
 function DrawNodes({nodes}) {
@@ -87,61 +78,20 @@ function DrawNodes({nodes}) {
     );
 }
 
-// Drawing Mode Control
-const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
-  return (
-    <div className="drawing-mode-control" style={{
-      position: 'absolute',
-      top: '85%',
-      right: '0%',
-      zIndex: 1000,
-    }}>
-      <button 
-        onClick={() => setDrawingMode('path')}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: drawingMode === 'path' ? '#4CAF50' : '#ccc',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px 0 0 4px',
-          cursor: 'pointer',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-        }}
-      >
-        Draw Path
-      </button>
-      <button 
-        onClick={() => setDrawingMode('forbidden')}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: drawingMode === 'forbidden' ? '#f44336' : '#ccc',
-          color: 'white',
-          border: 'none',
-          borderRadius: '0 4px 4px 0',
-          cursor: 'pointer',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-        }}
-      >
-        Draw Forbidden Zone
-      </button>
-    </div>
-  );
-};
-
 // Forbidden Zones Initializer
-const ForbiddenZonesInitializer = () => {
+function ForbiddenZonesInitializer() {
   const map = useMap();
-  
+
   useEffect(() => {
     const forbiddenManager = new ForbiddenZonesManager(map);
     map.forbiddenManager = forbiddenManager;
-    
+
     return () => {
       forbiddenManager.clearForbiddenZones();
     };
   }, [map]);
 
   return null;
-};
+}
 
-export { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer };
+export { ForbiddenZoneDrawing, ForbiddenZonesInitializer };

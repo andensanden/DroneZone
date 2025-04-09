@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
-import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
-import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from '@/mapScripts/gpsToggleControl';
+import DrawingModeControl from '@/mapScripts/drawingModeControl';
+import { ForbiddenZoneDrawing, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing';
 
 // Main Map Component
 const Map = () => {
