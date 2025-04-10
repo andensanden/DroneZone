@@ -4,6 +4,10 @@ import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
 import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing.jsx';
+import { useSelector, useDispatch } from "react-redux";
+import LoggedInMap from './loggedInMap';
+
+
 
 // Main Map Component
 const Map = () => {
@@ -14,6 +18,9 @@ const Map = () => {
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
   };
+
+  //Checking the state, if the user is logged in we redirect to loggedInMap.jsx instead
+  //isAuth == True, if logged in, == False not logged in  
 
   return (
     <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
