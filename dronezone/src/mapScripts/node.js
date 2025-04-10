@@ -20,6 +20,7 @@ export class Node {
     */
     removeNode(index, setNodes) {
         setNodes((prevNodes) => prevNodes.filter((_, i) => i !== index));
+        //setNodes((prevNodes) => prevNodes.splice(index, 1));
     }
 
     movePosition(position) {

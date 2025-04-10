@@ -35,6 +35,21 @@ const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
         >
           Draw Forbidden Zone
         </button>
+            <button
+                onClick={() => setDrawingMode('remove')}
+                style={{
+                    padding: '8px 16px',
+                    backgroundColor: 'grey',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px 0 0 4px',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                }}
+
+            >
+                Remove Node
+            </button>
       </div>
     );
 };

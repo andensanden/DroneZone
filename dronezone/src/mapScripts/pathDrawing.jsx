@@ -2,8 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
-import ForbiddenZonesManager from './forbiddenZonesManager.js'
-import { wouldLineIntersectForbiddenZone } from './intersectHandler.jsx'
+import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './ZonesContext.jsx'
 
 /*
@@ -18,25 +17,26 @@ function MapClick({ drawingMode }) {
     const { zones } = useZones();
 
     const onMapClick = (e) => {
-        //alert(drawingMode);
-        if (drawingMode === 'forbidden') return;
+        if (drawingMode === 'path') {
         // Only create a new node upon clicking map, not buttons or other UI elements
-        /*if (e.originalEvent.target.classList.contains("leaflet-container")
-            || e.originalEvent.target.classList.contains("map-clickable")) */
+        if (!e.originalEvent.target.classList.contains("leaflet-container")
+            && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
-        /*if (map.forbiddenManager.wouldLineIntersectForbiddenZone(e.latlng, nodes)) {
-            console.log(" Blocked red zone");
-            alert("Cannot place point or draw line through forbidden zone!");
-            return;
-        }*/
-        if (wouldLineIntersectForbiddenZone(e.latlng, nodes, zones)) {
-            console.log(" Blocked red zone");
-            alert("Cannot place point or draw line through forbidden zone!");
-            return;
+            const newNode = new Node(e.latlng);
+            newNode.addNode(nodes, setNodes);
         }
-
-        const newNode = new Node(e.latlng);
-        newNode.addNode(nodes, setNodes);        
+        else if (drawingMode === 'remove') {
+            if (nodes.length === 0) return;
+            for (var i = 0; i < nodes.length; i++) {
+                let dist = e.latlng.distanceTo(nodes[i].position);
+                if (dist <= nodes[i].radius) {
+                    doNotDraw.current = true;
+                    nodes[i].removeNode(i, setNodes);
+                    RemovePath(i-1, setPaths);
+                    RemoveBufferZone(i-1, setBufferZones);
+                }
+            }
+        }
     }
 
     // Update paths whenever nodes is updated
@@ -127,6 +127,7 @@ function AddPath(startNode, endNode, setPaths) {
 
 function RemovePath(index, setPaths) {
     setPaths((prevPaths) => prevPaths.filter((_, i) => i !== index));
+    //setPaths((prevPaths) => prevPaths.splice(index, 1));
 }
 
 /*
@@ -140,6 +141,7 @@ function AddBufferZone(startNode, endNode, setBufferZones) {
 
 function RemoveBufferZone(index, setBufferZones) {
     setBufferZones((prevBuffer) => prevBuffer.filter((_, i) => i !== index));
+    //setBufferZones((prevBuffer) => prevBuffer.splice(index, 1));
 }
 
 /*
@@ -180,7 +182,6 @@ function CreateBufferCoords(coords, widthMeters) {
 }
 
 function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) {
-    if (nodes.length === 0) alert("Working");
     doNotDraw.current = true;
     nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
     RemovePath(paths.length - 1, setPaths);

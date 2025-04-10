@@ -1,25 +1,3 @@
-//import { useZones } from "./ZonesContext";
-
-/*function IntersectHandler() {
-  const { zones } = useZones();
-  // Check if a new point would create a line that intersects with any forbidden zone
-  function wouldLineIntersectForbiddenZone(newPoint, coords) {
-    if (coords.length === 0) {
-      return isPointInForbiddenZone(newPoint);
-    }
-    
-    const lastPoint = coords[coords.length - 1];
-    
-    for (let i = 0; i < zones.length; i++) {
-      if (doesLineIntersectPolygon(lastPoint, newPoint, zones[i])) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
-}*/
-
 export function wouldLineIntersectForbiddenZone(newPoint, coords, zones) {
   if (coords.length === 0) {
     return isPointInForbiddenZone(newPoint, zones);
@@ -38,7 +16,6 @@ export function wouldLineIntersectForbiddenZone(newPoint, coords, zones) {
 
  // Check if a line segment intersects with a polygon
  function doesLineIntersectPolygon(p1, p2, polygon) {
-  //const polygonCoords = polygon.getLatLngs()[0];
   const polygonCoords = polygon.coords;
   
   if (isPointInPolygon(p1, polygon) || isPointInPolygon(p2, polygon)) {
@@ -100,5 +77,3 @@ function isPointInForbiddenZone(point, zones) {
     }
     return false;
 }
-
-//export default IntersectHandler

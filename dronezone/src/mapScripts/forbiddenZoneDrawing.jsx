@@ -18,22 +18,14 @@ function ForbiddenZoneDrawing({ drawingMode }) {
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (drawingMode === 'path') return;
+      if (drawingMode !== 'forbidden') return;
       // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
-      if (!e.originalEvent.target.classList.contains('leaflet-container')) return;
+      if (!e.originalEvent.target.classList.contains("leaflet-container")
+        && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
       setPoints((prevPoints) => {
         const newPoints = [...prevPoints, e.latlng];
         clickPointsRef.current = newPoints;
-
-        //const newZone = new ForbiddenZone([...prevPoints, e.latlng]);
-        /*setZones((prevZones) => {
-          const newZones = [...prevZones];
-          newZones[currZoneRef.current] = newZone;
-          return newZones;
-        });*/
-        //updateZone(currZoneRef.current, newZone);
-        //return newZone.coords;
         return newPoints;
       });
     };
@@ -79,7 +71,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     <>
     {zones.map((zone, index) => 
       (zone.coords.length > 0 && (
-      <Polygon key={index} positions={zone.coords} color="red" fillOpacity={0.5} weight={1} />)
+      <Polygon className="map-clickable" key={index} positions={zone.coords} color="red" fillOpacity={0.5} weight={1} />)
     ))}
   </>
   )
