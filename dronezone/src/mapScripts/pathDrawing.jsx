@@ -13,23 +13,20 @@ function MapClick() {
     const [nodes, setNodes] = useState([]);
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
-    let newNode;
-    let zonesManager = new ForbiddenZonesManager(useMap());
 
     const onMapClick = (e) => {
         // Only create a new node upon clicking map, not buttons or other UI elements
-        if (e.originalEvent.target.classList.contains("leaflet-container")
-            || e.originalEvent.target.classList.contains("map-clickable")) {
-            newNode = new Node(e.latlng);
-            newNode.addNode(nodes, setNodes);
-            // WIP, check for intersection with forbidden zone
-            /*if (!zonesManager.wouldLineIntersectForbiddenZone(e.latlng, nodes))
-            {
-                newNode = new Node(e.latlng);
-                newNode.addNode(nodes, setNodes);
-            }
-            else alert("Cannot place point or draw line through forbidden zone!");*/
+        /*if (e.originalEvent.target.classList.contains("leaflet-container")
+            || e.originalEvent.target.classList.contains("map-clickable")) */
+
+        if (map.forbiddenManager.wouldLineIntersectForbiddenZone(e.latlng, nodes)) {
+            console.log(" Blocked red zone");
+            alert("Cannot place point or draw line through forbidden zone!");
+            return;
         }
+
+        const newNode = new Node(e.latlng);
+        newNode.addNode(nodes, setNodes);        
     }
 
     // Update paths whenever nodes is updated
@@ -50,9 +47,24 @@ function MapClick() {
         }
 
         if (nodes.length > 1) {
-            AddPath(nodes[nodes.length-2], n, setPaths)
-            AddBufferZone(nodes[nodes.length-2], n, setBufferZones)
+            const last = nodes[nodes.length - 2];
+            const current = nodes[nodes.length - 1];
+            const coords = nodes.slice(0, -1).map(n => n.getPosition());
+        
+            const zonesManager = map.forbiddenManager;
+            const blocked = zonesManager?.wouldLineIntersectForbiddenZone(current.getPosition(), coords);
+        
+            if (!blocked) {
+                AddPath(last, current, setPaths);
+                AddBufferZone(last, current, setBufferZones);
+            } else {
+                console.warn(" Path segment intersects red zone, Removing last node.");
+                doNotDraw.current = true;
+                nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
+                alert("Path intersects forbidden zone — node removed.");
+            }
         }
+        
     }, [nodes])
 
     useEffect(() => {

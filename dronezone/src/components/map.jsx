@@ -3,9 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'r
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
-import GPSToggleControl from '@/mapScripts/gpsToggleControl';
-import DrawingModeControl from '@/mapScripts/drawingModeControl';
+import GPSToggleControl from  '@/mapScripts/gpsToggleControl'
 import LaunchButton from '@/mapScripts/launchButton';
+import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 
 // Main Map Component

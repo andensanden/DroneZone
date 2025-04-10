@@ -22,7 +22,10 @@ export class ForbiddenZonesManager {
     }).addTo(this.map);
     
     this.fPolys.push(this.lastPolygon);
+
     return this.lastPolygon;
+    console.log("Added forbidden polygon!", map.forbiddenManager?.fPolys?.length);
+
   }
 
   // Calculate the centroid of a set of coordinates
