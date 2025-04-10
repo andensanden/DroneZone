@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
@@ -8,10 +8,11 @@ import ForbiddenZonesManager from './forbiddenZonesManager.js'
     Handles what happens when the user clicks on the map
 */
 function MapClick() {
-    const map = useMap()
-    const [nodes, setNodes] = useState([])
-    const [paths, setPaths] = useState([])
-    const [bufferZones, setBufferZones] = useState([])
+    const map = useMap();
+    const doNotDraw = useRef(false);
+    const [nodes, setNodes] = useState([]);
+    const [paths, setPaths] = useState([]);
+    const [bufferZones, setBufferZones] = useState([]);
     let newNode;
     let zonesManager = new ForbiddenZonesManager(useMap());
 
@@ -30,6 +31,11 @@ function MapClick() {
 
     // Update paths whenever nodes is updated
     useEffect(() => {
+        if(doNotDraw.current){
+            doNotDraw.current = false;
+            return;
+        }
+
         let n = nodes[nodes.length-1];
         // Check if nodes overlap
         if (n) {
@@ -67,7 +73,7 @@ function MapClick() {
                         zIndex: 1000,
                     }}>
                         <button
-                            onClick={() => undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones) }
+                            onClick={() => undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) }
             
                             style={{
                                 padding: '8px 16px',
@@ -149,9 +155,9 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones) {
+function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) {
     if (nodes.length === 0) alert("Working");
-
+    doNotDraw.current = true;
     nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
     RemovePath(paths.length - 1, setPaths);
     RemoveBufferZone(bufferZones.length - 1, setBufferZones);
