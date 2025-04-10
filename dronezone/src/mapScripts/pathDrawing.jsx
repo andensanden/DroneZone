@@ -166,4 +166,4 @@ function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doN
     RemoveBufferZone(bufferZones.length - 1, setBufferZones);
 }
 
-export { MapClick }
+export default MapClick;

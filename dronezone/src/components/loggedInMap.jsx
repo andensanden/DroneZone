@@ -10,11 +10,6 @@ import {
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
-import {
-  ForbiddenZoneDrawing,
-  DrawingModeControl,
-  ForbiddenZonesInitializer
-} from '@/mapScripts/forbiddenZoneDrawing';
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
 import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
@@ -92,7 +87,6 @@ const LoggedInMap = () => {
           }}
         />
 
-        <ForbiddenZonesInitializer />
         {!confirmFlightPath && drawingMode === 'path' && <MapClick />}
       </MapContainer>
 

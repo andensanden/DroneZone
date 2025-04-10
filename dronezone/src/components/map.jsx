@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapClick } from '@/mapScripts/pathDrawing';
+import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
 import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';

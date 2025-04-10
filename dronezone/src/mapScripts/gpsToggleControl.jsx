@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css';
+import {VscPerson} from "react-icons/vsc"
 
 // GPS Toggle Control
 function GPSToggleControl({ trackingEnabled, toggleTracking }) {
@@ -14,7 +15,7 @@ function GPSToggleControl({ trackingEnabled, toggleTracking }) {
             cursor: 'pointer'
           }}
         >
-          📍
+          📍<VscPerson size={24}/>
         </button>
       </div>
     );
