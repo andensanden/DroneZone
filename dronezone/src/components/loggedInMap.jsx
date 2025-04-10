@@ -18,6 +18,7 @@ import {
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
 import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
+import { useEffect } from 'react';
 
 import {GiPathDistance} from "react-icons/gi";
 
@@ -68,7 +69,7 @@ const LoggedInMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={toggleTracking} />
+        <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
         
 
         {showCurrentLocation && <Marker position={position}><Popup>Current Location</Popup></Marker>}
@@ -157,7 +158,7 @@ const LoggedInMap = () => {
             {[
               { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
               { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => setShowRestrictedZones(!showRestrictedZones) },
-              { label: 'Current Location', checked: showCurrentLocation, toggle: () => setShowCurrentLocation(!showCurrentLocation) }
+              { label: 'Current Location', checked: trackingEnabled, toggle: () => setTrackingEnabled(prev => !prev) }
             ].map((layer, i) => (
               <label key={i} style={{
                 display: 'flex',
