@@ -1,21 +1,32 @@
 import { BsPaperclip } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { FaSave } from "react-icons/fa";
-import { useState } from "react";
 import { TbDrone } from "react-icons/tb";
+import { useEffect } from "react";
+import { supabase } from "@/supabase/config";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/Redux/auth/authSlice";
 
 export function AccountInfo() {
-  //TODO: Fetch user data from supabase
-  const mockUser = {
-    name: "John",
-    lastName: "Doe",
-    email: "JohnDoe.gmail.com",
-    phoneNumber: "0701234566",
-    devices: ["drone 1", "drone 2"],
-    droneLicense: "droneLicense.pdf",
-  };
 
-  const [phone, setPhone] = useState(mockUser.phoneNumber);
+  const dispatch = useDispatch();
+  const { name, lastname, phone, email } = useSelector((state) => state.auth);
+
+  useEffect(() => { 
+    const fetchData = async() => {
+
+    const { data, error } = await supabase.auth.getUser();
+
+    const respone = await fetch(`http://localhost:8080/api/auth/user/${data.user.id}`);
+    const parsedData = await respone.json();
+
+    dispatch(setUser(parsedData));
+  }
+
+  fetchData();
+  }, []);
+
+
 
   //Function to handle the change of phone number
   function handleChangePhone() {
@@ -29,7 +40,7 @@ export function AccountInfo() {
 
     //TODO: Save the new phone number to the database
   }
-
+ 
   return (
     <div className="bg-primary-yellow flex grow ">
       <div className="flex p-10 w-full">
@@ -41,15 +52,15 @@ export function AccountInfo() {
               {/*Name presentation*/}
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
-                value={mockUser.name + " " + mockUser.lastName}
                 disabled
+                value={name + " " + lastname}
               ></input>
 
               {/*Email presentation*/}
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
-                value={mockUser.email}
                 disabled
+                value={email}
               ></input>
 
               {/*Phone number presentation, is changable*/}
@@ -91,14 +102,11 @@ export function AccountInfo() {
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-
-            // value={}
           ></input>
           {/*Drone two*/}
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-            // value={}
           ></input>
           <button className="bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
             <p>Add new drone </p>
