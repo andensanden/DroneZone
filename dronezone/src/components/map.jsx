@@ -7,6 +7,7 @@ import GPSToggleControl from  '@/mapScripts/gpsToggleControl'
 import LaunchButton from '@/mapScripts/launchButton';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
 
 // Main Map Component
 const Map = () => {
@@ -62,14 +63,19 @@ const Map = () => {
         
         <LocationTracker trackingEnabled={trackingEnabled} />
         
-        {drawingMode === 'path' ? (
-          <MapClick />
-        ) : (
-          <ForbiddenZoneDrawing />
-        )}
+        <ZonesProvider>
+          <MapClick drawingMode={drawingMode}/>
+          <ForbiddenZoneDrawing drawingMode={drawingMode} />
+        </ZonesProvider>
       </MapContainer>
     </div>
   );
 };
+
+/*{drawingMode === 'path' ? (
+  <MapClick />
+) : (
+  <ForbiddenZoneDrawing />
+)}*/
 
 export default Map;

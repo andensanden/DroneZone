@@ -3,23 +3,33 @@ import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import ForbiddenZonesManager from './forbiddenZonesManager.js'
+import { wouldLineIntersectForbiddenZone } from './intersectHandler.jsx'
+import { useZones } from './ZonesContext.jsx'
 
 /*
     Handles what happens when the user clicks on the map
 */
-function MapClick() {
+function MapClick({ drawingMode }) {
     const map = useMap();
     const doNotDraw = useRef(false);
     const [nodes, setNodes] = useState([]);
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
+    const { zones } = useZones();
 
     const onMapClick = (e) => {
+        //alert(drawingMode);
+        if (drawingMode === 'forbidden') return;
         // Only create a new node upon clicking map, not buttons or other UI elements
         /*if (e.originalEvent.target.classList.contains("leaflet-container")
             || e.originalEvent.target.classList.contains("map-clickable")) */
 
-        if (map.forbiddenManager.wouldLineIntersectForbiddenZone(e.latlng, nodes)) {
+        /*if (map.forbiddenManager.wouldLineIntersectForbiddenZone(e.latlng, nodes)) {
+            console.log(" Blocked red zone");
+            alert("Cannot place point or draw line through forbidden zone!");
+            return;
+        }*/
+        if (wouldLineIntersectForbiddenZone(e.latlng, nodes, zones)) {
             console.log(" Blocked red zone");
             alert("Cannot place point or draw line through forbidden zone!");
             return;
@@ -49,10 +59,9 @@ function MapClick() {
         if (nodes.length > 1) {
             const last = nodes[nodes.length - 2];
             const current = nodes[nodes.length - 1];
-            const coords = nodes.slice(0, -1).map(n => n.getPosition());
+            const coords = nodes.slice(0, -1).map(n => n.position);
         
-            const zonesManager = map.forbiddenManager;
-            const blocked = zonesManager?.wouldLineIntersectForbiddenZone(current.getPosition(), coords);
+            const blocked = wouldLineIntersectForbiddenZone(current.position, coords, zones);
         
             if (!blocked) {
                 AddPath(last, current, setPaths);
@@ -73,7 +82,7 @@ function MapClick() {
         return () => {
             map.off('click', onMapClick)
         }
-    }, [map])
+    }, [map, drawingMode])
 
     return (
         <>

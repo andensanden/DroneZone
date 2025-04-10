@@ -2,20 +2,23 @@
 import { useEffect, useState, useRef } from 'react';
 import { useMap, Polygon } from 'react-leaflet';
 import { ForbiddenZone } from './forbiddenZone.js';
+import { useZones } from './ZonesContext.jsx'
 
-function ForbiddenZoneDrawing() {
+function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [clickPoints, setPoints] = useState([]);
   const clickPointsRef = useRef([]);
-  const [zones, setZones] = useState([]);
+  //const [zones, setZones] = useState([]);
+  const { zones, addZone, updateZone } = useZones();
   const [currZone, setCurrZone] = useState(0);
   const currZoneRef = useRef(0);
 
-  // WIP (ask Rasmus before editing)
+  // WIP
   // Remove clickPoints?? Also check the references if they are all necessary
 
   useEffect(() => {
     const handleClick = (e) => {
+      if (drawingMode === 'path') return;
       // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
       if (!e.originalEvent.target.classList.contains('leaflet-container')) return;
 
@@ -23,13 +26,15 @@ function ForbiddenZoneDrawing() {
         const newPoints = [...prevPoints, e.latlng];
         clickPointsRef.current = newPoints;
 
-        const newZone = new ForbiddenZone([...prevPoints, e.latlng]);
-        setZones((prevZones) => {
+        //const newZone = new ForbiddenZone([...prevPoints, e.latlng]);
+        /*setZones((prevZones) => {
           const newZones = [...prevZones];
           newZones[currZoneRef.current] = newZone;
           return newZones;
-        });
-        return newZone.coords;
+        });*/
+        //updateZone(currZoneRef.current, newZone);
+        //return newZone.coords;
+        return newPoints;
       });
     };
 
@@ -38,7 +43,14 @@ function ForbiddenZoneDrawing() {
     return () => {
       map.off('click', handleClick);
     };
-  }, [map]);
+  }, [map, drawingMode]);
+
+  useEffect(() => {
+    if (clickPointsRef.current.length === 0) return;
+    // Update the context with the new zone after `currZone` is updated
+    const newZone = new ForbiddenZone([...clickPointsRef.current]);
+    updateZone(currZoneRef.current, newZone);
+  }, [clickPoints, currZone]);  // Trigger whenever clickPoints or currZone changes
 
   useEffect(() => {
     const handleDoubleClick = () => {
