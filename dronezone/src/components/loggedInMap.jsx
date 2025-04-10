@@ -22,11 +22,18 @@ import { useEffect } from 'react';
 
 import {GiPathDistance} from "react-icons/gi";
 
+const droneIcon = L.icon({
+    iconUrl: icon,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+  });
+
 const LoggedInMap = () => {
   const [position, setPosition] = useState([59.3293, 18.0686]);
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState('path');
-  const [showCurrentLocation, setShowCurrentLocation] = useState(true);
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [showRestrictedZones, setShowRestrictedZones] = useState(true);
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const [showFlightPath, setShowFlightPath] = useState(false);
@@ -34,7 +41,7 @@ const LoggedInMap = () => {
   const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
   const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
   const [confirmFlightPath, setConfirmFlightPath] = useState(false);
-  const [flightPath, setFlightPath] = useState([]); // array of LatLngs
+  const [flightPath, setFlightPath] = useState([]);
 
   const accountInfo = {
     devices: ["DJI AIR 3S – Photography...", "Emax Tinyhawk III Plus – Racing"]
@@ -44,6 +51,16 @@ const LoggedInMap = () => {
     accountInfo.devices.map(name => ({ name, checked: false }))
   );
 
+  const dummyActiveDrones = [
+    { name: 'Drone Alpha', position: [59.4041, 17.9449], icon: icon },
+    { name: 'Drone Bravo', position: [59.3375, 18.0650], icon: icon },
+  ];
+
+  const dummyRestrictedZones = [
+    { center: [59.6494, 17.9343], radius: 5000 },
+    { center: [59.3054, 18.0236], radius: 150 },
+  ];
+
   const toggleTracking = () => setTrackingEnabled(prev => !prev);
   const clearLayers = () => {
     setShowCurrentLocation(false);
@@ -52,7 +69,7 @@ const LoggedInMap = () => {
     setShowFlightPath(false);
   };
 
-  const baseBottom = 80; // reserve bottom space for Launch button
+  const baseBottom = 80;
   const drawFlightButtonHeight = 60;
   const drawFlightPanelHeight = 320;
   const devicesButtonHeight = 60;
@@ -70,11 +87,44 @@ const LoggedInMap = () => {
         />
 
         <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
-        
 
-        {showCurrentLocation && <Marker position={position}><Popup>Current Location</Popup></Marker>}
-        {showRestrictedZones && <Circle center={position} radius={200} color="red"><Popup>Restricted Area</Popup></Circle>}
-        {showActiveDrones && <Circle center={[position[0] + 0.002, position[1] + 0.002]} radius={150} color="blue"><Popup>Active Drone</Popup></Circle>}
+        {showCurrentLocation && trackingEnabled && position && (
+          <>
+            <Marker position={position}>
+              <Popup>Current Location</Popup>
+            </Marker>
+            <Circle center={position} radius={500} options={{ fillColor: 'red', fillOpacity: 0.3 }} />
+          </>
+        )}
+
+        {showRestrictedZones && dummyRestrictedZones.map((zone, idx) => (
+          <Circle
+            key={`restricted-${idx}`}
+            center={zone.center}
+            radius={zone.radius}
+            color="red"
+            fillOpacity={0.3}
+          >
+            <Popup>Restricted Zone</Popup>
+          </Circle>
+        ))}
+
+        {showActiveDrones && dummyActiveDrones.map((drone, idx) => (
+          <Marker
+            key={`drone-${idx}`}
+            position={drone.position}
+            icon={L.icon({
+                iconUrl: drone.icon,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+              })}
+          >
+
+            <Popup>{drone.name}</Popup>
+          </Marker>
+        ))}
+
         {showFlightPath && (
           <Polyline
             positions={[
@@ -154,7 +204,22 @@ const LoggedInMap = () => {
             width: '260px',
             padding: '16px'
           }}>
-            <h4 style={{ marginBottom: '10px', fontWeight: 'bold' }}>Layers</h4>
+       <div style={{
+      fontWeight: 'bold',
+      fontSize: '16px',
+      padding: '16px',
+    }}> 
+      Layers
+    </div>
+
+    {/* Divider line */}
+    <div style={{
+      height: '2px',
+      backgroundColor: '#e5e7eb',
+      width: '100%',
+  margin: 0,
+  padding: 0
+    }} />
             {[
               { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
               { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => setShowRestrictedZones(!showRestrictedZones) },
