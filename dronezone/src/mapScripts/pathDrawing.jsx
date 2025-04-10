@@ -20,12 +20,15 @@ function MapClick() {
         // Only create a new node upon clicking map, not buttons or other UI elements
         if (e.originalEvent.target.classList.contains("leaflet-container")
             || e.originalEvent.target.classList.contains("map-clickable")) {
-            if (!zonesManager.wouldLineIntersectForbiddenZone(e.latlng, nodes))
-            {
             newNode = new Node(e.latlng);
             newNode.addNode(nodes, setNodes);
+            // WIP, check for intersection with forbidden zone
+            /*if (!zonesManager.wouldLineIntersectForbiddenZone(e.latlng, nodes))
+            {
+                newNode = new Node(e.latlng);
+                newNode.addNode(nodes, setNodes);
             }
-            else alert("Cannot place point or draw line through forbidden zone!");
+            else alert("Cannot place point or draw line through forbidden zone!");*/
         }
     }
 
@@ -97,8 +100,8 @@ function MapClick() {
     Add a new path to the array of paths
 */
 function AddPath(startNode, endNode, setPaths) {
-    const newPath = [startNode.position, endNode.position]
-    setPaths((prevPaths) => [...prevPaths, newPath])
+    const newPath = [startNode.position, endNode.position];
+    setPaths((prevPaths) => [...prevPaths, newPath]);
 }
 
 function RemovePath(index, setPaths) {
@@ -110,8 +113,8 @@ function RemovePath(index, setPaths) {
 */
 function AddBufferZone(startNode, endNode, setBufferZones) {
     const bufferWidth = 40;
-    const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth)
-    setBufferZones((prevZones) => [...prevZones, newZone])
+    const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth);
+    setBufferZones((prevZones) => [...prevZones, newZone]);
 }
 
 function RemoveBufferZone(index, setBufferZones) {

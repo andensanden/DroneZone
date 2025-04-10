@@ -6,8 +6,7 @@ import LocationTracker from '@/mapScripts/locationTracker';
 import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import LaunchButton from '@/mapScripts/launchButton';
-import UndoButton from '@/mapScripts/undoButton';
-import { ForbiddenZoneDrawing, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing';
+import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 
 // Main Map Component
 const Map = () => {
@@ -62,7 +61,6 @@ const Map = () => {
       </LayersControl>
         
         <LocationTracker trackingEnabled={trackingEnabled} />
-        <ForbiddenZonesInitializer />
         
         {drawingMode === 'path' ? (
           <MapClick />

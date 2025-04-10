@@ -1,5 +1,9 @@
 import { MapClick } from './pathDrawing'
 
+/*
+    Does nothing right now, functionality is in pathDrawing.jsx
+*/
+
 function UndoButton() {
     return (
         <div className="undo-button" style={{
