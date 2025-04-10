@@ -15,13 +15,18 @@ import icon from '@/assets/icon.svg';
 import DashboardPanel from '@/components/dashboard'; // adjust path if needed
 import { useEffect } from 'react';
 
-
+const droneIcon = L.icon({
+    iconUrl: icon,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+  });
 
 const EndFlightMode = () => {
   const [position, setPosition] = useState([59.3293, 18.0686]);
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState('path');
-  const [showCurrentLocation, setShowCurrentLocation] = useState(true);
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [showRestrictedZones, setShowRestrictedZones] = useState(true);
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const [showFlightPath, setShowFlightPath] = useState(false);
@@ -55,6 +60,16 @@ useEffect(() => {
     accountInfo.devices.map(name => ({ name, checked: false }))
   );
 
+    const dummyActiveDrones = [
+      { name: 'Drone Alpha', position: [59.4041, 17.9449], icon: icon },
+      { name: 'Drone Bravo', position: [59.3375, 18.0650], icon: icon },
+    ];
+  
+    const dummyRestrictedZones = [
+      { center: [59.6494, 17.9343], radius: 5000 },
+      { center: [59.3054, 18.0236], radius: 150 },
+    ];
+
   const toggleTracking = () => setTrackingEnabled(prev => !prev);
   const clearLayers = () => {
     setShowCurrentLocation(false);
@@ -83,15 +98,49 @@ useEffect(() => {
         <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
         
 
-        {showCurrentLocation && <Marker position={position}><Popup>Current Location</Popup></Marker>}
-        {showRestrictedZones && <Circle center={position} radius={200} color="red"><Popup>Restricted Area</Popup></Circle>}
-        {showActiveDrones && <Circle center={[position[0] + 0.002, position[1] + 0.002]} radius={150} color="blue"><Popup>Active Drone</Popup></Circle>}
+        {showCurrentLocation && trackingEnabled && position && (
+          <>
+            <Marker position={position}>
+              <Popup>Current Location</Popup>
+            </Marker>
+            <Circle center={position} radius={500} options={{ fillColor: 'red', fillOpacity: 0.3 }} />
+          </>
+        )}
+
+        {showRestrictedZones && dummyRestrictedZones.map((zone, idx) => (
+          <Circle
+            key={`restricted-${idx}`}
+            center={zone.center}
+            radius={zone.radius}
+            color="red"
+            fillOpacity={0.3}
+          >
+            <Popup>Restricted Zone</Popup>
+          </Circle>
+        ))}
+
+        {showActiveDrones && dummyActiveDrones.map((drone, idx) => (
+          <Marker
+            key={`drone-${idx}`}
+            position={drone.position}
+            icon={L.icon({
+                iconUrl: drone.icon,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -16]
+              })}
+          >
+
+            <Popup>{drone.name}</Popup>
+          </Marker>
+        ))}
+
         {showFlightPath && (
           <Polyline
             positions={[
               position,
               [position[0] + 0.002, position[1] + 0.001],
-              [position[0] + 0.003, position[1] + 0.005]
+              [position[0] + 0.003, position[1] + 0.0005]
             ]}
             color="purple"
           />
@@ -136,10 +185,7 @@ useEffect(() => {
                 if (timerId) {
                   clearInterval(timerId);
                 }
-          
-                
-          
-                // ✅ Optional: Reset or navigate
+    
                  setElapsedSeconds(0); // if you want to reset timer
                 navigate('/loggedInMap'); // if using React Router
               }}
