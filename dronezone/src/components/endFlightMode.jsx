@@ -17,11 +17,12 @@ import {
 } from '@/mapScripts/forbiddenZoneDrawing';
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
-import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
+import DashboardPanel from '@/components/dashboard'; // adjust path if needed
+import { useEffect } from 'react';
 
-import {GiPathDistance} from "react-icons/gi";
 
-const LoggedInMap = () => {
+
+const EndFlightMode = () => {
   const [position, setPosition] = useState([59.3293, 18.0686]);
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState('path');
@@ -34,6 +35,22 @@ const LoggedInMap = () => {
   const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
   const [confirmFlightPath, setConfirmFlightPath] = useState(false);
   const [flightPath, setFlightPath] = useState([]); // array of LatLngs
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+const [timerId, setTimerId] = useState(null);
+useEffect(() => {
+    const id = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    setTimerId(id);
+    return () => clearInterval(id);
+  }, []);
+  
+  const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+
 
   const accountInfo = {
     devices: ["DJI AIR 3S – Photography...", "Emax Tinyhawk III Plus – Racing"]
@@ -68,7 +85,7 @@ const LoggedInMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={toggleTracking} />
+        <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
         
 
         {showCurrentLocation && <Marker position={position}><Popup>Current Location</Popup></Marker>}
@@ -79,7 +96,7 @@ const LoggedInMap = () => {
             positions={[
               position,
               [position[0] + 0.002, position[1] + 0.001],
-              [position[0] + 0.003, position[1] + 0.0005]
+              [position[0] + 0.003, position[1] + 0.005]
             ]}
             color="purple"
           />
@@ -96,7 +113,22 @@ const LoggedInMap = () => {
         {!confirmFlightPath && drawingMode === 'path' && <MapClick />}
       </MapContainer>
 
-      {/* 🚀 Launch Button */}
+      <div style={{
+  position: 'absolute',
+  bottom: '30px',
+  right: '30px',
+  zIndex: 1000
+}}>
+  <DashboardPanel
+    data={{
+      longitude: position[0],
+      latitude: position[1],
+      altitude: 'N/A',
+      timeElapsed: formatTime(elapsedSeconds)
+    }}
+  />
+</div>
+      {/* 🚀 End Button */}
       <div style={{
         position: 'absolute',
         bottom: '20px',
@@ -104,7 +136,20 @@ const LoggedInMap = () => {
         transform: 'translateX(-50%)',
         zIndex: 1000
       }}>
-        <button style={{
+        <button 
+            onClick={() => {
+            
+                if (timerId) {
+                  clearInterval(timerId);
+                }
+          
+                
+          
+                // ✅ Optional: Reset or navigate
+                 setElapsedSeconds(0); // if you want to reset timer
+                navigate('/loggedInMap'); // if using React Router
+              }}
+        style={{
           backgroundColor: '#1D4ED8',
           color: 'white',
           fontWeight: 'bold',
@@ -115,7 +160,7 @@ const LoggedInMap = () => {
           border: 'none',
           cursor: 'pointer'
         }}>
-          Launch
+          End Flight
         </button>
       </div>
 
@@ -151,13 +196,29 @@ const LoggedInMap = () => {
             borderRadius: '16px',
             boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
             width: '260px',
+            overflow: 'hidden',
             padding: '16px'
           }}>
-            <h4 style={{ marginBottom: '10px', fontWeight: 'bold' }}>Layers</h4>
+            <div style={{
+      fontWeight: 'bold',
+      fontSize: '16px',
+      padding: '16px',
+    }}>
+      Layers
+    </div>
+
+    {/* Divider line */}
+    <div style={{
+      height: '2px',
+      backgroundColor: '#e5e7eb',
+      width: '100%',
+  margin: 0,
+  padding: 0
+    }} />
             {[
               { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
               { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => setShowRestrictedZones(!showRestrictedZones) },
-              { label: 'Current Location', checked: showCurrentLocation, toggle: () => setShowCurrentLocation(!showCurrentLocation) }
+              { label: 'Current Location', checked: trackingEnabled, toggle: () => setTrackingEnabled(prev => !prev) }
             ].map((layer, i) => (
               <label key={i} style={{
                 display: 'flex',
@@ -195,91 +256,7 @@ const LoggedInMap = () => {
         )}
       </div>
 
-      {/* ✏️ Draw Flight Path menu */}
-      <div style={{
-        position: 'absolute',
-        bottom: flightPathMenuOpen ? '310px' : '100px',
-        left: '20px',
-        zIndex: 1000,
-        transition: 'bottom 0.5s ease'
-      }}>
-        <button
-          onClick={() => {
-            setFlightPathMenuOpen(!flightPathMenuOpen);
-            setDevicesMenuOpen(false);
-            setDrawingMode('path'); // Activate path drawing
-          }}
-          style={{
-            background: '#FFD700',
-            padding: '10px 16px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '30px'
-          }}
-        >
-          <span>Draw Flight Path</span>
-          <GiPathDistance size={24} />
-        </button>
-
-        {flightPathMenuOpen && (
-          <div style={{
-            position:'absolute',
-            top: '60px',
-            left:'0',
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '260px',
-            overflow: 'hidden',
-            fontFamily: 'Arial, sans-serif'
-          }}>
-            
-
-            <div style={{ padding: '12px 16px' }}>
-              <div style={{
-                padding: '10px 0',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #ddd',
-                fontWeight: 'bold',
-                fontSize: '14px'
-              }}>
-                <span>Confirm Flight Path</span>
-                <input
-                  type="checkbox"
-                  checked={confirmFlightPath}
-                  onChange={() => {
-                    const confirmed = !confirmFlightPath;
-                    setConfirmFlightPath(confirmed);
-                    if (confirmed) setDrawingMode(null); // disable drawing
-                  }}
-
-                  style={{ width: '16px', height: '16px', accentColor: '#FFD700' }}
-                />
-              </div>
-
-              <div style={{ color: 'green', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Place End-Point
-              </div>
-
-              <div style={{ color: 'red', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Undo
-              </div>
-
-              <div style={{ color: 'red', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Clear Selection
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+     
 
       {/* Your Devices drop-down */}
       <div style={{
@@ -369,5 +346,4 @@ const LoggedInMap = () => {
     </div>
   );
 };
-
-export default LoggedInMap;
+export default EndFlightMode;
