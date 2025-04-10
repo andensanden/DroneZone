@@ -3,6 +3,11 @@ import { FaPen } from "react-icons/fa";
 import { FaSave } from "react-icons/fa";
 import { useState } from "react";
 import { TbDrone } from "react-icons/tb";
+import { supabase } from "@/supabase/config.js";
+import { useSelector } from "react-redux";
+
+
+
 
 export function AccountInfo() {
   //TODO: Fetch user data from supabase
@@ -16,12 +21,40 @@ export function AccountInfo() {
   };
 
   const [phone, setPhone] = useState(mockUser.phoneNumber);
+  
 
   //Function to handle the change of phone number
   function handleChangePhone() {
     const phoneInput = document.getElementById("phoneInput");
     phoneInput.disabled = false;
   }
+
+  //Function to get user ID and its data
+  async function getUserData(){
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log("userID:",user.id);
+    
+    await fetch(`${backendURL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.session.access_token}`,
+      },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        name,
+        lastname,
+        phone,
+        email,
+        pnummer,
+        adress,
+        city,
+        zip,
+      }),
+    });
+  }
+
+  getUserData();
 
   function handleSavePhone() {
     const phoneInput = document.getElementById("phoneInput");
