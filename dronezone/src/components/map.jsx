@@ -39,10 +39,13 @@ const Map = () => {
         trackingEnabled={trackingEnabled} 
         toggleTracking={toggleTracking} 
       />
+      
+      {/* Code to draw forbidden zones and flightpaths
+      
       <DrawingModeControl 
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
-      />
+      />*/}
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">
@@ -66,11 +69,14 @@ const Map = () => {
         <LocationTracker trackingEnabled={trackingEnabled} />
         <ForbiddenZonesInitializer />
         
+        {/* Code to draw forbidden zones and flightpaths
+
         {drawingMode === 'path' ? (
           <MapClick />
         ) : (
           <ForbiddenZoneDrawing />
         )}
+          */}
       </MapContainer>
     </div>
   );
