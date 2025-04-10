@@ -4,8 +4,8 @@ import { FaSave } from "react-icons/fa";
 import { useState } from "react";
 import { TbDrone } from "react-icons/tb";
 import { supabase } from "@/supabase/config.js";
-import { useSelector } from "react-redux";
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -32,26 +32,23 @@ export function AccountInfo() {
   //Function to get user ID and its data
   async function getUserData(){
     const { data: { user } } = await supabase.auth.getUser();
-    console.log("userID:",user.id);
+      
     
-    await fetch(`${backendURL}/api/auth/register`, {
-      method: "POST",
+    try {
+    const response = await fetch(`${backendURL}/api/auth/user/${user.id}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${data.session.access_token}`,
       },
-      body: JSON.stringify({
-        user_id: data.user.id,
-        name,
-        lastname,
-        phone,
-        email,
-        pnummer,
-        adress,
-        city,
-        zip,
-      }),
     });
+      console.log( await response.json())
+      
+      //Todo: fixa if !repsons.ok statement  
+      const data = await response.json()
+      console.log("data from backend", data)
+   } catch (error) {
+
+   }
   }
 
   getUserData();
