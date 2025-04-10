@@ -17,6 +17,8 @@ export function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
 
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
   const navigate = useNavigate();
 
   async function handleSignUp() {
@@ -29,30 +31,50 @@ export function SignUpForm() {
       return;
     }
 
-    const { error, data } = await supabase.auth.signUp(
-      {
-        email,
-        password,
-      },
-
-      //TODO: Send this data to the database instead on profile table
-      {
-        data: {
-          name,
-          lastname,
-          phone,
-          pnummer,
-          adress,
-          city,
-          zip,
-        },
-      }
-    );
+    const { error, data } = await supabase.auth.signUp({ email, password });
 
     //TODO: Implement error handling and displaying message with help of application state
     if (error) {
-      console.error(error);
+      toast.error(error.message);
+      return;
     }
+
+    const x = { user_id: data.user.id,
+    name,
+    lastname,
+    phone,
+    email,
+    pnummer,
+    adress,
+    city,
+    zip,
+    }
+
+    console.log(x);
+
+
+    //TODO: Extra data is sent to backend to store in database
+    const respone = await fetch(`${backendURL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.session.access_token}`,
+      },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        name,
+        lastname,
+        phone,
+        email,
+        pnummer,
+        adress,
+        city,
+        zip,
+      }),
+    });
+
+    console.log(respone);
+    //TODO: Implement error handling and displaying message with help of application state
 
     //reset the form
     setName("");
@@ -66,8 +88,7 @@ export function SignUpForm() {
     setPassword("");
     setConfirmPassword("");
 
-    navigate("/home");
-    console.log(data);
+    navigate("/");
   }
 
   return (
