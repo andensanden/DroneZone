@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'r
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
-import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing';
+import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing.jsx';
 
 // Main Map Component
 const Map = () => {
