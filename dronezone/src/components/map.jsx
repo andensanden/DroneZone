@@ -48,7 +48,6 @@ const Map = () => {
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
       />
-      <LaunchButton/>
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">
@@ -79,6 +78,7 @@ const Map = () => {
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
           <UndoButton/>
+          <LaunchButton setDrawingMode={setDrawingMode}/>
         </NodesProvider>
       </MapContainer>
     </div>

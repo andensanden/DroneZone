@@ -1,8 +1,3 @@
-/*
-    WIP, replacement for forbiddenZonesManager.js
-    Will store all relevant information for forbidden zones
-*/
-
 export class ForbiddenZone {
     constructor(coords) {
         this.coords = this.#sortCoordinates(coords);
