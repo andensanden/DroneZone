@@ -7,7 +7,7 @@ import {Guidelines} from "./pages/Guidelines";
 import { Account } from "./pages/Account";
 import { CreateAccount } from "./pages/CreateAccount";
 import { useGetUserAuth } from "@/hooks/useGetUserAuth";
-import { Info } from "@/pages/info";
+import { Info } from "@/pages/Info";
 
 
 function App() {

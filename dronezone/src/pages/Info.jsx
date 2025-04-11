@@ -12,4 +12,4 @@ export function Info() {
       <InfoFooter />
     </>
   )
-}
+} export default Info;
