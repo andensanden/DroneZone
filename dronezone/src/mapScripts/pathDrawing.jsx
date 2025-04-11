@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
@@ -15,15 +15,25 @@ function MapClick({ drawingMode }) {
     const [bufferZones, setBufferZones] = useState([]);
     const { nodes, setNodes } = useNodes();
     const { zones } = useZones();
+    const nodesRef = useRef(nodes);
+    const zonesRef = useRef(zones);
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
-        // Only create a new node upon clicking map, not buttons or other UI elements
-        if (!e.originalEvent.target.classList.contains("leaflet-container")
-            && !e.originalEvent.target.classList.contains("map-clickable")) return;
+            // Only create a new node upon clicking map, not buttons or other UI elements
+            if (!e.originalEvent.target.classList.contains("leaflet-container")
+                && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
-            const newNode = new Node(e.latlng);
-            newNode.addNode(nodes, setNodes);
+            // Only create a new node if the path would not intersect a forbidden zone
+            const coords = nodesRef.current.map(n => n.position);
+            const blocked = wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
+            if (blocked) {
+                alert("Path intersects forbidden zone — node removed.");
+            }
+            else {
+                const newNode = new Node(e.latlng);
+                newNode.addNode(nodes, setNodes);
+            }
         }
         // Remove nodes by clicking on them
         else if (drawingMode === 'remove') {
@@ -50,21 +60,6 @@ function MapClick({ drawingMode }) {
             }
         }
 
-        //Detect if the user draw on a red zone
-        if (nodes.length > 1) {
-            const node = nodes[nodes.length - 1];
-            const coords = nodes.slice(0, -1).map(n => n.position);
-        
-            const blocked = wouldLineIntersectForbiddenZone(node.position, coords, zones);
-            /* Detect if path intersect with a red zone (user draws a path where a
-            red zone ends up between two nodes).
-            */
-            if (blocked) {
-                nodes[nodes.length - 1].removeNode(setNodes);
-                alert("Path intersects forbidden zone — node removed.");
-            }
-        }
-
         // Create a path between two nodes
         if (nodes.length > 1) {
             BuildPath(nodes, setPaths);
@@ -84,6 +79,14 @@ function MapClick({ drawingMode }) {
             map.off('click', onMapClick)
         }
     }, [map, drawingMode])
+
+    useEffect(() => {
+        nodesRef.current = nodes;
+    }, [nodes]);
+
+    useEffect(() => {
+        zonesRef.current = zones;
+    }, [zones]);
 
     return (
         <>
