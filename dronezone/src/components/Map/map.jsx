@@ -11,6 +11,7 @@ import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
 import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
+import { InFlightProvider } from './inFlightContext'; // Adjust the path as necessary
 
 //--------------- UI Components -----------
 import { HamburgerButton } from './layerHamburgerMenu';
@@ -19,6 +20,8 @@ import { DrawFlightPathMenu } from './drawFlightPath';
 import { YourDevicesMenu } from './yourDevicesMenu';
 import DashboardPanel from '../dashboard';
 import { LaunchButton } from './launchButton';
+
+
 
 //-------- Main Map Component -------
 const Map = () => {
@@ -79,6 +82,14 @@ const formatTime = (totalSeconds) => {
     setTrackingEnabled(prev => !prev);
   };
 
+  //Displaying dashboard
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  
+  const handleLaunchClick = () => {
+    setShowDashboard(prevState => !prevState);
+  };
+
   return (
     
     //Overall map component generation with styling
@@ -108,17 +119,28 @@ const formatTime = (totalSeconds) => {
         right: '20px',
         zIndex: 1000
         }}>
-          <DashboardPanel
-            data={{
-              longitude: position[0],
-              latitude: position[1],
-              altitude: 'N/A', // Replace when you have real data
-              timeElapsed: formatTime(elapsedSeconds) 
-            }}
-          />
+        
         </div>
-
-
+        <InFlightProvider>
+          <LaunchButton onClick={handleLaunchClick} />
+          {showDashboard && (
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              zIndex: 1000
+            }}>
+              <DashboardPanel
+                data={{
+                  longitude: position[0],
+                  latitude: position[1],
+                  altitude: 'N/A', // Replace when you have real data
+                  timeElapsed: formatTime(elapsedSeconds)
+                }}
+              />
+            </div>
+          )}
+          </InFlightProvider>
         {/* This is the overlay HAMBURGER button */}
         <HamburgerButton position={position} />
 
