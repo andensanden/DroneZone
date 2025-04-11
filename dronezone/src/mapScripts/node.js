@@ -11,8 +11,7 @@ export class Node {
     /*
         Add a new node to the array of nodes
     */
-    addNode(nodes, setNodes) {
-        //NodeOverlap(newNode, nodes);
+    addNode(setNodes) {
         setNodes((prevNodes) => [...prevNodes, this]);
     }
 
@@ -21,14 +20,6 @@ export class Node {
     */
     removeNode(setNodes) {
         setNodes((prevNodes) => prevNodes.filter((node) => node !== this));
-    }
-    // Update the node's position to a new latitude/longitude
-    movePosition(position) {
-        this.position = position;
-    }
-    // get node's position (latlng)
-    getPosition() {
-        return this.position;
     }
 
     /*

@@ -8,6 +8,7 @@ import { useNodes } from './nodesContext.jsx'
 
 /*
     Handles what happens when the user clicks on the map
+    Rename to PathDrawing
 */
 function MapClick({ drawingMode }) {
     const [popupPos, setPopupPos] = useState(null);
@@ -35,7 +36,7 @@ function MapClick({ drawingMode }) {
             }
             else {
                 const newNode = new Node(e.latlng);
-                newNode.addNode(nodes, setNodes);
+                newNode.addNode(setNodes);
             }
         }
         // Remove nodes by clicking on them
