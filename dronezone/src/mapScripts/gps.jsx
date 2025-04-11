@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import {VscPerson} from "react-icons/vsc"
 
 
 /*
@@ -85,14 +86,14 @@ function GPSToggleControl({ trackingEnabled, toggleTracking }) {
       <button
         onClick={toggleTracking}
         style={{
-          backgroundColor: trackingEnabled ? '#4CAF50' : '#fff',
+          backgroundColor: trackingEnabled ? '#fff' : '#fff',
           padding: '8px',
-          border: '2px solid rgba(0,0,0,0.2)',
+          border: '1px solid rgba(0,0,0,0.2)',
           borderRadius: '4px',
           cursor: 'pointer'
         }}
       >
-        📍
+        <VscPerson size={24}/>
       </button>
     </div>
   );

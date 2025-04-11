@@ -1,147 +1,80 @@
 // src/mapScripts/forbiddenZoneDrawing.jsx
-import { useEffect, useState } from 'react';
-import { useMap, Circle } from 'react-leaflet';
-import ForbiddenZonesManager from '@/mapScripts/forbiddenZonesManager.js';
+import { useEffect, useState, useRef } from 'react';
+import { useMap, Polygon } from 'react-leaflet';
+import { ForbiddenZone } from './forbiddenZone.js';
+import { useZones } from './ZonesContext.jsx'
 
-const nodeRadius = 20;
-
-const ForbiddenZoneDrawing = () => {
+function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
-  let clickPoints = [];
-  let tempPolygon = null;
-  const [nodes, setNodes] = useState([]);
-  let doubleClickHandler = null; // Track the double-click handler
+  const [clickPoints, setPoints] = useState([]);
+  const clickPointsRef = useRef([]);
+  //const [zones, setZones] = useState([]);
+  const { zones, addZone, updateZone } = useZones();
+  const [currZone, setCurrZone] = useState(0);
+  const currZoneRef = useRef(0);
+
+  // WIP
+  // Remove clickPoints?? Also check the references if they are all necessary
 
   useEffect(() => {
     const handleClick = (e) => {
+      if (drawingMode !== 'forbidden') return;
       // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
-      if (!map.forbiddenManager || !e.originalEvent.target.classList.contains('leaflet-container')) return;
+      if (!e.originalEvent.target.classList.contains("leaflet-container")
+        && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
-      clickPoints.push(e.latlng);
-      AddNode(e, setNodes);
-
-      // Draw temporary polygon
-      if (tempPolygon) tempPolygon.remove();
-      if (clickPoints.length > 2) {
-        tempPolygon = map.forbiddenManager.drawForbiddenPoly(clickPoints);
-      }
-
-      // Only set up double-click handler if not already set
-      if (!doubleClickHandler) {
-        doubleClickHandler = () => {
-          if (map.forbiddenManager && clickPoints.length >= 3) {
-            map.forbiddenManager.drawForbiddenPoly(clickPoints);
-            clickPoints = [];
-            if (tempPolygon) {
-              tempPolygon.remove();
-              tempPolygon = null;
-            }
-            map.doubleClickZoom.enable();
-            map.off('dblclick', doubleClickHandler);
-            doubleClickHandler = null;
-          }
-        };
-        map.doubleClickZoom.disable();
-        map.on('dblclick', doubleClickHandler);
-      }
+      setPoints((prevPoints) => {
+        const newPoints = [...prevPoints, e.latlng];
+        clickPointsRef.current = newPoints;
+        return newPoints;
+      });
     };
 
     map.on('click', handleClick);
-    
+
     return () => {
-      // Clean up ALL event handlers when component unmounts
       map.off('click', handleClick);
-      if (doubleClickHandler) {
-        map.off('dblclick', doubleClickHandler);
-        map.doubleClickZoom.enable();
+    };
+  }, [map, drawingMode]);
+
+  useEffect(() => {
+    if (clickPointsRef.current.length === 0) return;
+    // Update the context with the new zone after `currZone` is updated
+    const newZone = new ForbiddenZone([...clickPointsRef.current]);
+    updateZone(currZoneRef.current, newZone);
+  }, [clickPoints, currZone]);  // Trigger whenever clickPoints or currZone changes
+
+  useEffect(() => {
+    const handleDoubleClick = () => {
+      if (clickPointsRef.current.length >= 1) {
+        // Finalize current zone and move to next
+        setCurrZone((prev) => prev + 1);
+        setPoints([]);
+        clickPointsRef.current = [];
       }
-      if (tempPolygon) tempPolygon.remove();
+    };
+  
+    map.doubleClickZoom.disable();
+    map.on('dblclick', handleDoubleClick);
+  
+    return () => {
+      map.off('dblclick', handleDoubleClick);
+      map.doubleClickZoom.enable();
     };
   }, [map]);
+
+  useEffect(() => {
+    currZoneRef.current = currZone;
+  }, [currZone]);
 
   return (
     <>
-      <DrawNodes nodes={nodes}/>
-    </>
-  );
-};
-
-function AddNode(e, setNodes) {
-    const newNode = {
-        position: e.latlng,
-        radius: nodeRadius,
-    }
-    setNodes((prevNodes) => [...prevNodes, newNode]);
+    {zones.map((zone, index) => 
+      (zone.coords.length > 0 && (
+      <Polygon className="map-clickable" key={index} positions={zone.coords} color="red" fillOpacity={0.5} weight={1} />)
+    ))}
+  </>
+  )
 }
 
-function DrawNodes({nodes}) {
-    return (
-        <>
-            {nodes.map((node, index) => { return(
-                <Circle 
-                key={index} center={node.position} radius={node.radius}
-                color="red" fillColor="red" fillOpacity={0.5}/>
-                )
-            })}
-        </>
-    );
-}
-
-// Drawing Mode Control
-const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
-  return (
-    <div className="drawing-mode-control" style={{
-      position: 'absolute',
-      top: '85%',
-      right: '0%',
-      zIndex: 1000,
-    }}>
-      <button 
-        onClick={() => setDrawingMode('path')}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: drawingMode === 'path' ? '#4CAF50' : '#ccc',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px 0 0 4px',
-          cursor: 'pointer',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-        }}
-      >
-        Draw Path
-      </button>
-      <button 
-        onClick={() => setDrawingMode('forbidden')}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: drawingMode === 'forbidden' ? '#f44336' : '#ccc',
-          color: 'white',
-          border: 'none',
-          borderRadius: '0 4px 4px 0',
-          cursor: 'pointer',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-        }}
-      >
-        Draw Forbidden Zone
-      </button>
-    </div>
-  );
-};
-
-// Forbidden Zones Initializer
-const ForbiddenZonesInitializer = () => {
-  const map = useMap();
-  
-  useEffect(() => {
-    const forbiddenManager = new ForbiddenZonesManager(map);
-    map.forbiddenManager = forbiddenManager;
-    
-    return () => {
-      forbiddenManager.clearForbiddenZones();
-    };
-  }, [map]);
-
-  return null;
-};
-
-export { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer };
+export default ForbiddenZoneDrawing;

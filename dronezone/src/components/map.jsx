@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
-import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
-import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing.jsx';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from  '@/mapScripts/gpsToggleControl'
+import LaunchButton from '@/mapScripts/launchButton';
+import DrawingModeControl from '@/mapScripts/drawingModeControl';
+import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
 
 // Main Map Component
 const Map = () => {
@@ -36,6 +40,7 @@ const Map = () => {
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
       />
+      <LaunchButton/>
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">
@@ -57,16 +62,20 @@ const Map = () => {
       </LayersControl>
         
         <LocationTracker trackingEnabled={trackingEnabled} />
-        <ForbiddenZonesInitializer />
         
-        {drawingMode === 'path' ? (
-          <MapClick />
-        ) : (
-          <ForbiddenZoneDrawing />
-        )}
+        <ZonesProvider>
+          <MapClick drawingMode={drawingMode}/>
+          <ForbiddenZoneDrawing drawingMode={drawingMode} />
+        </ZonesProvider>
       </MapContainer>
     </div>
   );
 };
+
+/*{drawingMode === 'path' ? (
+  <MapClick />
+) : (
+  <ForbiddenZoneDrawing />
+)}*/
 
 export default Map;
