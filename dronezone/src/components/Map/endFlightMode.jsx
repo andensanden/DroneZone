@@ -162,6 +162,7 @@ useEffect(() => {
   right: '30px',
   zIndex: 1000
 }}>
+{/*
   <DashboardPanel
     data={{
       longitude: position[0],
@@ -170,6 +171,7 @@ useEffect(() => {
       timeElapsed: formatTime(elapsedSeconds)
     }}
   />
+  */}
 </div>
       {/* 🚀 End Button */}
       <div style={{
