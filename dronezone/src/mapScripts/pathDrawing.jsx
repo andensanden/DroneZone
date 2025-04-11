@@ -30,7 +30,6 @@ function MapClick({ drawingMode }) {
             const coords = nodesRef.current.map(n => n.position);
             const blocked = wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
             if (blocked) {
-                //alert("Path intersects forbidden zone — node removed.");
                 setPopupPos(e.latlng);
                 setShowPopup(true);
             }
