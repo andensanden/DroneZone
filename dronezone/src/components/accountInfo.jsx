@@ -46,7 +46,9 @@ export function AccountInfo() {
   //Add a drone device function
   async function addDevice() {
 
-    console.log("Clicked add device")
+    //Setting device state so UI is updated immediately when adding drone
+    setDevices([...devices, { deviceName, deviceID }])
+
     const { data } = await supabase.auth.getUser();
 
     console.log({
@@ -72,21 +74,19 @@ export function AccountInfo() {
   }
     
 
-
-
-
-
   //Function to handle the change of phone number
   function handleChangePhone() {
     const phoneInput = document.getElementById("phoneInput");
     phoneInput.disabled = false;
   }
 
+  //TODO: User most be able to change their phone number
   function handleSavePhone() {
+
     const phoneInput = document.getElementById("phoneInput");
     phoneInput.disabled = true;
 
-    //TODO: Save the new phone number to the database
+    
   }
  
   return (
@@ -115,9 +115,6 @@ export function AccountInfo() {
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                }}
                 disabled
                 id="phoneInput"
               ></input>
