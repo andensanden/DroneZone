@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+
+//--------- LEAFLET------------
 import {
   MapContainer,
   TileLayer,
@@ -8,14 +11,19 @@ import {
   Polyline
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+
+//------------ UTILS ------------
+
 import MapClick from '@/mapScripts/pathDrawing';
 import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
+import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
+import { LaunchButton } from './launchButton';
+import  DashboardPanel from '../dashboard';
+
+//------------ ASSETS --------------
+import {GiPathDistance} from "react-icons/gi";
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
-import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
-import { useEffect } from 'react';
-
-import {GiPathDistance} from "react-icons/gi";
 
 const droneIcon = L.icon({
     iconUrl: icon,
@@ -23,6 +31,8 @@ const droneIcon = L.icon({
     iconAnchor: [16, 16],
     popupAnchor: [0, -16]
   });
+
+//------------ COMPONENT GENERATION ------------------
 
 const LoggedInMap = () => {
   const [position, setPosition] = useState([59.3293, 18.0686]);
@@ -73,6 +83,7 @@ const LoggedInMap = () => {
   const drawFlightBottom = baseBottom;
   const devicesBottom = drawFlightBottom + (flightPathMenuOpen ? drawFlightPanelHeight : drawFlightButtonHeight) + 10;
 
+  // --------------------------------------------------------------
   return (
     <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
       <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
@@ -80,7 +91,7 @@ const LoggedInMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-
+        {/*GPS tracker and location display */}
         <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
 
         {showCurrentLocation && trackingEnabled && position && (
@@ -92,6 +103,7 @@ const LoggedInMap = () => {
           </>
         )}
 
+        {/*Displaying restricted zones */}
         {showRestrictedZones && dummyRestrictedZones.map((zone, idx) => (
           <Circle
             key={`restricted-${idx}`}
@@ -104,6 +116,7 @@ const LoggedInMap = () => {
           </Circle>
         ))}
 
+        {/*Displaying active drones */}
         {showActiveDrones && dummyActiveDrones.map((drone, idx) => (
           <Marker
             key={`drone-${idx}`}
@@ -120,6 +133,7 @@ const LoggedInMap = () => {
           </Marker>
         ))}
 
+        {/*Displaying drawn flightpath */}
         {showFlightPath && (
           <Polyline
             positions={[
@@ -131,6 +145,8 @@ const LoggedInMap = () => {
           />
         )}
 
+
+        {/*Displaying user location*/}
         <LocationTracker
           trackingEnabled={trackingEnabled}
           onLocationUpdate={({ latitude, longitude }) => {
@@ -141,119 +157,8 @@ const LoggedInMap = () => {
         {!confirmFlightPath && drawingMode === 'path' && <MapClick />}
       </MapContainer>
 
-      {/* 🚀 Launch Button */}
-      <div style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 1000
-      }}>
-        <button style={{
-          backgroundColor: '#1D4ED8',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: '30px',
-          padding: '10px 55px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          border: 'none',
-          cursor: 'pointer'
-        }}>
-          Launch
-        </button>
-      </div>
 
-      {/* 🗺️ Layers Hamburger Menu */}
-      <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            background: 'white',
-            padding: '10px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-            border: 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '40px',
-            width: '50px'
-          }}
-        >
-          <span style={{ height: '3px', backgroundColor: '#FFD700', borderRadius: '20px' }} />
-          <span style={{ height: '3px', backgroundColor: '#FFD700', borderRadius: '20px' }} />
-          <span style={{ height: '3px', backgroundColor: '#FFD700', borderRadius: '20px' }} />
-        </button>
-
-        {menuOpen && (
-          <div style={{
-            position: 'absolute',
-            top: '60px',
-            right: '0',
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '260px',
-            padding: '16px'
-          }}>
-       <div style={{
-      fontWeight: 'bold',
-      fontSize: '16px',
-      padding: '16px',
-    }}> 
-      Layers
-    </div>
-
-    {/* Divider line */}
-    <div style={{
-      height: '2px',
-      backgroundColor: '#e5e7eb',
-      width: '100%',
-  margin: 0,
-  padding: 0
-    }} />
-            {[
-              { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
-              { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => setShowRestrictedZones(!showRestrictedZones) },
-              { label: 'Current Location', checked: trackingEnabled, toggle: () => setTrackingEnabled(prev => !prev) }
-            ].map((layer, i) => (
-              <label key={i} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                margin: '10px 0',
-                fontSize: '14px',
-                fontWeight: 'bold'
-              }}>
-                {layer.label}
-                <input
-                  type="checkbox"
-                  checked={layer.checked}
-                  onChange={layer.toggle}
-                  style={{ width: '18px', height: '18px', accentColor: '#FFD700', cursor: 'pointer' }}
-                />
-              </label>
-            ))}
-
-            <button
-              onClick={clearLayers}
-              style={{
-                marginTop: '12px',
-                background: 'transparent',
-                border: 'none',
-                color: 'red',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                cursor: 'pointer'
-              }}
-            >
-              Clear Layers
-            </button>
-          </div>
-        )}
-      </div>
+<HamburgerButton/>
 
       {/* ✏️ Draw Flight Path menu */}
       <div style={{
