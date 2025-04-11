@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { useMap } from 'react-leaflet'
+import { useMap, Popup } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
@@ -9,6 +9,8 @@ import { useZones } from './ZonesContext.jsx'
     Handles what happens when the user clicks on the map
 */
 function MapClick({ drawingMode }) {
+    const [popupPos, setPopupPos] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
     const map = useMap();
     const doNotDraw = useRef(false); // not needed anymore?
     const [nodes, setNodes] = useState([]); // nodes list
@@ -24,6 +26,10 @@ function MapClick({ drawingMode }) {
 
             const newNode = new Node(e.latlng);
             newNode.addNode(nodes, setNodes);
+
+            
+
+            
         }
         // Remove nodes by clicking on them
         else if (drawingMode === 'remove') {
@@ -60,7 +66,8 @@ function MapClick({ drawingMode }) {
         }
 
         //Detect if the user draw on a red zone
-        if (nodes.length > 1) {
+        
+        if (nodes.length > 0) {
             const node = nodes[nodes.length - 1];
             const coords = nodes.slice(0, -1).map(n => n.position);
         
@@ -69,11 +76,16 @@ function MapClick({ drawingMode }) {
             red zone ends up between two nodes).
             */
             if (blocked) {
-                console.warn(" Path segment intersects red zone, Removing last node.");
                 doNotDraw.current = true;
                 nodes[nodes.length - 1].removeNode(setNodes);
-                alert("Path intersects forbidden zone — node removed.");
+                setPopupPos(node.position);
+                setShowPopup(true);
+                
+
+
+
             }
+            
         }
 
         // Create a path between two nodes
@@ -87,7 +99,7 @@ function MapClick({ drawingMode }) {
         
     }, [nodes])
 
-// Adds a map click listener (useEffect) and updates it when the drawing mode changes.
+// Adds a map click listener and updates it when the drawing mode changes.
     useEffect(() => {
         map.on('click', onMapClick) 
 
@@ -101,6 +113,12 @@ function MapClick({ drawingMode }) {
             <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
+            {showPopup && popupPos && (
+  <Popup position={popupPos} onClose={() => setShowPopup(false)}>
+    ⚠️ You cannot draw through or on a red zone ⚠️.
+  </Popup>
+)}
+
 
             <div className="Undo-button" style={{
                         position: 'absolute',

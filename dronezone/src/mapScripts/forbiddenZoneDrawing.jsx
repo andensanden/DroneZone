@@ -8,7 +8,6 @@ function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [clickPoints, setPoints] = useState([]);
   const clickPointsRef = useRef([]);
-  //const [zones, setZones] = useState([]); //remove???
   const { zones, updateZone } = useZones();
   const [currZone, setCurrZone] = useState(0);
   const currZoneRef = useRef(0);
