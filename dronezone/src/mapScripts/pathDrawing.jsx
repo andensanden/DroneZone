@@ -29,7 +29,7 @@ function MapClick({ drawingMode }) {
            const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
            if (index !== -1) {
                 for (var i = 0; i < nodes.length; i++) {
-                    if (clickOnNode(e, nodes[i])) {
+                    if (ClickOnNode(e, nodes[i])) {
                         doNotDraw.current = true;
                         nodes[i].removeNode(setNodes);
                     }
@@ -95,14 +95,14 @@ function MapClick({ drawingMode }) {
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
 
-            <div className="undo-button" style={{
+            <div className="Undo-button" style={{
                         position: 'absolute',
                         top: '68%',
                         right: '0%',
                         zIndex: 1000,
                     }}>
                         <button
-                            onClick={() => undo(nodes, setNodes, doNotDraw) }
+                            onClick={() => Undo(nodes, setNodes, doNotDraw) }
             
                             style={{
                                 padding: '8px 16px',
@@ -182,14 +182,18 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-function undo(nodes, setNodes, doNotDraw) {
+function Undo(nodes, setNodes, doNotDraw) {
     doNotDraw.current = true;
     nodes[nodes.length - 1].removeNode(setNodes);
 }
 
-function clickOnNode(e, node) {
+function ClickOnNode(e, node) {
     const dist = e.latlng.distanceTo(node.position);
     return dist <= node.radius;
+}
+
+function Launch() {
+    
 }
 
 export default MapClick;
