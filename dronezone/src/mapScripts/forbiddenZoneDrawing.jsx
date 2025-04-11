@@ -8,7 +8,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [clickPoints, setPoints] = useState([]);
   const clickPointsRef = useRef([]);
-  //const [zones, setZones] = useState([]);
+  //const [zones, setZones] = useState([]); //remove???
   const { zones, updateZone } = useZones();
   const [currZone, setCurrZone] = useState(0);
   const currZoneRef = useRef(0);
@@ -44,6 +44,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     updateZone(currZoneRef.current, newZone);
   }, [clickPoints, currZone]);  // Trigger whenever clickPoints or currZone changes
 
+  // Stop drawing red zones when double click
   useEffect(() => {
     const handleDoubleClick = () => {
       if (clickPointsRef.current.length >= 1) {
@@ -63,6 +64,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     };
   }, [map]);
 
+  //draw zones every time we add a new node on the map
   useEffect(() => {
     currZoneRef.current = currZone;
   }, [currZone]);

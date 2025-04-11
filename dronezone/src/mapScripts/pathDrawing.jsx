@@ -10,10 +10,10 @@ import { useZones } from './ZonesContext.jsx'
 */
 function MapClick({ drawingMode }) {
     const map = useMap();
-    const doNotDraw = useRef(false);
-    const [nodes, setNodes] = useState([]);
-    const [paths, setPaths] = useState([]);
-    const [bufferZones, setBufferZones] = useState([]);
+    const doNotDraw = useRef(false); // not needed anymore?
+    const [nodes, setNodes] = useState([]); // nodes list
+    const [paths, setPaths] = useState([]); // paths list
+    const [bufferZones, setBufferZones] = useState([]); // bufferzone list
     const { zones } = useZones();
 
     const onMapClick = (e) => {
@@ -25,6 +25,7 @@ function MapClick({ drawingMode }) {
             const newNode = new Node(e.latlng);
             newNode.addNode(nodes, setNodes);
         }
+        // Remove nodes by clicking on them
         else if (drawingMode === 'remove') {
            const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
            if (index !== -1) {
@@ -40,6 +41,7 @@ function MapClick({ drawingMode }) {
 
     // Update paths whenever nodes is updated
     useEffect(() => {
+        //Avoid creating new path when we remove a node
         if(doNotDraw.current){
             doNotDraw.current = false;
             BuildPath(nodes, setPaths);
@@ -57,12 +59,15 @@ function MapClick({ drawingMode }) {
             }
         }
 
+        //Detect if the user draw on a red zone
         if (nodes.length > 1) {
             const node = nodes[nodes.length - 1];
             const coords = nodes.slice(0, -1).map(n => n.position);
         
             const blocked = wouldLineIntersectForbiddenZone(node.position, coords, zones);
-        
+            /* Detect if path intersect with a red zone (user draws a path where a
+            red zone ends up between two nodes).
+            */
             if (blocked) {
                 console.warn(" Path segment intersects red zone, Removing last node.");
                 doNotDraw.current = true;
@@ -71,16 +76,18 @@ function MapClick({ drawingMode }) {
             }
         }
 
+        // Create a path between two nodes
         if (nodes.length > 1) {
             BuildPath(nodes, setPaths);
             BuildBuffer(nodes, setBufferZones);
-        } else {
+        } else { // if nodes are less than 1, there should be no paths or bufferzones
             setPaths([]);
             setBufferZones([]);
         }
         
     }, [nodes])
 
+// Adds a map click listener (useEffect) and updates it when the drawing mode changes.
     useEffect(() => {
         map.on('click', onMapClick) 
 
@@ -182,18 +189,17 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
+// Remove last drawn node.
 function Undo(nodes, setNodes, doNotDraw) {
     doNotDraw.current = true;
     nodes[nodes.length - 1].removeNode(setNodes);
 }
 
+// check if the user clicked on a node
 function ClickOnNode(e, node) {
     const dist = e.latlng.distanceTo(node.position);
     return dist <= node.radius;
 }
 
-function Launch() {
-    
-}
 
 export default MapClick;

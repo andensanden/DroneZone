@@ -1,4 +1,4 @@
-// Drawing Mode Control
+// Drawing Mode Control, include Draw path, draw forbidden zone and remove node buttons
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
     return (
       <div className="drawing-mode-control" style={{

@@ -22,11 +22,11 @@ export class Node {
     removeNode(setNodes) {
         setNodes((prevNodes) => prevNodes.filter((node) => node !== this));
     }
-
+    // Update the node's position to a new latitude/longitude
     movePosition(position) {
         this.position = position;
     }
-
+    // get node's position (latlng)
     getPosition() {
         return this.position;
     }
