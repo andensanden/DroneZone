@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const DashboardPanel = ({ data }) => {
   return (
     <div style={{
