@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { supabase } from "@/supabase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/Redux/auth/authSlice";
+import { DropdownAddDevice } from "@/components/dropdownAddDevice";
 
 export function AccountInfo() {
 
@@ -107,11 +108,8 @@ export function AccountInfo() {
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-          ></input>
-          <button className="bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
-            <p>Add new drone </p>
-            <TbDrone size={18} />
-          </button>
+          />
+            <DropdownAddDevice />
         </div>
 
         {/*Licence column ends here */}
