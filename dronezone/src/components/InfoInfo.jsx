@@ -36,7 +36,7 @@ export function InfolineInfo() {
             <div className="flex flex-col w-70">
               <h2 className="font-bold text-xl ">Choose Your Layers</h2>
               <p className="text-sm  mb-2">
-                Customize your map view using the <span className="font-semibold">Layers</span> option:
+                Customize your map view using <span className="font-semibold italic">map layers</span>:
               </p>
               <ul className="list-disc text-sm space-y-1">
                 <li className="pl-2">
