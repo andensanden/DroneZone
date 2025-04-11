@@ -8,6 +8,8 @@ import LaunchButton from '@/mapScripts/launchButton';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
+import { useSelector, useDispatch } from "react-redux";
+import LoggedInMap from './loggedInMap';
 
 // Main Map Component
 const Map = () => {
@@ -18,6 +20,9 @@ const Map = () => {
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
   };
+
+  //Checking the state, if the user is logged in we redirect to loggedInMap.jsx instead
+  //isAuth == True, if logged in, == False not logged in  
 
   return (
     <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
@@ -36,6 +41,9 @@ const Map = () => {
         trackingEnabled={trackingEnabled} 
         toggleTracking={toggleTracking} 
       />
+      
+      {/* Code to draw forbidden zones and flightpaths
+      
       <DrawingModeControl 
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
@@ -63,19 +71,16 @@ const Map = () => {
         
         <LocationTracker trackingEnabled={trackingEnabled} />
         
+        {/* Code to draw forbidden zones and flightpaths
+
         <ZonesProvider>
           <MapClick drawingMode={drawingMode}/>
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
+          */}
       </MapContainer>
     </div>
   );
 };
-
-/*{drawingMode === 'path' ? (
-  <MapClick />
-) : (
-  <ForbiddenZoneDrawing />
-)}*/
 
 export default Map;
