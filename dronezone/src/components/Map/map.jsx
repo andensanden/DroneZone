@@ -19,6 +19,7 @@ import { DrawFlightPathMenu } from './drawFlightPath';
 import { YourDevicesMenu } from './yourDevicesMenu';
 import DashboardPanel from '../dashboard';
 import { LaunchButton } from './launchButton';
+import { NodesProvider } from '@/mapScripts/nodesContext';
 
 //-------- Main Map Component -------
 const Map = () => {
@@ -126,10 +127,12 @@ const formatTime = (totalSeconds) => {
         bottom={devicesBottom}
       />
 
+        <NodesProvider>
         <ZonesProvider>
           <MapClick drawingMode={drawingMode} />
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
+        </NodesProvider>
       </MapContainer>
     </div>
   );
