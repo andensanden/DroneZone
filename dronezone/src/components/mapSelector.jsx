@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ForbiddenZoneDrawing, DrawingModeControl, ForbiddenZonesInitializer } from '@/mapScripts/forbiddenZoneDrawing.jsx';
 import { useSelector, useDispatch } from "react-redux";
 import  LoggedInMap  from './loggedInMap';
 import  Map  from './map';

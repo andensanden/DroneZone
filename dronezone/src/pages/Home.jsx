@@ -10,7 +10,8 @@ export function Home() {
   return (
     <>
       <Header />
-      <MapSelector />
+      {/*<MapSelector />*/}
+      <LoggedInMap/>
       <Footer />
     </>
   );
