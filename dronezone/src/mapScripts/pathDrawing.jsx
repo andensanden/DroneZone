@@ -15,7 +15,6 @@ function MapClick({ drawingMode }) {
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
     const { zones } = useZones();
-    let id = 0;
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -98,7 +97,7 @@ function MapClick({ drawingMode }) {
 
             <div className="undo-button" style={{
                         position: 'absolute',
-                        top: '78%',
+                        top: '68%',
                         right: '0%',
                         zIndex: 1000,
                     }}>
