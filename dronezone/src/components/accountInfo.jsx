@@ -17,7 +17,7 @@ export function AccountInfo() {
 
   const [deviceName, setDeviceName] = useState("");
   const [deviceID, setDeviceID] = useState("");
-
+  const [devices, setDevices] = useState([]);
 
 //! Account info fetch from backend
   const dispatch = useDispatch();
@@ -29,33 +29,18 @@ export function AccountInfo() {
     const { data, error } = await supabase.auth.getUser();
 
     const respone = await fetch(`${backendURL}/api/auth/user/${data.user.id}`);
+    const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`);
+
     const parsedData = await respone.json();
+    const parsedDeviceData = await deviceRespone.json()
+    
+    setDevices(parsedDeviceData)
 
     dispatch(setUser(parsedData));
   }
 
   fetchData();
   }, []);
-
-  //? add devices to accounts
-  async function addDevice() {
-
-    const { data } = await supabase.auth.getUser();
-
-    const respone = await fetch(`${backendURL}/api/devices`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        },
-      body: JSON.stringify({
-        user_id: data.user.id,
-        deviceName,
-        deviceID,
-      }),
-    });
-    
-  }
-
 
 
   //Add a drone device function
@@ -161,16 +146,24 @@ export function AccountInfo() {
         {/*Devices column starts here. använd map funktion för att diplaya all drones */}
         <div className="ml-50 flex flex-col">
           <h2 className="text-3xl font-bold my-4 ">Devices</h2>
-          {/*Drone one */}
+          {/* {Drone one
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
           ></input>
-          {/*Drone two*/}
+          {/*Drone two*/}{/*
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-          />
+          /> */}
+          {devices.map((device, index)=> {
+           return( <input
+            key = {index}
+            className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
+            disabled
+            value = {device[index].deviceName}
+          />)}
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger className=" bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
               <p>Add new drone </p>
