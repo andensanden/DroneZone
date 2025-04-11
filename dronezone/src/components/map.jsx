@@ -7,9 +7,9 @@ import GPSToggleControl from  '@/mapScripts/gpsToggleControl'
 import LaunchButton from '@/mapScripts/launchButton';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import UndoButton from '@/mapScripts/undoButton';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
-import { useSelector, useDispatch } from "react-redux";
-import LoggedInMap from './loggedInMap';
+import { NodesProvider } from '@/mapScripts/nodesContext';
 
 // Main Map Component
 const Map = () => {
@@ -42,7 +42,7 @@ const Map = () => {
         toggleTracking={toggleTracking} 
       />
       
-      {/* Code to draw forbidden zones and flightpaths
+      {/* Code to draw forbidden zones and flightpaths */}
       
       <DrawingModeControl 
         drawingMode={drawingMode}
@@ -71,13 +71,15 @@ const Map = () => {
         
         <LocationTracker trackingEnabled={trackingEnabled} />
         
-        {/* Code to draw forbidden zones and flightpaths
+        {/* Code to draw forbidden zones and flightpaths */}
 
+        <NodesProvider>
         <ZonesProvider>
           <MapClick drawingMode={drawingMode}/>
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
-          */}
+          <UndoButton/>
+        </NodesProvider>
       </MapContainer>
     </div>
   );

@@ -16,13 +16,6 @@ function DrawNodes({nodes, color}) {
     )
 }
 
-/*{nodes.map((node, index) => { if (node.visible) return(
-    <Circle className = "map-clickable"
-    key={node.id} center={node.position} radius={node.radius}
-    color={color} fillColor={color} fillOpacity={0.5}/>
-    )
-})}*/
-
 /*
     Draws the existing paths on the map
 */

@@ -9,7 +9,8 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
-import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
 import DashboardPanel from '@/components/dashboard'; // adjust path if needed

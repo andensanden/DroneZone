@@ -11,11 +11,11 @@ import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
-import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
-import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
 import { useEffect } from 'react';
 
 import {GiPathDistance} from "react-icons/gi";

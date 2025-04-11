@@ -11,7 +11,7 @@ export function Home() {
     <>
       <Header />
       {/*<MapSelector />*/}
-      <LoggedInMap/>
+      <Map/>
       <Footer />
     </>
   );

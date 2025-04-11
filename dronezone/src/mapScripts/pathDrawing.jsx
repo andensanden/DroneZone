@@ -1,19 +1,20 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useMap } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './ZonesContext.jsx'
+import { useNodes } from './nodesContext.jsx'
 
 /*
     Handles what happens when the user clicks on the map
 */
 function MapClick({ drawingMode }) {
     const map = useMap();
-    const doNotDraw = useRef(false);
-    const [nodes, setNodes] = useState([]);
+    //const [nodes, setNodes] = useState([]);
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
+    const { nodes, setNodes } = useNodes();
     const { zones } = useZones();
 
     const onMapClick = (e) => {
@@ -30,7 +31,6 @@ function MapClick({ drawingMode }) {
            if (index !== -1) {
                 for (var i = 0; i < nodes.length; i++) {
                     if (ClickOnNode(e, nodes[i])) {
-                        doNotDraw.current = true;
                         nodes[i].removeNode(setNodes);
                     }
                 }
@@ -40,13 +40,6 @@ function MapClick({ drawingMode }) {
 
     // Update paths whenever nodes is updated
     useEffect(() => {
-        if(doNotDraw.current){
-            doNotDraw.current = false;
-            BuildPath(nodes, setPaths);
-            BuildBuffer(nodes, setBufferZones);
-            return;
-        }
-
         let n = nodes[nodes.length-1];
         // Check if nodes overlap
         if (n) {
@@ -65,7 +58,6 @@ function MapClick({ drawingMode }) {
         
             if (blocked) {
                 console.warn(" Path segment intersects red zone, Removing last node.");
-                doNotDraw.current = true;
                 nodes[nodes.length - 1].removeNode(setNodes);
                 alert("Path intersects forbidden zone — node removed.");
             }
@@ -94,30 +86,6 @@ function MapClick({ drawingMode }) {
             <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
-
-            <div className="Undo-button" style={{
-                        position: 'absolute',
-                        top: '68%',
-                        right: '0%',
-                        zIndex: 1000,
-                    }}>
-                        <button
-                            onClick={() => Undo(nodes, setNodes, doNotDraw) }
-            
-                            style={{
-                                padding: '8px 16px',
-                                backgroundColor: 'grey',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px 0 0 4px',
-                                cursor: 'pointer',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-                            }}
-            
-                        >
-                            Undo
-                        </button>
-                    </div>
         </>
     )
 }
@@ -182,18 +150,9 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-function Undo(nodes, setNodes, doNotDraw) {
-    doNotDraw.current = true;
-    nodes[nodes.length - 1].removeNode(setNodes);
-}
-
 function ClickOnNode(e, node) {
     const dist = e.latlng.distanceTo(node.position);
     return dist <= node.radius;
-}
-
-function Launch() {
-    
 }
 
 export default MapClick;
