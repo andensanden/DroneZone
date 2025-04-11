@@ -15,6 +15,7 @@ function MapClick({ drawingMode }) {
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
     const { zones } = useZones();
+    let id = 0;
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -26,16 +27,15 @@ function MapClick({ drawingMode }) {
             newNode.addNode(nodes, setNodes);
         }
         else if (drawingMode === 'remove') {
-            if (nodes.length === 0) return;
-            for (var i = 0; i < nodes.length; i++) {
-                let dist = e.latlng.distanceTo(nodes[i].position);
-                if (dist <= nodes[i].radius) {
-                    doNotDraw.current = true;
-                    nodes[i].removeNode(i, setNodes);
-                    RemovePath(i-1, setPaths);
-                    RemoveBufferZone(i-1, setBufferZones);
+           const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
+           if (index !== -1) {
+                for (var i = 0; i < nodes.length; i++) {
+                    if (clickOnNode(e, nodes[i])) {
+                        doNotDraw.current = true;
+                        nodes[i].removeNode(setNodes);
+                    }
                 }
-            }
+           }
         }
     }
 
@@ -43,6 +43,8 @@ function MapClick({ drawingMode }) {
     useEffect(() => {
         if(doNotDraw.current){
             doNotDraw.current = false;
+            BuildPath(nodes, setPaths);
+            BuildBuffer(nodes, setBufferZones);
             return;
         }
 
@@ -57,21 +59,25 @@ function MapClick({ drawingMode }) {
         }
 
         if (nodes.length > 1) {
-            const last = nodes[nodes.length - 2];
-            const current = nodes[nodes.length - 1];
+            const node = nodes[nodes.length - 1];
             const coords = nodes.slice(0, -1).map(n => n.position);
         
-            const blocked = wouldLineIntersectForbiddenZone(current.position, coords, zones);
+            const blocked = wouldLineIntersectForbiddenZone(node.position, coords, zones);
         
-            if (!blocked) {
-                AddPath(last, current, setPaths);
-                AddBufferZone(last, current, setBufferZones);
-            } else {
+            if (blocked) {
                 console.warn(" Path segment intersects red zone, Removing last node.");
                 doNotDraw.current = true;
-                nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
+                nodes[nodes.length - 1].removeNode(setNodes);
                 alert("Path intersects forbidden zone — node removed.");
             }
+        }
+
+        if (nodes.length > 1) {
+            BuildPath(nodes, setPaths);
+            BuildBuffer(nodes, setBufferZones);
+        } else {
+            setPaths([]);
+            setBufferZones([]);
         }
         
     }, [nodes])
@@ -97,7 +103,7 @@ function MapClick({ drawingMode }) {
                         zIndex: 1000,
                     }}>
                         <button
-                            onClick={() => undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) }
+                            onClick={() => undo(nodes, setNodes, doNotDraw) }
             
                             style={{
                                 padding: '8px 16px',
@@ -118,30 +124,26 @@ function MapClick({ drawingMode }) {
 }
 
 /*
-    Add a new path to the array of paths
+    Builds the path based on the existing nodes
 */
-function AddPath(startNode, endNode, setPaths) {
-    const newPath = [startNode.position, endNode.position];
-    setPaths((prevPaths) => [...prevPaths, newPath]);
-}
-
-function RemovePath(index, setPaths) {
-    setPaths((prevPaths) => prevPaths.filter((_, i) => i !== index));
-    //setPaths((prevPaths) => prevPaths.splice(index, 1));
+function BuildPath(nodes, setPaths) {
+    const path = [];
+    for (var i = 0; i < nodes.length-1; i++) {
+        path.push([nodes[i].position, nodes[i+1].position]);
+    }
+    setPaths(path);
 }
 
 /*
-    Add a new buffer zone to the buffer zone array
+    Builds the buffer zone based on the existing nodes
 */
-function AddBufferZone(startNode, endNode, setBufferZones) {
+function BuildBuffer(nodes, setBufferZones) {
+    const buffer = [];
     const bufferWidth = 40;
-    const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth);
-    setBufferZones((prevZones) => [...prevZones, newZone]);
-}
-
-function RemoveBufferZone(index, setBufferZones) {
-    setBufferZones((prevBuffer) => prevBuffer.filter((_, i) => i !== index));
-    //setBufferZones((prevBuffer) => prevBuffer.splice(index, 1));
+    for (var i = 0; i < nodes.length-1; i++) {
+        buffer.push(CreateBufferCoords([nodes[i].position, nodes[i+1].position], bufferWidth));
+    }
+    setBufferZones(buffer);
 }
 
 /*
@@ -181,11 +183,14 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) {
+function undo(nodes, setNodes, doNotDraw) {
     doNotDraw.current = true;
-    nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
-    RemovePath(paths.length - 1, setPaths);
-    RemoveBufferZone(bufferZones.length - 1, setBufferZones);
+    nodes[nodes.length - 1].removeNode(setNodes);
+}
+
+function clickOnNode(e, node) {
+    const dist = e.latlng.distanceTo(node.position);
+    return dist <= node.radius;
 }
 
 export default MapClick;

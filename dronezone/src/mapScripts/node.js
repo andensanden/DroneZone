@@ -1,10 +1,11 @@
 const defaultRadius = 20;
 
 export class Node {
-    constructor(position, radius) {
+    constructor(position, id, radius) {
         this.position = position;
         this.radius = radius ? radius : defaultRadius;
         this.visible = true;
+        this.id = id;
     }
 
     /*
@@ -18,9 +19,8 @@ export class Node {
     /*
         Remove a node based on its index in the nodes array
     */
-    removeNode(index, setNodes) {
-        setNodes((prevNodes) => prevNodes.filter((_, i) => i !== index));
-        //setNodes((prevNodes) => prevNodes.splice(index, 1));
+    removeNode(setNodes) {
+        setNodes((prevNodes) => prevNodes.filter((node) => node !== this));
     }
 
     movePosition(position) {
