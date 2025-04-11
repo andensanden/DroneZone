@@ -146,16 +146,6 @@ export function AccountInfo() {
         {/*Devices column starts here. använd map funktion för att diplaya all drones */}
         <div className="ml-50 flex flex-col">
           <h2 className="text-3xl font-bold my-4 ">Devices</h2>
-          {/* {Drone one
-          <input
-            className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
-            disabled
-          ></input>
-          {/*Drone two*/}{/*
-          <input
-            className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
-            disabled
-          /> */}
           {devices.map((device, index)=> {
            return( <input
             key = {index}
