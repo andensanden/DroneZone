@@ -2,6 +2,7 @@ import { GiPathDistance } from 'react-icons/gi';
 
 export function DrawFlightPathMenu({
   flightPathMenuOpen,
+  onToggleMenu,
   setFlightPathMenuOpen,
   setDevicesMenuOpen,
   confirmFlightPath,
@@ -19,9 +20,13 @@ export function DrawFlightPathMenu({
     }}>
       <button
         onClick={() => {
-          setFlightPathMenuOpen(!flightPathMenuOpen);
-          setDevicesMenuOpen(false);
-          setDrawingMode('path'); // Activate path drawing
+            onToggleMenu();         // ✅ let parent handle toggle logic
+            setFlightPathMenuOpen(!flightPathMenuOpen);
+            if(!setDrawingMode&& !confirmFlightPath){
+                setDrawingMode('path')
+            }
+            setDevicesMenuOpen(false);
+            
         }}
         style={{
           background: '#FFD700',
@@ -70,7 +75,12 @@ export function DrawFlightPathMenu({
                 onChange={() => {
                   const confirmed = !confirmFlightPath;
                   setConfirmFlightPath(confirmed);
-                  if (confirmed) setDrawingMode(null); // disable drawing
+
+                  if (confirmed) {
+                    setDrawingMode(null);}
+                    else{
+                        setDrawingMode('path')
+                    }
                 }}
                 style={{ width: '16px', height: '16px', accentColor: '#FFD700' }}
               />
