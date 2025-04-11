@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 //--------- LEAFLET------------
 
@@ -40,7 +40,20 @@ const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
     { name: 'DJI AIR 3S – Photography...', checked: false },
     { name: 'Tinyhawk III Plus – Racing', checked: true }
   ]);
-// For time in dashpanel
+// For timer in dashpanel
+const [elapsedSeconds, setElapsedSeconds] = useState(0);
+useEffect(() => {
+  const id = setInterval(() => {
+    setElapsedSeconds(prev => prev + 1);
+  }, 1000);
+  return () => clearInterval(id);
+}, []);
+const formatTime = (totalSeconds) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
+//-----------------------
 
 
   const toggleTracking = () => {
@@ -81,7 +94,7 @@ const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
               longitude: position[0],
               latitude: position[1],
               altitude: 'N/A', // Replace when you have real data
-              timeElapsed: '00:00:42' // Can be dynamic later
+              timeElapsed: formatTime(elapsedSeconds) 
             }}
           />
         </div>
