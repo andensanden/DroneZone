@@ -6,9 +6,14 @@ import { useEffect } from "react";
 import { supabase } from "@/supabase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/Redux/auth/authSlice";
+import { DropdownAddDevice } from "@/components/dropdownAddDevice";
+
+
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 
 export function AccountInfo() {
-
+//! Account info fetch from backend
   const dispatch = useDispatch();
   const { name, lastname, phone, email } = useSelector((state) => state.auth);
 
@@ -17,7 +22,7 @@ export function AccountInfo() {
 
     const { data, error } = await supabase.auth.getUser();
 
-    const respone = await fetch(`http://localhost:8080/api/auth/user/${data.user.id}`);
+    const respone = await fetch(`${backendURL}/api/auth/user/${data.user.id}`);
     const parsedData = await respone.json();
 
     dispatch(setUser(parsedData));
@@ -25,6 +30,26 @@ export function AccountInfo() {
 
   fetchData();
   }, []);
+
+  //? add devices to accounts
+  async function addDevice() {
+
+    const { data } = await supabase.auth.getUser();
+
+    const respone = await fetch(`${backendURL}/api/devices`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        deviceName,
+        deviceID,
+      }),
+    });
+    
+  }
+
 
 
 
@@ -107,11 +132,8 @@ export function AccountInfo() {
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-          ></input>
-          <button className="bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
-            <p>Add new drone </p>
-            <TbDrone size={18} />
-          </button>
+          />
+            <DropdownAddDevice />
         </div>
 
         {/*Licence column ends here */}

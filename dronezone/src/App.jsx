@@ -7,7 +7,7 @@ import {Guidelines} from "./pages/Guidelines";
 import { Account } from "./pages/Account";
 import { CreateAccount } from "./pages/CreateAccount";
 import { useGetUserAuth } from "@/hooks/useGetUserAuth";
-
+import { Info } from "@/pages/info";
 
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
         <Route path="/guidelines" element={<Guidelines/>}/>
         <Route path="/account" element={<Account/>}/>
         <Route path="/createaccount" element={<CreateAccount/>}/>
+        <Route path="/info" element={<Info/>}/>
       </Routes>
     </BrowserRouter>
     <ToastContainer position="bottom-right" />

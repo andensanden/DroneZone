@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { LoginDropDown } from "@/components/loginDropDown"; 
 
 import { LuInbox } from "react-icons/lu";
+import {GoQuestion} from "react-icons/go";
 
 
 
@@ -30,6 +31,10 @@ export function Header() {
           <button className="bg-primary-blue p-3 rounded-xl"><LuInbox size={20} className="text-white"/> </button> 
         <span className="text-white text-sm font-bold bg-red-600 rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0">1</span>
         </div> : null}
+
+
+        <button className=" p-3 rounded-xl"><GoQuestion size={30} className="text-black"
+        onClick={() => navigate("/info")}/> </button> 
 
         <div className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
           <button
