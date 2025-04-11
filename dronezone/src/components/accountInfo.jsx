@@ -1,8 +1,11 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {Button  } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { TbDrone } from "react-icons/tb";
 import { BsPaperclip } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { FaSave } from "react-icons/fa";
-import { TbDrone } from "react-icons/tb";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/supabase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/Redux/auth/authSlice";
@@ -10,11 +13,15 @@ import { setUser } from "@/Redux/auth/authSlice";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-
 export function AccountInfo() {
+
+  const [deviceName, setDeviceName] = useState("");
+  const [deviceID, setDeviceID] = useState("");
+
+
 //! Account info fetch from backend
   const dispatch = useDispatch();
-  const { name, lastname, phone, email } = useSelector((state) => state.auth);
+  const { firstname, lastname, phone, email } = useSelector((state) => state.auth);
 
   useEffect(() => { 
     const fetchData = async() => {
@@ -51,6 +58,38 @@ export function AccountInfo() {
 
 
 
+  //Add a drone device function
+  async function addDevice() {
+
+    console.log("Clicked add device")
+    const { data } = await supabase.auth.getUser();
+
+    console.log({
+      user_id: data.user.id,
+      deviceName,
+      deviceID
+    })
+
+    const response = await fetch(`${backendURL}/api/device`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        deviceName,
+        deviceID,
+      }),
+    });
+
+    setDeviceID("")
+    setDeviceName("")
+  }
+    
+
+
+
+
 
   //Function to handle the change of phone number
   function handleChangePhone() {
@@ -77,7 +116,7 @@ export function AccountInfo() {
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 disabled
-                value={name + " " + lastname}
+                value={`${firstname} ${lastname}`}
               ></input>
 
               {/*Email presentation*/}
@@ -131,11 +170,18 @@ export function AccountInfo() {
           <input
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-          ></input>
-          <button className="bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
-            <p>Add new drone </p>
-            <TbDrone size={18} />
-          </button>
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger className=" bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
+              <p>Add new drone </p>
+              <TbDrone size={18} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <Input value={deviceName} placeholder="Name" className="mb-2" onChange={(e) => setDeviceName(e.target.value)} />
+              <Input value={deviceID} placeholder="Drone ID" className="mb-2" onChange={(e) => setDeviceID(e.target.value)} />
+              <Button onClick={addDevice} className="block w-full">Add</Button>
+            </DropdownMenuContent>
+        </DropdownMenu>
         </div>
 
         {/*Licence column ends here */}
