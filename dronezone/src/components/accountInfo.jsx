@@ -161,7 +161,7 @@ export function AccountInfo() {
             key = {index}
             className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
             disabled
-            value = {device[index].deviceName}
+            value = {device.deviceName}
           />)}
           )}
           <DropdownMenu>
