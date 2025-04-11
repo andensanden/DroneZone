@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { useMap } from 'react-leaflet'
+import { useMap, Popup } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
@@ -10,6 +10,8 @@ import { useNodes } from './nodesContext.jsx'
     Handles what happens when the user clicks on the map
 */
 function MapClick({ drawingMode }) {
+    const [popupPos, setPopupPos] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
     const map = useMap();
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
@@ -28,7 +30,9 @@ function MapClick({ drawingMode }) {
             const coords = nodesRef.current.map(n => n.position);
             const blocked = wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
             if (blocked) {
-                alert("Path intersects forbidden zone — node removed.");
+                //alert("Path intersects forbidden zone — node removed.");
+                setPopupPos(e.latlng);
+                setShowPopup(true);
             }
             else {
                 const newNode = new Node(e.latlng);
@@ -71,7 +75,7 @@ function MapClick({ drawingMode }) {
         
     }, [nodes])
 
-// Adds a map click listener (useEffect) and updates it when the drawing mode changes.
+// Adds a map click listener and updates it when the drawing mode changes.
     useEffect(() => {
         map.on('click', onMapClick) 
 
@@ -93,6 +97,11 @@ function MapClick({ drawingMode }) {
             <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
+            {showPopup && popupPos && (
+            <Popup position={popupPos} onClose={() => setShowPopup(false)}>
+                ⚠️ You cannot draw through or on a red zone ⚠️.
+            </Popup>
+            )}
         </>
     )
 }
