@@ -39,19 +39,6 @@ export function SignUpForm() {
       return;
     }
 
-    const x = { user_id: data.user.id,
-    name,
-    lastname,
-    phone,
-    email,
-    pnummer,
-    adress,
-    city,
-    zip,
-    }
-
-    console.log(x);
-
 
     //TODO: Extra data is sent to backend to store in database
     const respone = await fetch(`${backendURL}/api/auth/register`, {

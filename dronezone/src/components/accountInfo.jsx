@@ -7,8 +7,12 @@ import { supabase } from "@/supabase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/Redux/auth/authSlice";
 
-export function AccountInfo() {
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+
+export function AccountInfo() {
+//! Account info fetch from backend
   const dispatch = useDispatch();
   const { name, lastname, phone, email } = useSelector((state) => state.auth);
 
@@ -17,7 +21,7 @@ export function AccountInfo() {
 
     const { data, error } = await supabase.auth.getUser();
 
-    const respone = await fetch(`http://localhost:8080/api/auth/user/${data.user.id}`);
+    const respone = await fetch(`${backendURL}/api/auth/user/${data.user.id}`);
     const parsedData = await respone.json();
 
     dispatch(setUser(parsedData));
@@ -25,6 +29,26 @@ export function AccountInfo() {
 
   fetchData();
   }, []);
+
+  //? add devices to accounts
+  async function addDevice() {
+
+    const { data } = await supabase.auth.getUser();
+
+    const respone = await fetch(`${backendURL}/api/devices`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        deviceName,
+        deviceID,
+      }),
+    });
+    
+  }
+
 
 
 
