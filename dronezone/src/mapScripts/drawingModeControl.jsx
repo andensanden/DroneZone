@@ -1,4 +1,4 @@
-// Drawing Mode Control
+// Drawing Mode Control, include Draw path, draw forbidden zone and remove node buttons
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
     return (
       <div className="drawing-mode-control" style={{
@@ -39,7 +39,7 @@ const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
                 onClick={() => setDrawingMode('remove')}
                 style={{
                     padding: '8px 16px',
-                    backgroundColor: 'grey',
+                    backgroundColor: drawingMode === 'remove' ? '#f44336' : '#ccc',
                     color: 'white',
                     border: 'none',
                     borderRadius: '4px 0 0 4px',

@@ -16,6 +16,7 @@ export function wouldLineIntersectForbiddenZone(newPoint, coords, zones) {
 
  // Check if a line segment intersects with a polygon
  function doesLineIntersectPolygon(p1, p2, polygon) {
+  if (!polygon) return false;
   const polygonCoords = polygon.coords;
   
   if (isPointInPolygon(p1, polygon) || isPointInPolygon(p2, polygon)) {
@@ -53,6 +54,7 @@ function doLineSegmentsIntersect(p1, p2, p3, p4) {
 
 // Check if a point is inside a polygon
 function isPointInPolygon(point, polygon) {
+    if (!polygon) return false;
     const polygonCoords = polygon.coords;
     let inside = false;
     const x = point.lat, y = point.lng;

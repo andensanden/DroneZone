@@ -1,19 +1,17 @@
-import { MapClick } from './pathDrawing'
-
-/*
-    Does nothing right now, functionality is in pathDrawing.jsx
-*/
+import { useNodes } from "./nodesContext";
 
 function UndoButton() {
+    const { nodes, setNodes } = useNodes();
+    
     return (
         <div className="undo-button" style={{
             position: 'absolute',
-            top: '78%',
+            top: '68%',
             right: '0%',
             zIndex: 1000,
         }}>
             <button
-                onClick={() => {() => undo(MapClick.nodes) } }
+                onClick={() => Undo(nodes, setNodes) }
 
                 style={{
                     padding: '8px 16px',
@@ -29,13 +27,12 @@ function UndoButton() {
                 Undo
             </button>
         </div>
-    );
+    )
 }
 
-function undo(nodes) {
-    if (nodes.length === 0) alert("Working");
-
-    nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
+function Undo(nodes, setNodes) {
+    if (nodes.length === 0) return;
+    nodes[nodes.length - 1].removeNode(setNodes);
 }
 
-export default UndoButton
+export default UndoButton;
