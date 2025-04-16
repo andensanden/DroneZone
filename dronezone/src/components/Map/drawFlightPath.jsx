@@ -1,5 +1,6 @@
 import { GiPathDistance } from "react-icons/gi";
 import { useNodes } from "@/mapScripts/nodesContext";
+import UndoButton from "@/mapScripts/undoButton";
 
 export function DrawFlightPathMenu({
   flightPathMenuOpen,
@@ -112,14 +113,14 @@ export function DrawFlightPathMenu({
             <div
               onClick={undoLastNode} // Step 3 ✅
               style={{
-                color: nodes.length > 0 ? "red" : "gray",
+                
                 fontWeight: "bold",
                 fontSize: "14px",
                 margin: "12px 0",
                 cursor: nodes.length > 0 ? "pointer" : "not-allowed",
               }}
             >
-              Undo
+              <UndoButton />
             </div>
 
             <div
