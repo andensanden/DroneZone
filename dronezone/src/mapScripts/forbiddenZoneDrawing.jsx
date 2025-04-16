@@ -17,7 +17,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [coords, setCoords] = useState([]);
   const coordsRef = useRef([]);
-  const { zones, updateZone, addZone } = useZones();
+  const { zones, updateZone, showRestrictedZones } = useZones();
   const [currZone, setCurrZone] = useState(0);
   const currZoneRef = useRef(0);
 
@@ -100,7 +100,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
 
   return (
     <>
-    {zones.map((zone, index) => 
+    {showRestrictedZones && zones.map((zone, index) => 
       (zone && zone.coords.length > 0 && (
       <Polygon className="map-clickable" key={index} positions={zone.coords} color="red" fillOpacity={0.5} weight={1} />)
     ))}

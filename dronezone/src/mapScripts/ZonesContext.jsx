@@ -25,7 +25,6 @@
  */
 
 import React, { createContext, useState, useContext } from 'react';
-import { ForbiddenZone } from './forbiddenZone';
 
 // Create a context for zones
 const ZonesContext = createContext();
@@ -33,6 +32,7 @@ const ZonesContext = createContext();
 // Create a provider component
 export const ZonesProvider = ({ children }) => {
   const [zones, setZones] = useState([]);
+  const [showRestrictedZones, setShowRestrictedZones] = useState(true);
 
   // Update zone at a specific index
   const updateZone = (index, newZone) => {
@@ -44,12 +44,18 @@ export const ZonesProvider = ({ children }) => {
   };
 
   // Add a new zone
+  // Remove?
   const addZone = (newZone) => {
     setZones((prevZones) => [...prevZones, newZone]);
   };
 
+  // Toggles visibility of forbidden zones
+  const toggleZones = () => {
+    setShowRestrictedZones(!showRestrictedZones);
+  };
+
   return (
-    <ZonesContext.Provider value={{ zones, setZones, updateZone, addZone }}>
+    <ZonesContext.Provider value={{ zones, setZones, updateZone, showRestrictedZones, toggleZones }}>
       {children}
     </ZonesContext.Provider>
   );
