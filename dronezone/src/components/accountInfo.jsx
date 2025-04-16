@@ -79,7 +79,7 @@ export function AccountInfo() {
     //TODO: Error checking for response
   }
     
-  //TODO: User most be able to change their phone 
+  //TODO: User should be able to change their phone number 
  
   return (
     <div className="bg-primary-yellow flex grow ">
