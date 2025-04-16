@@ -18,10 +18,10 @@ import L from 'leaflet';
 
 
 /**
- * Component for drawing red forbidden zones on a Leaflet map.
+ * Component for drawing forbidden zones on the map.
  *
  * @param {{ drawingMode: string }} props - Props object
- * @param {string} props.drawingMode - Current drawing mode (e.g. "forbidden", "node", etc.)
+ * @param {string} props.drawingMode - Current drawing mode
  * @returns {JSX.Element} Polygon elements representing forbidden zones
  */
 function ForbiddenZoneDrawing({ drawingMode }) {

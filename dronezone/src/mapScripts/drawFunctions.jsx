@@ -1,11 +1,7 @@
 import { Circle, Polyline, Polygon } from 'react-leaflet'
 
-/*
-    Draws the existing nodes on the map.
-*/
-
 /**
- * Renders nodes on the map using blue circles.
+ * Renders nodes on the map using circles.
  * @param {{ nodes: Node[], color: string }} props - Props for the component.
  * @param {Node[]} props.nodes - An array of Node class instances to be drawn.
  * @param {string} props.color - The color to use for the circles' outline and fill.
@@ -23,10 +19,6 @@ function DrawNodes({nodes, color}) {
         </>
     )
 }
-
-/*
-    Draws the existing paths on the map
-*/
 
 /**
  * Renders path lines on the map using blue polyline.
@@ -46,10 +38,6 @@ function DrawPaths({paths}) {
         </>
     )
 }
-
-/*
-    Draws the existing buffer zones on the map
-*/
 
 /**
  * Renders buffer zone on the map using blue polygons.

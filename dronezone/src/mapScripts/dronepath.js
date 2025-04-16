@@ -12,10 +12,6 @@ export class Dronepath {
     constructor(owner) {
         this.owner = owner;
     }
-
-    /*
-        Add a node
-    */
     
    /**
    * Adds a node to the drone path.
@@ -25,16 +21,12 @@ export class Dronepath {
         this.nodes.push(node);
     }
 
-    /*
-        Remove a node at index i
-    */
-
     /**
     * Removes a node from the path by its index.
-    * @param {number} i - The index of the node to remove.
+    * @param {number} index - The index of the node to remove.
     */
-    removeNode(i) {
-        this.nodes.splice(i, 1);
+    removeNode(index) {
+        this.nodes.splice(index, 1);
     }
 
    /**
