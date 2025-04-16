@@ -2,15 +2,6 @@ import { useState, useEffect } from "react";
 
 //--------- LEAFLET------------
 
-
-import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
-import iconUrl from 'leaflet/dist/images/marker-icon.png';
-import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
-
-
 import {
   MapContainer,
   TileLayer,
@@ -19,8 +10,7 @@ import {
   LayersControl,
   Circle,
 } from "react-leaflet";
-
-
+import "leaflet/dist/leaflet.css";
 
 //------------ UTILS ------
 import DrawingModeControl from "@/mapScripts/drawingModeControl";
@@ -44,26 +34,6 @@ const Map = () => {
   const [drawingMode, setDrawingMode] = useState("path");
   const position = [59.3293, 18.0686]; // Stockholm coordinates
 
-  
-  delete L.Icon.Default.prototype._getIconUrl;
-  
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
-  });
-//-----------------
-//For draw path menu
-const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
-const [confirmFlightPath, setConfirmFlightPath] = useState(false);
-const drawFlightBottom = 80;
-const drawFlightPanelHeight = 320;
-const drawFlightButtonHeight = 60;
-const devicesBottom = drawFlightBottom + (flightPathMenuOpen ? drawFlightPanelHeight : drawFlightButtonHeight) + 10;
-//For your devices 
-const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
-=======
-
   //-----------------
   //For draw path menu
   const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
@@ -73,7 +43,6 @@ const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
   const devicesPanelHeight = 260;
   //For your devices
   const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
-
   const [deviceStates, setDeviceStates] = useState([
     { name: "DJI AIR 3S – Photography...", checked: false },
     { name: "Tinyhawk III Plus – Racing", checked: true },
