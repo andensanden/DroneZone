@@ -11,6 +11,7 @@ import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
 import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
+import { NodesProvider } from '@/mapScripts/nodesContext';
 
 //--------------- UI Components -----------
 import { HamburgerButton } from './layerHamburgerMenu';
@@ -19,7 +20,6 @@ import { DrawFlightPathMenu } from './drawFlightPath';
 import { YourDevicesMenu } from './yourDevicesMenu';
 import DashboardPanel from '../dashboard';
 import { LaunchButton } from './launchButton';
-import { NodesProvider } from '@/mapScripts/nodesContext';
 
 //-------- Main Map Component -------
 const Map = () => {
