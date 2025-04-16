@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const DashboardPanel = ({ data }) => {
   return (
     <div style={{
@@ -24,7 +25,7 @@ const DashboardPanel = ({ data }) => {
         <DashboardRow label="Longitude" value={data.longitude} />
         <DashboardRow label="Latitude" value={data.latitude} />
         <DashboardRow label="Altitude" value={data.altitude} />
-        <DashboardRow label="Time Elapsed..." value={data.timeElapsed || ''} bold />
+        <DashboardRow label="Time Elapsed" value={data.timeElapsed || ''} bold />
       </div>
     </div>
   );
