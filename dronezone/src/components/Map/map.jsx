@@ -179,10 +179,12 @@ const Map = () => {
           />
         )}
 
+        <NodesProvider>
         <ZonesProvider>
           {/*<MapClick drawingMode={drawingMode} />*/}
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
+        </NodesProvider>
       </MapContainer>
     </div>
   );

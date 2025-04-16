@@ -18,4 +18,10 @@ export class Dronepath {
     removeNode(i) {
         this.nodes.splice(i, 1);
     }
+
+    toJSON() {
+        return {
+            nodes: this.nodes.map(node => node.toJSON())
+        }
+    }
 }

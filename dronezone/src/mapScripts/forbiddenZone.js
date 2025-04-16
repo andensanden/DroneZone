@@ -1,6 +1,7 @@
 export class ForbiddenZone {
     constructor(coords) {
-        this.coords = this.#sortCoordinates(coords);
+        //this.coords = this.#sortCoordinates(coords);
+        this.coords = coords;
     }
 
     // Calculate the centroid of a set of coordinates
