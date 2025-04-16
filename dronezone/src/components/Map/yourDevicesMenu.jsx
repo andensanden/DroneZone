@@ -1,27 +1,33 @@
 
+import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
-/*
-ADD this to real "loggedinmap"
-import { YourDevicesMenu } from './yourDevicesMenu';
-//For your devices 
-const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
-  const [deviceStates, setDeviceStates] = useState([
-    { name: 'DJI AIR 3S – Photography...', checked: false },
-    { name: 'Tinyhawk III Plus – Racing', checked: true }
-  ]);
-//--------------Call function-----
-{/* your devices Menu*
-<YourDevicesMenu
-deviceStates={deviceStates}
-setDeviceStates={setDeviceStates}
-menuOpen={devicesMenuOpen}
-setMenuOpen={setDevicesMenuOpen}
-/>
-
- */
+import { useNavigate } from "react-router";
+import { supabase } from "@/supabase/config";
 
 
-export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom,onToggleMenu }) {
+export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom }) {
+  const navigate = useNavigate();
+
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+  const [deviceName, setDeviceName] = useState([]);
+
+  useEffect(() => { 
+      const fetchData = async() => {
+
+        const { data, error } = await supabase.auth.getUser();
+
+        const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); //Fetching device data
+
+        const parsedDeviceData = await deviceRespone.json()
+        setDeviceName(parsedDeviceData)
+        
+        
+      }
+      fetchData();
+      }, [deviceName]);
+
+
   return (
     <div
       style={{
@@ -67,57 +73,55 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
           }}
         >
           <div style={{ padding: '10px 16px' }}>
-            {deviceStates.map((device, index) => (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '8px 0',
-                  borderBottom:
-                    index !== deviceStates.length - 1 ? '1px solid #ddd' : 'none',
-                  fontWeight: 'bold',
-                  fontSize: '14px'
-                }}
-              >
-                <span
+          {deviceName.map((deviceName, index)=> {
+            return(
+                <div
+                  key={deviceName.deviceTableID}
                   style={{
-                    maxWidth: '160px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '8px 0',
+                    borderBottom:
+                      index !== deviceStates.length - 1 ? '1px solid #ddd' : 'none',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
                   }}
                 >
-                  {device.name}
-                </span>
-                <input
-                  type="checkbox"
-                  checked={device.checked}
-                  onChange={() => {
-                    const updated = [...deviceStates];
-                    updated[index].checked = !updated[index].checked;
-                    setDeviceStates(updated);
-                  }}
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    accentColor: '#FFD700'
-                  }}
-                />
-              </div>
-            ))}
+                  <input
+                    disabled
+                    value = {deviceName.deviceName}
+                  >
+                  </input>
+                  <input
+                    type="checkbox"
+                    // checked={device.checked}
+                    onChange={() => {
+                      const updated = [...deviceStates];
+                      updated[index].checked = !updated[index].checked;
+                      setDeviceStates(updated);
+                    }}
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      accentColor: '#FFD700'
+                    }}
+                  />
+                </div>  
+                )}
+                )}
 
             <div
               style={{
                 paddingTop: '10px',
-                color: '#FBBF24',
                 fontWeight: 'bold',
                 fontSize: '14px',
-                cursor: 'pointer'
-              }}
-            >
-              + Add New Device
+                }}
+              >
+              <button className='text-primary-yellow hover:scale-107 transition-all duration-200'
+               onClick={() => navigate("/account")}>
+                + Add New Device 
+              </button>
             </div>
           </div>
         </div>
