@@ -5,8 +5,6 @@
   coords are used to track the coordinates of the forbidden zone currently being drawn.
   currZone tracks the index of the zone currently being drawn.
   zones contains all zones existing on the map.
-
-  Authors: Rasmus, Wasim
 */
 
 import { useEffect, useState, useRef } from 'react';
@@ -44,14 +42,16 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     };
   }, [map, drawingMode]);
 
+  // Update the context with the new zone after coords is updated
+  // Remove when removing manual drawing of forbidden zones
   useEffect(() => {
     if (coordsRef.current.length === 0) return;
-    // Update the context with the new zone after coords is updated
     const newZone = new ForbiddenZone([...coordsRef.current]);
     updateZone(currZoneRef.current, newZone);
   }, [coords]);
 
   // Stop drawing red zones when double click
+  // Remove when removing manual red zone drawing
   useEffect(() => {
     const handleDoubleClick = () => {
       if (coordsRef.current.length >= 1) {
