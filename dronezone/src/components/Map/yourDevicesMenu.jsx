@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import icon from '@/assets/icon.svg'; // Update this path as needed
 /*
 ADD this to real "loggedinmap"
@@ -21,20 +21,20 @@ setMenuOpen={setDevicesMenuOpen}
  */
 
 
-export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom }) {
+export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom,onToggleMenu }) {
   return (
     <div
       style={{
         position: 'absolute',
-  bottom: `${bottom}px`, // ← passed as a prop from the parent
-  left: '20px',
-  zIndex: 1000,
-  transition: 'bottom 0.5s ease'
+        bottom: `${bottom}px`, // ← passed as a prop from the parent
+        left: '20px',
+        zIndex: 1000,
+        transition: 'bottom 0.5s ease'
         
       }}
     >
       <button
-        onClick={() => setMenuOpen(!menuOpen)}
+       onClick={onToggleMenu} 
         style={{
           background: '#FFD700',
           padding: '10px 16px',

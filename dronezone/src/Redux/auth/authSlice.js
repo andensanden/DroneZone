@@ -23,9 +23,9 @@ const authSlice = createSlice({
             state.email = email;
         },
         setUser(state, action) {
-            const { name, lastname, phone } = action.payload;
+            const { firstname, lastname, phone } = action.payload;
 
-            state.name = name;
+            state.firstname = firstname;
             state.lastname = lastname;
             state.phone = phone;
         }

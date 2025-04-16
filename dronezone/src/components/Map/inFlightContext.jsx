@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 const InFlightModeContext = createContext();
 
-export const InFlightProvider = ({ launchbutton }) => {
+export const InFlightProvider = ({ children }) => {
     const [flightMode, setFlightMode] = useState('drawFlightMode');
   
     const toggleMode = () => {
@@ -13,7 +13,7 @@ export const InFlightProvider = ({ launchbutton }) => {
 
     return (
         <InFlightModeContext.Provider value={{ flightMode, toggleMode}}>
-            {launchbutton}
+            {children}
         </InFlightModeContext.Provider>
     );
 };
