@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
-import React, { createContext, useContext, useState } from 'react';
+import { useState, useEffect } from "react";
 
 //--------- LEAFLET------------
+
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
+  LayersControl,
   Circle,
-  Polyline
+
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -49,309 +50,196 @@ L.Icon.Default.mergeOptions({
 
 //------------ COMPONENT GENERATION ------------------
 
+=======
+} from "react-leaflet";
+
+
+//------------ UTILS ------
+import DrawingModeControl from "@/mapScripts/drawingModeControl";
+import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
+import { ZonesProvider } from "@/mapScripts/ZonesContext.jsx";
+import { NodesProvider } from "@/mapScripts/nodesContext";
+import MapClick from "@/mapScripts/pathDrawing";
+import LocationTracker from "@/mapScripts/locationTracker";
+import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
+
+//--------------- UI Components -----------
+import { HamburgerButton } from "./layerHamburgerMenu";
+import GPSToggleControl from "@/mapScripts/gpsToggleControl";
+import { DrawFlightPathMenu } from "./drawFlightPath";
+import { YourDevicesMenu } from "./yourDevicesMenu";
+import DashboardPanel from "../dashboard";
+import { LaunchButton } from "./launchButton";
+
+//-------- Main Map Component -------
+
 const LoggedInMap = () => {
-  const [position, setPosition] = useState([59.3293, 18.0686]);
   const [trackingEnabled, setTrackingEnabled] = useState(true);
-  const [drawingMode, setDrawingMode] = useState('path');
-  const [showCurrentLocation, setShowCurrentLocation] = useState(false);
-  const [showRestrictedZones, setShowRestrictedZones] = useState(true);
-  const [showActiveDrones, setShowActiveDrones] = useState(true);
-  const [showFlightPath, setShowFlightPath] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
+  const [drawingMode, setDrawingMode] = useState(null);
+  const position = [59.3293, 18.0686]; // Stockholm coordinates
+
+  //-----------------
+  //For draw path menu
   const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
   const [confirmFlightPath, setConfirmFlightPath] = useState(false);
-  const [flightPath, setFlightPath] = useState([]);
-
-  const accountInfo = {
-    devices: ["DJI AIR 3S – Photography...", "Emax Tinyhawk III Plus – Racing"]
-  };
-
-  const [deviceStates, setDeviceStates] = useState(
-    accountInfo.devices.map(name => ({ name, checked: false }))
-  );
-
-  const dummyActiveDrones = [
-    { name: 'Drone Alpha', position: [59.4041, 17.9449], icon: icon },
-    { name: 'Drone Bravo', position: [59.3375, 18.0650], icon: icon },
-  ];
-
-  const dummyRestrictedZones = [
-    { center: [59.6494, 17.9343], radius: 5000 },
-    { center: [59.3054, 18.0236], radius: 150 },
-  ];
-
-  const toggleTracking = () => setTrackingEnabled(prev => !prev);
-  const clearLayers = () => {
-    setShowCurrentLocation(false);
-    setShowRestrictedZones(false);
-    setShowActiveDrones(false);
-    setShowFlightPath(false);
-  };
-
   const baseBottom = 80;
-  const drawFlightButtonHeight = 60;
-  const drawFlightPanelHeight = 320;
   const devicesButtonHeight = 60;
   const devicesPanelHeight = 260;
+  //For your devices
+  const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
+  const [deviceStates, setDeviceStates] = useState([
+    { name: "DJI AIR 3S – Photography...", checked: false },
+    { name: "Tinyhawk III Plus – Racing", checked: true },
+  ]);
+  const drawFlightBottom =
+    baseBottom +
+    (devicesMenuOpen ? devicesPanelHeight : devicesButtonHeight) +
+    10;
+  const devicesBottom = baseBottom;
 
-  const drawFlightBottom = baseBottom;
-  const devicesBottom = drawFlightBottom + (flightPathMenuOpen ? drawFlightPanelHeight : drawFlightButtonHeight) + 10;
+  //For both menus to work dynamically
+  const toggleFlightPathMenu = () => {
+    setFlightPathMenuOpen((prev) => {
+      if (!prev) {
+        setDevicesMenuOpen(false);
+      }
+      return !prev;
+    });
+  };
 
-  // --------------------------------------------------------------
+  const toggleDevicesMenu = () => {
+    setDevicesMenuOpen((prev) => {
+      if (!prev) {
+        setFlightPathMenuOpen(false);
+      }
+      return !prev;
+    });
+  };
+  // For timer in dashpanel
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
+  };
+  //-----------------------
+
+  const toggleTracking = () => {
+    setTrackingEnabled((prev) => !prev);
+  };
+
+  //Displaying dashboard
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  const handleLaunchClick = () => {
+    setShowDashboard((prevState) => !prevState);
+  };
+
   return (
-    <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
-      <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
+    //Overall map component generation with styling
+    <div style={{ position: "relative", height: "82vh", width: "100%" }}>
+      <MapContainer
+        center={position}
+        zoom={13}
+        style={{ height: "100%", width: "100%" }}
+      >
+        {/* Initializing the leaflet-map*/}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        {/*GPS tracker and location display */}
-        <GPSToggleControl trackingEnabled={trackingEnabled} toggleTracking={() => setTrackingEnabled(prev => !prev)} />
 
-        {showCurrentLocation && trackingEnabled && position && (
-          <>
-            <Marker position={position}>
-              <Popup>Current Location</Popup>
-            </Marker>
-            <Circle center={position} radius={500} options={{ fillColor: 'red', fillOpacity: 0.3 }} />
-          </>
-        )}
+        {/* Activation of GPS functionality */}
+        <GPSToggleControl
+          trackingEnabled={trackingEnabled}
+          toggleTracking={toggleTracking}
+        />
 
-        {/*Displaying restricted zones */}
-        {showRestrictedZones && dummyRestrictedZones.map((zone, idx) => (
-          <Circle
-            key={`restricted-${idx}`}
-            center={zone.center}
-            radius={zone.radius}
-            color="red"
-            fillOpacity={0.3}
-          >
-            <Popup>Restricted Zone</Popup>
-          </Circle>
-        ))}
+        {/* Testing the Dashboard*/}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            right: "20px",
+            zIndex: 1000,
+          }}
+        ></div>
+        <InFlightProvider>
+          <LaunchButton onClick={handleLaunchClick} />
+          {showDashboard && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "20px",
+                right: "20px",
+                zIndex: 1000,
+              }}
+            >
+              <DashboardPanel
+                data={{
+                  longitude: position[0],
+                  latitude: position[1],
+                  altitude: "N/A", // Replace when you have real data
+                  timeElapsed: formatTime(elapsedSeconds),
+                }}
+              />
+            </div>
+          )}
+        </InFlightProvider>
+        {/* This is the overlay HAMBURGER button */}
+        <HamburgerButton position={position} />
 
-        {/*Displaying active drones */}
-        {showActiveDrones && dummyActiveDrones.map((drone, idx) => (
-          <Marker
-            key={`drone-${idx}`}
-            position={drone.position}
-            icon={L.icon({
-                iconUrl: drone.icon,
-                iconSize: [32, 32],
-                iconAnchor: [16, 16],
-                popupAnchor: [0, -16]
-              })}
-          >
+        {/* User tracking functionality*/}
+        <LocationTracker trackingEnabled={trackingEnabled} />
 
-            <Popup>{drone.name}</Popup>
-          </Marker>
-        ))}
+        {/* draw flight path Menu*/}
+        {/*} {(!devicesMenuOpen || flightPathMenuOpen) && (
+          <DrawFlightPathMenu
+            flightPathMenuOpen={flightPathMenuOpen}
+            onToggleMenu={toggleFlightPathMenu}
+            confirmFlightPath={confirmFlightPath}
+            setConfirmFlightPath={setConfirmFlightPath}
+            setDrawingMode={setDrawingMode}
+            bottom={flightPathMenuOpen ? 100 + 150 : 100}
+          />
+        )} */}
 
-        {/*Displaying drawn flightpath */}
-        {showFlightPath && (
-          <Polyline
-            positions={[
-              position,
-              [position[0] + 0.002, position[1] + 0.001],
-              [position[0] + 0.003, position[1] + 0.0005]
-            ]}
-            color="purple"
+        {(!flightPathMenuOpen || devicesMenuOpen) && (
+          <YourDevicesMenu
+            deviceStates={deviceStates}
+            setDeviceStates={setDeviceStates}
+            menuOpen={devicesMenuOpen}
+            bottom={devicesMenuOpen ? 40 + 170 : 40}
+            onToggleMenu={toggleDevicesMenu}
           />
         )}
 
-
-        {/*Displaying user location*/}
-        <LocationTracker
-          trackingEnabled={trackingEnabled}
-          onLocationUpdate={({ latitude, longitude }) => {
-            setPosition([latitude, longitude]);
-          }}
-        />
-
-        {/*!confirmFlightPath && drawingMode === 'path' && <MapClick />*/}
-        <NodesProvider>
         <ZonesProvider>
-          <MapClick drawingMode={drawingMode}/>
-          <ForbiddenZoneDrawing drawingMode={drawingMode} />
+          <NodesProvider>
+            {(!devicesMenuOpen || flightPathMenuOpen) && (
+              <DrawFlightPathMenu
+                flightPathMenuOpen={flightPathMenuOpen}
+                onToggleMenu={toggleFlightPathMenu}
+                confirmFlightPath={confirmFlightPath}
+                setConfirmFlightPath={setConfirmFlightPath}
+                setDrawingMode={setDrawingMode}
+                bottom={flightPathMenuOpen ? 100 + 150 : 100}
+              />
+            )}
+            <MapClick drawingMode={drawingMode} />
+            <ForbiddenZoneDrawing drawingMode={drawingMode} />
+          </NodesProvider>
         </ZonesProvider>
-        </NodesProvider>
       </MapContainer>
-
-
-<HamburgerButton/>
-
-      {/* ✏️ Draw Flight Path menu */}
-      <div style={{
-        position: 'absolute',
-        bottom: flightPathMenuOpen ? '310px' : '100px',
-        left: '20px',
-        zIndex: 1000,
-        transition: 'bottom 0.5s ease'
-      }}>
-        <button
-          onClick={() => {
-            setFlightPathMenuOpen(!flightPathMenuOpen);
-            setDevicesMenuOpen(false);
-            setDrawingMode('path'); // Activate path drawing
-          }}
-          style={{
-            background: '#FFD700',
-            padding: '10px 16px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '30px'
-          }}
-        >
-          <span>Draw Flight Path</span>
-          <GiPathDistance size={24} />
-        </button>
-
-        {flightPathMenuOpen && (
-          <div style={{
-            position:'absolute',
-            top: '60px',
-            left:'0',
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '260px',
-            overflow: 'hidden',
-            fontFamily: 'Arial, sans-serif'
-          }}>
-            
-
-            <div style={{ padding: '12px 16px' }}>
-              <div style={{
-                padding: '10px 0',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #ddd',
-                fontWeight: 'bold',
-                fontSize: '14px'
-              }}>
-                <span>Confirm Flight Path</span>
-                <input
-                  type="checkbox"
-                  checked={confirmFlightPath}
-                  onChange={() => {
-                    const confirmed = !confirmFlightPath;
-                    setConfirmFlightPath(confirmed);
-                    if (confirmed) setDrawingMode(null); // disable drawing
-                  }}
-
-                  style={{ width: '16px', height: '16px', accentColor: '#FFD700' }}
-                />
-              </div>
-
-              <div style={{ color: 'green', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Place End-Point
-              </div>
-
-              <div style={{ color: 'red', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Undo
-              </div>
-
-              <div style={{ color: 'red', fontWeight: 'bold', fontSize: '14px', margin: '12px 0', cursor: 'pointer' }}>
-                Clear Selection
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Your Devices drop-down */}
-      <div style={{
-        position: 'absolute',
-        bottom: devicesMenuOpen ? '230px' : '20px',
-        left: '20px',
-        zIndex: 1000,
-        transition: 'bottom 0.5s ease'
-      }}>
-        <button
-          onClick={() => {setDevicesMenuOpen(!devicesMenuOpen); setFlightPathMenuOpen(false);}}
-          
-          style={{
-            background: '#FFD700',
-            padding: '10px 16px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '55px'
-          }}
-        >
-          <span>Your Devices</span>
-          <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />
-        </button>
-
-        {devicesMenuOpen && (
-          <div style={{
-            position:'absolute',
-            top: '60px',
-            left:'0',
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '260px',
-            overflow: 'hidden'
-          }}>
-           
-
-            <div style={{ padding: '10px 16px' }}>
-              {deviceStates.map((device, index) => (
-                <div key={index} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '8px 0',
-                  borderBottom: index !== deviceStates.length - 1 ? '1px solid #ddd' : 'none',
-                  fontWeight: 'bold',
-                  fontSize: '14px'
-                }}>
-                  <span style={{
-                    maxWidth: '160px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  }}>{device.name}</span>
-                  <input
-                    type="checkbox"
-                    checked={device.checked}
-                    onChange={() => {
-                      const updated = [...deviceStates];
-                      updated[index].checked = !updated[index].checked;
-                      setDeviceStates(updated);
-                    }}
-                    style={{ width: '16px', height: '16px', accentColor: '#FFD700' }}
-                  />
-                </div>
-              ))}
-
-              <div style={{
-                paddingTop: '10px',
-                color: '#FBBF24',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                cursor: 'pointer'
-              }}>
-                + Add New Device
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

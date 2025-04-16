@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
 import { useNavigate } from "react-router";
@@ -26,6 +27,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       fetchData();
       }, [deviceName]);
 
+
   return (
     <div
       style={{
@@ -38,7 +40,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       }}
     >
       <button
-        onClick={() => setMenuOpen(!menuOpen)}
+       onClick={onToggleMenu} 
         style={{
           background: '#FFD700',
           padding: '10px 16px',
