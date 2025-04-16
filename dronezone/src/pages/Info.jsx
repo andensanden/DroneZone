@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { InfolineInfo } from "@/components/InfoInfo";
-import { Footer } from "@/components/footer";
+import { InfoFooter } from "@/components/infoFooter";
 
 
 export function Info() {
@@ -8,7 +8,7 @@ export function Info() {
     <>
       <Header />
         <InfolineInfo/>
-      <Footer />
+      <InfoFooter />
     </>
   )
 } 
