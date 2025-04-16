@@ -152,8 +152,6 @@ const LoggedInMap = () => {
             </div>
           )}
         </InFlightProvider>
-        {/* This is the overlay HAMBURGER button */}
-        <HamburgerButton position={position} />
 
         {/* User tracking functionality*/}
         <LocationTracker trackingEnabled={trackingEnabled} />
@@ -181,6 +179,8 @@ const LoggedInMap = () => {
         )}
 
         <ZonesProvider>
+          {/* This is the overlay HAMBURGER button */}
+          <HamburgerButton position={position} />
           <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu

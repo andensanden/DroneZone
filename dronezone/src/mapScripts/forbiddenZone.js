@@ -1,8 +1,18 @@
+/**
+ * Object representing a forbidden zone.
+ */
 export class ForbiddenZone {
+    /**
+     * Creates a new forbidden zone instance.
+     * @param {L.LatLng[]} coords - The coordinates of the forbidden zone.
+     */
     constructor(coords) {
         //this.coords = this.#sortCoordinates(coords);
         this.coords = coords;
     }
+
+    // These functions are used for manual drawing, remove them when manual drawing
+    // of forbidden zones is removed.
 
     // Calculate the centroid of a set of coordinates
     #calculateCentroid(coords) {
@@ -32,10 +42,5 @@ export class ForbiddenZone {
         let angleB = this.#calculateAngle(b, centroid);
         return angleA - angleB;
         });
-    }
-
-    // Remove all forbidden zones
-    clearForbiddenZones() {
-        this.coords = [];
     }
 }

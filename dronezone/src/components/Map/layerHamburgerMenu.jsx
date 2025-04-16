@@ -1,14 +1,15 @@
 import { useState } from 'react';
+import { useZones } from '@/mapScripts/ZonesContext'
 
 export function HamburgerButton() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showActiveDrones, setShowActiveDrones] = useState(true);
-  const [showRestrictedZones, setShowRestrictedZones] = useState(true);
+  const { showRestrictedZones, toggleZones } = useZones();
   const [trackingEnabled, setTrackingEnabled] = useState(true);
 
   const clearLayers = () => {
     setShowActiveDrones(false);
-    setShowRestrictedZones(false);
+    if (showRestrictedZones) toggleZones();
     setTrackingEnabled(false);
   };
 
@@ -68,7 +69,7 @@ export function HamburgerButton() {
 
           {[
             { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
-            { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => setShowRestrictedZones(!showRestrictedZones) },
+            { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => toggleZones() },
             { label: 'Current Location', checked: trackingEnabled, toggle: () => setTrackingEnabled(!trackingEnabled) }
           ].map((layer, i) => (
             <label key={i} style={{

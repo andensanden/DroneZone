@@ -7,24 +7,35 @@
   zones contains all zones existing on the map.
 */
 
+
+
 import { useEffect, useState, useRef } from 'react';
 import { useMap, Polygon } from 'react-leaflet';
 import { ForbiddenZone } from './forbiddenZone.js';
 import { useZones } from './ZonesContext.jsx';
 import L from 'leaflet';
 
+
+
+/**
+ * Component for drawing forbidden zones on the map.
+ *
+ * @param {{ drawingMode: string }} props - Props object
+ * @param {string} props.drawingMode - Current drawing mode
+ * @returns {JSX.Element} Polygon elements representing forbidden zones
+ */
 function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [coords, setCoords] = useState([]);
   const coordsRef = useRef([]);
-  const { zones, updateZone, addZone } = useZones();
+  const { zones, updateZone, showRestrictedZones } = useZones();
   const [currZone, setCurrZone] = useState(0);
   const currZoneRef = useRef(0);
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (drawingMode !== 'forbidden') return;
       // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
+      if (drawingMode !== 'forbidden') return;
       if (!e.originalEvent.target.classList.contains("leaflet-container")
         && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
@@ -94,13 +105,19 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     fetchData();
   }, []);
 
+
+  /**
+   * Converts an array of plain coordinate objects to a LatLng objects.
+   * @param {{lat: number, long: number}[]} coordArray Array of coordinates with `lat` and `long` keys
+   * @returns {L.LatLng[]} Array of LatLng objects
+   */
   function coordinatesToLatLngObject(coordArray) {
     return coordArray.map(coord => L.latLng(coord.lat, coord.long));
   }
 
   return (
     <>
-    {zones.map((zone, index) => 
+    {showRestrictedZones && zones.map((zone, index) => 
       (zone && zone.coords.length > 0 && (
       <Polygon className="map-clickable" key={index} positions={zone.coords} color="red" fillOpacity={0.5} weight={1} />)
     ))}
