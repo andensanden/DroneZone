@@ -1,19 +1,20 @@
 import { Header } from "@/components/header";
-
+import { useSelector  } from "react-redux";
 import { useState } from "react";
 //import MapSelector from "@/components/mapSelector";
 
 import Map from "@/components/Map/map";
 import { Footer } from "@/components/footer";
 import LoggedInMap from "@/components/Map/loggedInMap";
-import EndFlightMode from "@/components/Map/endFlightMode";
+
 
 export function Home() {
+   const isAuth = useSelector((state) => state.auth.isAuth);
+    console.log("Authentication State:", isAuth); // Debugging line
   return (
     <>
       <Header />
-      {/*<MapSelector />*/}
-      <LoggedInMap />
+        {isAuth ? <LoggedInMap /> : <Map/> }
       <Footer />
     </>
   );
