@@ -9,10 +9,13 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapClick from '@/mapScripts/pathDrawing';
-import { LocationTracker, GPSToggleControl } from '@/mapScripts/gps';
+import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from '@/mapScripts/gpsToggleControl';
+import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
-import FlightPathDrawer from '@/mapScripts/FlightPathDrawer';
 import { useEffect } from 'react';
 
 import {GiPathDistance} from "react-icons/gi";
@@ -138,7 +141,16 @@ const LoggedInMap = () => {
           }}
         />
 
-        {!confirmFlightPath && drawingMode === 'path' && <MapClick />}
+        <DrawingModeControl 
+          drawingMode={drawingMode}
+          setDrawingMode={setDrawingMode}
+        />
+
+        {/*!confirmFlightPath && drawingMode === 'path' && <MapClick />*/}
+        <ZonesProvider>
+          <MapClick drawingMode={drawingMode}/>
+          <ForbiddenZoneDrawing drawingMode={drawingMode} />
+        </ZonesProvider>
       </MapContainer>
 
       {/* 🚀 Launch Button */}

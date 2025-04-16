@@ -19,7 +19,7 @@ function LocationTracker({ trackingEnabled }) {
         console.log("Your browser does not support geolocation!");
         return;
       }
-
+      // Get Position and update it
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];

@@ -7,7 +7,9 @@ import GPSToggleControl from  '@/mapScripts/gpsToggleControl'
 import LaunchButton from '@/mapScripts/launchButton';
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
 import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import UndoButton from '@/mapScripts/undoButton';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
+import { NodesProvider } from '@/mapScripts/nodesContext';
 
 // Main Map Component
 const Map = () => {
@@ -18,6 +20,9 @@ const Map = () => {
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
   };
+
+  //Checking the state, if the user is logged in we redirect to loggedInMap.jsx instead
+  //isAuth == True, if logged in, == False not logged in  
 
   return (
     <div style={{ position: 'relative', height: '82vh', width: '100%' }}>
@@ -36,11 +41,13 @@ const Map = () => {
         trackingEnabled={trackingEnabled} 
         toggleTracking={toggleTracking} 
       />
+      
+      {/* Code to draw forbidden zones and flightpaths */}
+      
       <DrawingModeControl 
         drawingMode={drawingMode}
         setDrawingMode={setDrawingMode}
       />
-      <LaunchButton/>
 
         {/*This is the overlay HAMBURGER button */}
       <LayersControl position="topright">
@@ -63,19 +70,19 @@ const Map = () => {
         
         <LocationTracker trackingEnabled={trackingEnabled} />
         
+        {/* Code to draw forbidden zones and flightpaths */}
+
+        <NodesProvider>
         <ZonesProvider>
           <MapClick drawingMode={drawingMode}/>
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
+          <UndoButton/>
+          <LaunchButton setDrawingMode={setDrawingMode}/>
+        </NodesProvider>
       </MapContainer>
     </div>
   );
 };
-
-/*{drawingMode === 'path' ? (
-  <MapClick />
-) : (
-  <ForbiddenZoneDrawing />
-)}*/
 
 export default Map;

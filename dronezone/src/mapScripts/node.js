@@ -1,34 +1,25 @@
 const defaultRadius = 20;
 
 export class Node {
-    constructor(position, radius) {
+    constructor(position, id, radius) {
         this.position = position;
         this.radius = radius ? radius : defaultRadius;
         this.visible = true;
+        this.id = id;
     }
 
     /*
         Add a new node to the array of nodes
     */
-    addNode(nodes, setNodes) {
-        //NodeOverlap(newNode, nodes);
+    addNode(setNodes) {
         setNodes((prevNodes) => [...prevNodes, this]);
     }
 
     /*
         Remove a node based on its index in the nodes array
     */
-    removeNode(index, setNodes) {
-        setNodes((prevNodes) => prevNodes.filter((_, i) => i !== index));
-        //setNodes((prevNodes) => prevNodes.splice(index, 1));
-    }
-
-    movePosition(position) {
-        this.position = position;
-    }
-
-    getPosition() {
-        return this.position;
+    removeNode(setNodes) {
+        setNodes((prevNodes) => prevNodes.filter((node) => node !== this));
     }
 
     /*

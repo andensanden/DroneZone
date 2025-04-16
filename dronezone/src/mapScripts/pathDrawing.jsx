@@ -1,51 +1,59 @@
 import { useEffect, useState, useRef } from 'react'
-import { useMap } from 'react-leaflet'
+import { useMap, Popup } from 'react-leaflet'
 import { Node } from './node.js'
 import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './ZonesContext.jsx'
+import { useNodes } from './nodesContext.jsx'
 
 /*
     Handles what happens when the user clicks on the map
+    Rename to PathDrawing
 */
 function MapClick({ drawingMode }) {
+    const [popupPos, setPopupPos] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
     const map = useMap();
-    const doNotDraw = useRef(false);
-    const [nodes, setNodes] = useState([]);
     const [paths, setPaths] = useState([]);
     const [bufferZones, setBufferZones] = useState([]);
+    const { nodes, setNodes } = useNodes();
     const { zones } = useZones();
+    const nodesRef = useRef(nodes);
+    const zonesRef = useRef(zones);
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
-        // Only create a new node upon clicking map, not buttons or other UI elements
-        if (!e.originalEvent.target.classList.contains("leaflet-container")
-            && !e.originalEvent.target.classList.contains("map-clickable")) return;
+            // Only create a new node upon clicking map, not buttons or other UI elements
+            if (!e.originalEvent.target.classList.contains("leaflet-container")
+                && !e.originalEvent.target.classList.contains("map-clickable")) return;
 
-            const newNode = new Node(e.latlng);
-            newNode.addNode(nodes, setNodes);
-        }
-        else if (drawingMode === 'remove') {
-            if (nodes.length === 0) return;
-            for (var i = 0; i < nodes.length; i++) {
-                let dist = e.latlng.distanceTo(nodes[i].position);
-                if (dist <= nodes[i].radius) {
-                    doNotDraw.current = true;
-                    nodes[i].removeNode(i, setNodes);
-                    RemovePath(i-1, setPaths);
-                    RemoveBufferZone(i-1, setBufferZones);
-                }
+            // Only create a new node if the path would not intersect a forbidden zone
+            const coords = nodesRef.current.map(n => n.position);
+            const blocked = wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
+            if (blocked) {
+                setPopupPos(e.latlng);
+                setShowPopup(true);
             }
+            else {
+                const newNode = new Node(e.latlng);
+                newNode.addNode(setNodes);
+            }
+        }
+        // Remove nodes by clicking on them
+        else if (drawingMode === 'remove') {
+           const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
+           if (index !== -1) {
+                for (var i = 0; i < nodes.length; i++) {
+                    if (ClickOnNode(e, nodes[i])) {
+                        nodes[i].removeNode(setNodes);
+                    }
+                }
+           }
         }
     }
 
     // Update paths whenever nodes is updated
     useEffect(() => {
-        if(doNotDraw.current){
-            doNotDraw.current = false;
-            return;
-        }
-
         let n = nodes[nodes.length-1];
         // Check if nodes overlap
         if (n) {
@@ -56,26 +64,18 @@ function MapClick({ drawingMode }) {
             }
         }
 
+        // Create a path between two nodes
         if (nodes.length > 1) {
-            const last = nodes[nodes.length - 2];
-            const current = nodes[nodes.length - 1];
-            const coords = nodes.slice(0, -1).map(n => n.position);
-        
-            const blocked = wouldLineIntersectForbiddenZone(current.position, coords, zones);
-        
-            if (!blocked) {
-                AddPath(last, current, setPaths);
-                AddBufferZone(last, current, setBufferZones);
-            } else {
-                console.warn(" Path segment intersects red zone, Removing last node.");
-                doNotDraw.current = true;
-                nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
-                alert("Path intersects forbidden zone — node removed.");
-            }
+            BuildPath(nodes, setPaths);
+            BuildBuffer(nodes, setBufferZones);
+        } else { // if nodes are less than 1, there should be no paths or bufferzones
+            setPaths([]);
+            setBufferZones([]);
         }
         
     }, [nodes])
 
+// Adds a map click listener and updates it when the drawing mode changes.
     useEffect(() => {
         map.on('click', onMapClick) 
 
@@ -84,64 +84,49 @@ function MapClick({ drawingMode }) {
         }
     }, [map, drawingMode])
 
+    useEffect(() => {
+        nodesRef.current = nodes;
+    }, [nodes]);
+
+    useEffect(() => {
+        zonesRef.current = zones;
+    }, [zones]);
+
     return (
         <>
             <DrawNodes nodes={nodes} color="blue"/>
             <DrawPaths paths={paths}/>
             <DrawBufferZones bufferZones={bufferZones}/>
-
-            <div className="undo-button" style={{
-                        position: 'absolute',
-                        top: '78%',
-                        right: '0%',
-                        zIndex: 1000,
-                    }}>
-                        <button
-                            onClick={() => undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) }
-            
-                            style={{
-                                padding: '8px 16px',
-                                backgroundColor: 'grey',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px 0 0 4px',
-                                cursor: 'pointer',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-                            }}
-            
-                        >
-                            Undo
-                        </button>
-                    </div>
+            {showPopup && popupPos && (
+            <Popup position={popupPos} onClose={() => setShowPopup(false)}>
+                ⚠️ You cannot draw through or on a red zone ⚠️.
+            </Popup>
+            )}
         </>
     )
 }
 
 /*
-    Add a new path to the array of paths
+    Builds the path based on the existing nodes
 */
-function AddPath(startNode, endNode, setPaths) {
-    const newPath = [startNode.position, endNode.position];
-    setPaths((prevPaths) => [...prevPaths, newPath]);
-}
-
-function RemovePath(index, setPaths) {
-    setPaths((prevPaths) => prevPaths.filter((_, i) => i !== index));
-    //setPaths((prevPaths) => prevPaths.splice(index, 1));
+function BuildPath(nodes, setPaths) {
+    const path = [];
+    for (var i = 0; i < nodes.length-1; i++) {
+        path.push([nodes[i].position, nodes[i+1].position]);
+    }
+    setPaths(path);
 }
 
 /*
-    Add a new buffer zone to the buffer zone array
+    Builds the buffer zone based on the existing nodes
 */
-function AddBufferZone(startNode, endNode, setBufferZones) {
+function BuildBuffer(nodes, setBufferZones) {
+    const buffer = [];
     const bufferWidth = 40;
-    const newZone = CreateBufferCoords([startNode.position, endNode.position], bufferWidth);
-    setBufferZones((prevZones) => [...prevZones, newZone]);
-}
-
-function RemoveBufferZone(index, setBufferZones) {
-    setBufferZones((prevBuffer) => prevBuffer.filter((_, i) => i !== index));
-    //setBufferZones((prevBuffer) => prevBuffer.splice(index, 1));
+    for (var i = 0; i < nodes.length-1; i++) {
+        buffer.push(CreateBufferCoords([nodes[i].position, nodes[i+1].position], bufferWidth));
+    }
+    setBufferZones(buffer);
 }
 
 /*
@@ -181,11 +166,9 @@ function CreateBufferCoords(coords, widthMeters) {
     return leftSide.concat(rightSide.reverse());
 }
 
-function undo(nodes, setNodes, paths, setPaths, bufferZones, setBufferZones, doNotDraw) {
-    doNotDraw.current = true;
-    nodes[nodes.length - 1].removeNode(nodes.length - 1, setNodes);
-    RemovePath(paths.length - 1, setPaths);
-    RemoveBufferZone(bufferZones.length - 1, setBufferZones);
+function ClickOnNode(e, node) {
+    const dist = e.latlng.distanceTo(node.position);
+    return dist <= node.radius;
 }
 
 export default MapClick;
