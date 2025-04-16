@@ -1,6 +1,7 @@
 import path from "path";
 import { Dronepath } from "./dronepath";
 import { useNodes } from "./nodesContext";
+import { Node } from "./node";
 
 function LaunchButton({ setDrawingMode }) {
   const { nodes } = useNodes();
@@ -36,14 +37,26 @@ function Launch(nodes, setDrawingMode) {
       dronepath.addNode(nodes[i]);
     }
     setDrawingMode('launched');
-    //alert("Dronepath added to user: " + dronepath.owner + ". It contains " + dronepath.nodes.length + " nodes.");
-    createPathJSON(dronepath);
+    const pathJSON = createPathJSON(dronepath);
 }
 
 function createPathJSON(dronepath) {
-  const pathJSON = JSON.stringify(dronepath);
-  console.log(pathJSON);
-  return pathJSON;
+  return JSON.stringify(dronepath);
+}
+
+function createDronepathFromJSON(pathJSON) {
+  const data = JSON.parse(pathJSON);
+
+  const dronepath = new Dronepath(1);
+
+  data.nodes.forEach(nodeData => {
+    const position = L.latLng(nodeData.position.lat, nodeData.position.lng);
+    const node = new Node(position);
+    node.visible = nodeData.visible;
+    dronepath.addNode(node);
+  });
+
+  return dronepath;
 }
 
 export default LaunchButton;
