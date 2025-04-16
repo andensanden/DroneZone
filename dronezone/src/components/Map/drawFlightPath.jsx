@@ -13,7 +13,7 @@ export function DrawFlightPathMenu({
   setDrawingMode,
   bottom,
 }) {
-  const { undoLastNode, nodes } = useNodes();
+  const { undoLastNode, nodes, clearNodes } = useNodes();
 
   useEffect(() => {
     if (!flightPathMenuOpen && !confirmFlightPath) {
@@ -113,6 +113,7 @@ export function DrawFlightPathMenu({
             </div>
 
             <div
+              onClick={clearNodes}
               style={{
                 color: "red",
                 fontWeight: "bold",
