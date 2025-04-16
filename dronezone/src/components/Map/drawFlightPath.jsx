@@ -1,5 +1,6 @@
 import { GiPathDistance } from "react-icons/gi";
 import { useNodes } from "@/mapScripts/nodesContext";
+import { useEffect } from "react";
 import UndoButton from "@/mapScripts/undoButton";
 
 export function DrawFlightPathMenu({
@@ -13,6 +14,17 @@ export function DrawFlightPathMenu({
   bottom,
 }) {
   const { undoLastNode, nodes } = useNodes();
+
+  useEffect(() => {
+    if (!flightPathMenuOpen && !confirmFlightPath) {
+      setDrawingMode(null); // B3 = 0
+    } else if (flightPathMenuOpen && !confirmFlightPath) {
+      setDrawingMode("path"); // B3 = 1
+    } else if (flightPathMenuOpen && confirmFlightPath) {
+      setDrawingMode(null); // B3 = 0
+    }
+  }, [flightPathMenuOpen, confirmFlightPath, setDrawingMode]);
+
   return (
     <div
       style={{
@@ -25,11 +37,8 @@ export function DrawFlightPathMenu({
     >
       <button
         onClick={() => {
-          onToggleMenu(); // ✅ let parent handle toggle logic
+          onToggleMenu();
           setFlightPathMenuOpen(!flightPathMenuOpen);
-          if (!setDrawingMode && !confirmFlightPath) {
-            setDrawingMode("path");
-          }
           setDevicesMenuOpen(false);
         }}
         style={{
@@ -81,14 +90,7 @@ export function DrawFlightPathMenu({
                 type="checkbox"
                 checked={confirmFlightPath}
                 onChange={() => {
-                  const confirmed = !confirmFlightPath;
-                  setConfirmFlightPath(confirmed);
-
-                  if (confirmed) {
-                    setDrawingMode(null);
-                  } else {
-                    setDrawingMode("path");
-                  }
+                  setConfirmFlightPath(!confirmFlightPath);
                 }}
                 style={{
                   width: "16px",
@@ -99,21 +101,8 @@ export function DrawFlightPathMenu({
             </div>
 
             <div
-              style={{
-                color: "green",
-                fontWeight: "bold",
-                fontSize: "14px",
-                margin: "12px 0",
-                cursor: "pointer",
-              }}
-            >
-              Place End-Point
-            </div>
-
-            <div
               onClick={undoLastNode} // Step 3 ✅
               style={{
-                
                 fontWeight: "bold",
                 fontSize: "14px",
                 margin: "12px 0",
