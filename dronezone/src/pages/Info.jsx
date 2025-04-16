@@ -1,15 +1,14 @@
-
 import { Header } from "@/components/header";
 import { InfolineInfo } from "@/components/InfoInfo";
-import { InfoFooter } from "@/components/infoFooter";
+import { Footer } from "@/components/footer";
 
 
 export function Info() {
   return (
     <>
       <Header />
-      <InfolineInfo/>
-      <InfoFooter />
+        <InfolineInfo/>
+      <Footer />
     </>
   )
-} export default Info;
+} 
