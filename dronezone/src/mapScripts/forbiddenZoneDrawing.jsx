@@ -7,12 +7,23 @@
   zones contains all zones existing on the map.
 */
 
+
+
 import { useEffect, useState, useRef } from 'react';
 import { useMap, Polygon } from 'react-leaflet';
 import { ForbiddenZone } from './forbiddenZone.js';
 import { useZones } from './ZonesContext.jsx';
 import L from 'leaflet';
 
+
+
+/**
+ * Component for drawing red forbidden zones on a Leaflet map.
+ *
+ * @param {{ drawingMode: string }} props - Props object
+ * @param {string} props.drawingMode - Current drawing mode (e.g. "forbidden", "node", etc.)
+ * @returns {JSX.Element} Polygon elements representing forbidden zones
+ */
 function ForbiddenZoneDrawing({ drawingMode }) {
   const map = useMap();
   const [coords, setCoords] = useState([]);
@@ -94,6 +105,12 @@ function ForbiddenZoneDrawing({ drawingMode }) {
     fetchData();
   }, []);
 
+
+  /**
+   * Converts an array of plain coordinate objects to a LatLng objects.
+   * @param {{lat: number, long: number}[]} coordArray Array of coordinates with `lat` and `long` keys
+   * @returns {L.LatLng[]} Array of LatLng objects
+   */
   function coordinatesToLatLngObject(coordArray) {
     return coordArray.map(coord => L.latLng(coord.lat, coord.long));
   }

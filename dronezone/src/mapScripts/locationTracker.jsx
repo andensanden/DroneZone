@@ -5,6 +5,13 @@ import 'leaflet/dist/leaflet.css';
 /*
     Tracks the users location and adds a marker at their position
 */
+
+/**
+ * Method for tracking user's location.
+ * @param {boolean} trackingEnabled - whether to track user's location 
+ * @returns {JSX.Element} - Return a marker at given position
+ * 
+ */
 function LocationTracker({ trackingEnabled }) {
   const map = useMap();
   const [position, setPosition] = useState(null);
