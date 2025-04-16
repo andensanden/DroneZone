@@ -56,14 +56,13 @@ const Map = () => {
           toggleTracking={toggleTracking}
         />
 
-        {/* This is the overlay HAMBURGER button */}
-        <HamburgerButton position={position} />
-
         {/* User tracking functionality*/}
         <LocationTracker trackingEnabled={trackingEnabled} />
 
         <NodesProvider>
         <ZonesProvider>
+          {/* This is the overlay HAMBURGER button */}
+          <HamburgerButton position={position} />
           {/*<MapClick drawingMode={drawingMode} />*/}
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
