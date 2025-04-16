@@ -93,26 +93,26 @@ function ForbiddenZoneDrawing({ drawingMode }) {
      data.forEach((zoneData, index) => {
       if (!zoneData.coorArray || zoneData.coorArray.length === 0) return;
       console.log("Updating zone:", index);
-      console.log("Array: " + zoneData.coorArray);
+      //console.log("Array: ", zoneData.coorArray);
       const coordinates = coordinatesToLatLngObject(zoneData.coorArray);
+      console.log(coordinates);
       const newZone = new ForbiddenZone(coordinates);
       updateZone(index, newZone);
       //setCurrZone((prev) => prev + 1);
      })
-      /*const coordinates = coordinatesToLatLngObject(data[2].coorArray);
+      /*const coordinates = coordinatesToLatLngObject(data[1].coorArray);
       const newZone = new ForbiddenZone(coordinates);
       updateZone(currZoneRef.current, newZone);
-      setCurrZone((prev) => prev + 1);
-      const coordinates2 = coordinatesToLatLngObject(data[1].coorArray);
-      const newZone2 = new ForbiddenZone(coordinates2);
-      updateZone(currZoneRef.current, newZone2);
       setCurrZone((prev) => prev + 1);*/
     }
     fetchData();
   }, []);
 
   function coordinatesToLatLngObject(coordArray) {
-    return coordArray.map(coord => L.latLng(coord.lat, coord.long));
+    if (coordArray[0].long)
+      return coordArray.map(coord => L.latLng(coord.lat, coord.long));
+    else
+      return coordArray.map(coord => L.latLng(coord.lat, coord.lng));
   }
 
   return (
