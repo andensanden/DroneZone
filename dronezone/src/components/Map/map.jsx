@@ -11,6 +11,7 @@ import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
 import { ZonesProvider } from '@/mapScripts/ZonesContext.jsx';
 import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from '@/mapScripts/locationTracker';
+import { InFlightProvider } from './inFlightContext'; // Adjust the path as necessary
 
 //--------------- UI Components -----------
 import { HamburgerButton } from './layerHamburgerMenu';
@@ -19,6 +20,8 @@ import { DrawFlightPathMenu } from './drawFlightPath';
 import { YourDevicesMenu } from './yourDevicesMenu';
 import DashboardPanel from '../dashboard';
 import { LaunchButton } from './launchButton';
+
+
 
 //-------- Main Map Component -------
 const Map = () => {
@@ -30,16 +33,35 @@ const Map = () => {
 //For draw path menu
 const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);
 const [confirmFlightPath, setConfirmFlightPath] = useState(false);
-const drawFlightBottom = 80;
-const drawFlightPanelHeight = 320;
-const drawFlightButtonHeight = 60;
-const devicesBottom = drawFlightBottom + (flightPathMenuOpen ? drawFlightPanelHeight : drawFlightButtonHeight) + 10;
+const baseBottom = 80;
+const devicesButtonHeight = 60;
+const devicesPanelHeight = 260;
 //For your devices 
 const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
   const [deviceStates, setDeviceStates] = useState([
     { name: 'DJI AIR 3S – Photography...', checked: false },
     { name: 'Tinyhawk III Plus – Racing', checked: true }
   ]);
+const drawFlightBottom = baseBottom + (devicesMenuOpen ? devicesPanelHeight : devicesButtonHeight) + 10;
+const devicesBottom = baseBottom;
+
+//For both menus to work dynamically
+const toggleFlightPathMenu = () => {
+  setFlightPathMenuOpen(prev => {
+    if (!prev){
+      setDevicesMenuOpen(false);}
+    return !prev;
+  });
+};
+
+const toggleDevicesMenu = () => {
+  setDevicesMenuOpen(prev => {
+    if (!prev) {
+      setFlightPathMenuOpen(false);
+    }
+    return !prev;
+  });
+};
 // For timer in dashpanel
 const [elapsedSeconds, setElapsedSeconds] = useState(0);
 useEffect(() => {
@@ -58,6 +80,14 @@ const formatTime = (totalSeconds) => {
 
   const toggleTracking = () => {
     setTrackingEnabled(prev => !prev);
+  };
+
+  //Displaying dashboard
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  
+  const handleLaunchClick = () => {
+    setShowDashboard(prevState => !prevState);
   };
 
   return (
@@ -89,17 +119,28 @@ const formatTime = (totalSeconds) => {
         right: '20px',
         zIndex: 1000
         }}>
-          <DashboardPanel
-            data={{
-              longitude: position[0],
-              latitude: position[1],
-              altitude: 'N/A', // Replace when you have real data
-              timeElapsed: formatTime(elapsedSeconds) 
-            }}
-          />
+        
         </div>
-
-
+        <InFlightProvider>
+          <LaunchButton onClick={handleLaunchClick} />
+          {showDashboard && (
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              zIndex: 1000
+            }}>
+              <DashboardPanel
+                data={{
+                  longitude: position[0],
+                  latitude: position[1],
+                  altitude: 'N/A', // Replace when you have real data
+                  timeElapsed: formatTime(elapsedSeconds)
+                }}
+              />
+            </div>
+          )}
+          </InFlightProvider>
         {/* This is the overlay HAMBURGER button */}
         <HamburgerButton position={position} />
 
@@ -108,23 +149,28 @@ const formatTime = (totalSeconds) => {
 
         
       {/* draw flight path Menu*/}
-        <DrawFlightPathMenu
-          flightPathMenuOpen={flightPathMenuOpen}
-          setFlightPathMenuOpen={setFlightPathMenuOpen}
-          setDevicesMenuOpen={setDevicesMenuOpen}
-          confirmFlightPath={confirmFlightPath}
-          setConfirmFlightPath={setConfirmFlightPath}
-          setDrawingMode={setDrawingMode}
-          bottom={drawFlightBottom}
-        />
-        {/* your devices Menu*/}
-        <YourDevicesMenu
-        deviceStates={deviceStates}
-        setDeviceStates={setDeviceStates}
-        menuOpen={devicesMenuOpen}
-        setMenuOpen={setDevicesMenuOpen}
-        bottom={devicesBottom}
-      />
+      {(!devicesMenuOpen || flightPathMenuOpen) && (
+          <DrawFlightPathMenu
+            flightPathMenuOpen={flightPathMenuOpen}
+            onToggleMenu={toggleFlightPathMenu}
+            confirmFlightPath={confirmFlightPath}
+            setConfirmFlightPath={setConfirmFlightPath}
+            setDrawingMode={setDrawingMode}
+            bottom={flightPathMenuOpen ? 100 + 150 : 100}
+          />
+        )}
+
+
+      {(!flightPathMenuOpen || devicesMenuOpen) && (
+          <YourDevicesMenu
+            deviceStates={deviceStates}
+            setDeviceStates={setDeviceStates}
+            menuOpen={devicesMenuOpen}
+            bottom={devicesMenuOpen ? 40 + 170 : 40}
+            onToggleMenu={toggleDevicesMenu}
+          />
+        )}
+
 
         <ZonesProvider>
           <MapClick drawingMode={drawingMode} />

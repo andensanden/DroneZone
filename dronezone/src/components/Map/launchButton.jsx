@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import React from 'react';
+import { useFlightMode } from './inFlightContext'; // Adjust the path as necessary
 
-// ---------------- Context Import -------------------
-import { InFlightProvider, useFlightMode } from './inFlightContext';
-
-
-export function LaunchButton() {
-  
+export function LaunchButton({ onClick }) {
   const { flightMode, toggleMode } = useFlightMode();
+
+  const handleClick = () => {
+    toggleMode();
+    if (onClick) {
+      onClick();
+    }
+  };
 
   return (
     <div
@@ -30,7 +33,7 @@ export function LaunchButton() {
           border: 'none',
           cursor: 'pointer'
         }}
-        onClick={toggleMode}
+        onClick={handleClick}
       >
         {flightMode === 'drawFlightMode' ? 'Launch' : 'In Flight'}
       </button>
