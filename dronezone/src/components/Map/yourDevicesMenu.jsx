@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
 
 
-export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom }) {
+export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom, onToggleMenu }) {
   const navigate = useNavigate();
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -40,7 +39,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       }}
     >
       <button
-       onClick={onToggleMenu} 
+        onClick={onToggleMenu} 
         style={{
           background: '#FFD700',
           padding: '10px 16px',
