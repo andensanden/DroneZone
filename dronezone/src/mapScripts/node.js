@@ -1,11 +1,12 @@
+import { TbHomeSignal } from "react-icons/tb";
+
 const defaultRadius = 20;
 
 export class Node {
-    constructor(position, id, radius) {
+    constructor(position, radius) {
         this.position = position;
         this.radius = radius ? radius : defaultRadius;
         this.visible = true;
-        this.id = id;
     }
 
     /*
@@ -34,6 +35,16 @@ export class Node {
             else if (dist <= this.radius * 2) {
                 return nodes[i];
             }
+        }
+    }
+
+    toJSON() {
+        return {
+            position: {
+                lat: this.position.lat,
+                lng: this.position.lng
+            },
+            visible: this.visible
         }
     }
 }
