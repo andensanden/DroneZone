@@ -4,6 +4,11 @@ import { useState,useEffect } from 'react';
 
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
 
 //------------ UTILS ------
 import DrawingModeControl from '@/mapScripts/drawingModeControl';
@@ -26,7 +31,14 @@ const Map = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState('path');
   const position = [59.3293, 18.0686]; // Stockholm coordinates
-
+  
+  delete L.Icon.Default.prototype._getIconUrl;
+  
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl,
+    iconUrl,
+    shadowUrl,
+  });
 //-----------------
 //For draw path menu
 const [flightPathMenuOpen, setFlightPathMenuOpen] = useState(false);

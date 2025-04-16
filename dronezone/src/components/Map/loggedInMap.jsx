@@ -11,6 +11,11 @@ import {
   Polyline
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
 
 //------------ UTILS ------------
 
@@ -29,11 +34,18 @@ import { toast } from 'react-toastify';
 import icon from '@/assets/icon.svg';
 
 const droneIcon = L.icon({
-    iconUrl: icon,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-    popupAnchor: [0, -16]
-  });
+  iconUrl: icon,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -16]
+});
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
 
 //------------ COMPONENT GENERATION ------------------
 
