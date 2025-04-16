@@ -9,8 +9,50 @@ import {
   Popup,
   LayersControl,
   Circle,
+
+} from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+
+//------------ UTILS ------------
+
+import MapClick from '@/mapScripts/pathDrawing';
+import ForbiddenZoneDrawing from '@/mapScripts/forbiddenZoneDrawing';
+import LocationTracker from '@/mapScripts/locationTracker';
+import GPSToggleControl from '@/mapScripts/gpsToggleControl';
+import { LaunchButton } from './launchButton';
+import  DashboardPanel from '../dashboard';
+import { NodesProvider } from '@/mapScripts/nodesContext';
+import { ZonesProvider } from '@/mapScripts/ZonesContext';
+
+//------------ ASSETS --------------
+import {GiPathDistance} from "react-icons/gi";
+import { toast } from 'react-toastify';
+import icon from '@/assets/icon.svg';
+
+const droneIcon = L.icon({
+  iconUrl: icon,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -16]
+});
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
+
+//------------ COMPONENT GENERATION ------------------
+
+=======
 } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+
 
 //------------ UTILS ------
 import DrawingModeControl from "@/mapScripts/drawingModeControl";
@@ -30,6 +72,7 @@ import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
 
 //-------- Main Map Component -------
+
 const LoggedInMap = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState(null);
