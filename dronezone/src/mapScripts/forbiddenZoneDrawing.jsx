@@ -83,36 +83,19 @@ function ForbiddenZoneDrawing({ drawingMode }) {
       const response = await fetch("http://localhost:8080/api/zone/restricted", 
                       {method: "GET", headers: { "Content-Type": "application/json"}});
       const data = await response.json();
-      /*for (var i = 0; i < 5; i++) {
-        console.log("Updating zone:", currZoneRef.current);
-        const coordinates = coordinatesToLatLngObject(data[i].coorArray);
-        const newZone = new ForbiddenZone(coordinates);
-        updateZone(currZoneRef.current, newZone);
-        setCurrZone((prev) => prev + 1);
-      }*/
-     data.forEach((zoneData, index) => {
-      if (!zoneData.coorArray || zoneData.coorArray.length === 0) return;
-      console.log("Updating zone:", index);
-      //console.log("Array: ", zoneData.coorArray);
+
+      data.forEach((zoneData, index) => {
       const coordinates = coordinatesToLatLngObject(zoneData.coorArray);
-      console.log(coordinates);
       const newZone = new ForbiddenZone(coordinates);
       updateZone(index, newZone);
-      //setCurrZone((prev) => prev + 1);
+      setCurrZone(index+1); // Temporary, remove when manual drawing of forbidden zones is removed
      })
-      /*const coordinates = coordinatesToLatLngObject(data[1].coorArray);
-      const newZone = new ForbiddenZone(coordinates);
-      updateZone(currZoneRef.current, newZone);
-      setCurrZone((prev) => prev + 1);*/
     }
     fetchData();
   }, []);
 
   function coordinatesToLatLngObject(coordArray) {
-    if (coordArray[0].long)
-      return coordArray.map(coord => L.latLng(coord.lat, coord.long));
-    else
-      return coordArray.map(coord => L.latLng(coord.lat, coord.lng));
+    return coordArray.map(coord => L.latLng(coord.lat, coord.long));
   }
 
   return (
