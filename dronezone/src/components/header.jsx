@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { useSelector, useDispatch } from "react-redux";
 import { LoginDropDown } from "@/components/loginDropDown"; 
-
 import { LuInbox } from "react-icons/lu";
 import {GoQuestion} from "react-icons/go";
 
@@ -33,10 +32,9 @@ export function Header() {
         </div> : null}
 
 
-        <button className=" p-3 rounded-xl"><GoQuestion size={30} className="text-black"
-        onClick={() => navigate("/info")}/> </button> 
-
         <div className="flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
+
+
           <button
             className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 w-16 hover:scale-107 transition-all duration-200"
             onClick={() => navigate("/")}
@@ -55,9 +53,15 @@ export function Header() {
           >
             Guidelines
           </button>
+
+          <button className=" p-3 rounded-xl"><GoQuestion size={25} className="text-gray-700  hover:scale-107 transition-all duration-200"
+          onClick={() => navigate("/info")}/> </button> 
+
           <button
             className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
           >
+
+
             {isAuth ? <LoginDropDown /> : <GrLogin size={20} onClick={() => navigate("/login")}/>}
           </button>
         </div>
