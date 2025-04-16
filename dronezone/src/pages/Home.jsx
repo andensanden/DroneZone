@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 
 import { useState } from "react";
-import MapSelector from "@/components/mapSelector";
+//import MapSelector from "@/components/mapSelector";
 
 import Map from "@/components/Map/map";
 import { Footer } from "@/components/footer";
@@ -13,7 +13,7 @@ export function Home() {
     <>
       <Header />
       {/*<MapSelector />*/}
-      <Map />
+      <LoggedInMap />
       <Footer />
     </>
   );
