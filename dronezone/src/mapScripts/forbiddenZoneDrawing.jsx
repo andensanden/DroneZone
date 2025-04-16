@@ -23,8 +23,8 @@ function ForbiddenZoneDrawing({ drawingMode }) {
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (drawingMode !== 'forbidden') return;
       // Return if either not in forbidden mode or if the click is on a UI element (such as a button)
+      if (drawingMode !== 'forbidden') return;
       if (!e.originalEvent.target.classList.contains("leaflet-container")
         && !e.originalEvent.target.classList.contains("map-clickable")) return;
 

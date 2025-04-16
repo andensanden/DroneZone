@@ -23,36 +23,87 @@ function MapClick({ drawingMode }) {
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
-            // Only create a new node upon clicking map, not buttons or other UI elements
-            if (!e.originalEvent.target.classList.contains("leaflet-container")
-                && !e.originalEvent.target.classList.contains("map-clickable")) return;
+            if (ClickOnUIElement(e)) return;
 
-            // Only create a new node if the path would not intersect a forbidden zone
-            const coords = nodesRef.current.map(n => n.position);
-            const blocked = wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
-            if (blocked) {
+            if (PathIntersectsForbiddenZone(e, nodesRef, zonesRef)) {
                 setPopupPos(e.latlng);
                 setShowPopup(true);
+                return;
             }
-            else {
-                const newNode = new Node(e.latlng);
-                newNode.addNode(setNodes);
-            }
+
+            CreateNode(e, setNodes);
         }
-        // Remove nodes by clicking on them
         else if (drawingMode === 'remove') {
-           const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
-           if (index !== -1) {
-                for (var i = 0; i < nodes.length; i++) {
-                    if (ClickOnNode(e, nodes[i])) {
-                        nodes[i].removeNode(setNodes);
-                    }
-                }
-           }
+           RemoveNode(e, nodes, setNodes);
         }
     }
 
-    // Update paths whenever nodes is updated
+    usePathAndBuffer(nodes, setPaths, setBufferZones);
+
+    useMapClickListener(map, drawingMode, onMapClick);
+
+    useSyncedRef(nodesRef, nodes);
+    useSyncedRef(zonesRef, zones);
+
+    return (
+        <>
+            <DrawNodes nodes={nodes} color="blue"/>
+            <DrawPaths paths={paths}/>
+            <DrawBufferZones bufferZones={bufferZones}/>
+            {showPopup && popupPos && (
+            <Popup position={popupPos} onClose={() => setShowPopup(false)}>
+                ⚠️ You cannot draw through or on a red zone ⚠️.
+            </Popup>
+            )}
+        </>
+    )
+}
+
+function CreateNode(e, setNodes) {
+    const newNode = new Node(e.latlng);
+    newNode.addNode(setNodes);
+}
+
+function RemoveNode(e, nodes, setNodes) {
+    const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
+    if (index === -1) return;
+
+    for (var node in nodes) {
+        if (ClickOnNode(e, node)) {
+            node.removeNode(setNodes);
+        }
+    }
+}
+
+/**
+ * Checks if path would intersect a forbidden zone.
+ * @param {*} e 
+ * @param {*} nodesRef 
+ * @param {*} zonesRef 
+ * @returns True if path intersects a forbidden zone.
+ */
+function PathIntersectsForbiddenZone(e, nodesRef, zonesRef) {
+    const coords = nodesRef.current.map(n => n.position);
+    return wouldLineIntersectForbiddenZone(e.latlng, coords, zonesRef.current);
+}
+
+function ClickOnUIElement(e) {
+    if (e.originalEvent.target.classList.contains("leaflet-container")) {
+        return false;
+    }
+    else if (e.originalEvent.target.classList.contains("map-clickable")) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Creates paths and buffer zones when nodes are added or removed.
+ * @param {*} nodes 
+ * @param {*} setPaths 
+ * @param {*} setBufferZones 
+ */
+function usePathAndBuffer(nodes, setPaths, setBufferZones) {
     useEffect(() => {
         let n = nodes[nodes.length-1];
         // Check if nodes overlap
@@ -72,38 +123,34 @@ function MapClick({ drawingMode }) {
             setPaths([]);
             setBufferZones([]);
         }
-        
-    }, [nodes])
+    }, [nodes]);
+}
 
-// Adds a map click listener and updates it when the drawing mode changes.
+/**
+ * Attaches a map click listener.
+ * @param {*} map 
+ * @param {*} drawingMode 
+ * @param {*} onMapClick 
+ */
+function useMapClickListener(map, drawingMode, onMapClick) {
     useEffect(() => {
         map.on('click', onMapClick) 
 
         return () => {
             map.off('click', onMapClick)
         }
-    }, [map, drawingMode])
+    }, [map, drawingMode]);
+}
 
+/**
+ * Keeps a reference synchronized with a value.
+ * @param {*} ref 
+ * @param {*} value 
+ */
+function useSyncedRef(ref, value) {
     useEffect(() => {
-        nodesRef.current = nodes;
-    }, [nodes]);
-
-    useEffect(() => {
-        zonesRef.current = zones;
-    }, [zones]);
-
-    return (
-        <>
-            <DrawNodes nodes={nodes} color="blue"/>
-            <DrawPaths paths={paths}/>
-            <DrawBufferZones bufferZones={bufferZones}/>
-            {showPopup && popupPos && (
-            <Popup position={popupPos} onClose={() => setShowPopup(false)}>
-                ⚠️ You cannot draw through or on a red zone ⚠️.
-            </Popup>
-            )}
-        </>
-    )
+        ref.current = value;
+    }, [value]);
 }
 
 /*
