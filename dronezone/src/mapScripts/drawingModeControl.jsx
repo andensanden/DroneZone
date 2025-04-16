@@ -1,4 +1,12 @@
 // Drawing Mode Control, include Draw path, draw forbidden zone and remove node buttons
+
+/**
+ * Control panel for switching between different drawing modes on the map.
+ * @param {{drawingMode: string, setDrawingMode: function}} props - Component props. 
+ * @param {string} props.drawingMode - The currently selected drawing mode.
+ * @param {(mode: string) => void} props.setDrawingMode - Function to update the drawing mode
+ *  
+ */
 const DrawingModeControl = ({ drawingMode, setDrawingMode }) => {
     return (
       <div className="drawing-mode-control" style={{
