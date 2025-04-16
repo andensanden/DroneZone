@@ -20,6 +20,8 @@ import LocationTracker from '@/mapScripts/locationTracker';
 import GPSToggleControl from '@/mapScripts/gpsToggleControl';
 import { LaunchButton } from './launchButton';
 import  DashboardPanel from '../dashboard';
+import { NodesProvider } from '@/mapScripts/nodesContext';
+import { ZonesProvider } from '@/mapScripts/ZonesContext';
 
 //------------ ASSETS --------------
 import {GiPathDistance} from "react-icons/gi";
@@ -155,16 +157,13 @@ const LoggedInMap = () => {
           }}
         />
 
-        <DrawingModeControl 
-          drawingMode={drawingMode}
-          setDrawingMode={setDrawingMode}
-        />
-
         {/*!confirmFlightPath && drawingMode === 'path' && <MapClick />*/}
+        <NodesProvider>
         <ZonesProvider>
           <MapClick drawingMode={drawingMode}/>
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
+        </NodesProvider>
       </MapContainer>
 
 
