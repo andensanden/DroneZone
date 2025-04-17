@@ -4,16 +4,17 @@ const DronepathsContext = createContext();
 
 export function DronepathsProvider({ children }) {
   const [dronepaths, setDronepaths] = useState([]);
-  /*const clearDronepaths = () => {
+
+  const clearDronepaths = () => {
     setDronepaths([]);
-  };*/
+  };
 
   const addDronepath = (newDronepath) => {
     setDronepaths(prevDronepaths => [...prevDronepaths, newDronepath]);
   };
 
   return (
-    <DronepathsContext.Provider value={{ dronepaths, setDronepaths, addDronepath }}>
+    <DronepathsContext.Provider value={{ dronepaths, setDronepaths, addDronepath, clearDronepaths }}>
       {children}
     </DronepathsContext.Provider>
   );

@@ -5,9 +5,12 @@ import { Node } from "./node";
 import { useDronepaths } from "./dronepathsContext";
 import L from "leaflet";
 
+/**
+ * Fetches and sends all dronepaths to and from the database.
+ * @returns Draws all dronepaths on the map.
+ */
 export function DronepathHandler() {
     const { dronepaths, addDronepath } = useDronepaths();
-    const dronepathsRef = useRef(dronepaths);
 
     // Temporary for testing
     const [dronepathTest] = useState(() => {
@@ -25,6 +28,7 @@ export function DronepathHandler() {
         path.addNode(new Node(L.latLng(59.3240, 18.1030)));
         return path;
     });
+    
 
     // Run once on initial mounting of component
     // Use this to fetch all dronepaths
@@ -45,39 +49,39 @@ export function DronepathHandler() {
         fetchData();
     }, []);*/
 
+    // Temporary for testing
     useEffect(() => {
-        dronepathsRef.current = dronepaths;
-        console.log("After dronepaths: ", dronepathsRef.current);
-    }, [dronepaths]);
-
-    useEffect(() => {
-            if (dronepaths.length === 0) {
             addDronepath(dronepathTest);
             addDronepath(dronepathTest2);
-            }
-        }, [dronepaths, dronepathTest, dronepathTest2, addDronepath]);
+        }, []);
 
     return (
         <>
-            {dronepathsRef.current.map((dronepath, index) => (
+            {dronepaths.map((dronepath, index) => (
                 <DrawDronepath key={index} dronepath={dronepath} color={dronepath.color}/>
             ))}
         </>
     );
 }
 
-export function CreateDronepath(nodes, addDronepath, dronepaths) {
-    console.log("Before dronepaths: ", dronepaths);
+/**
+ * Adds a new dronepath based on an array of nodes, then sends that dronepath to the database. This is mainly used in pathDrawing for saving a planned path.
+ * @param {*} nodes An array of nodes which will be used for the dronepath.
+ * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
+ */
+export function CreateDronepath(nodes, addDronepath) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
         console.log(nodes[i].position);
         newDronepath.addNode(nodes[i]);
     }
     addDronepath(newDronepath);
-    console.log("After dronepaths: ", dronepaths);
     // Send newDronepath to database
 }
 
+/**
+ * Draws a dronepath on the map.
+ */
 function DrawDronepath({ dronepath, color }) {
     return (
         <>
@@ -88,10 +92,20 @@ function DrawDronepath({ dronepath, color }) {
     )
 }
 
+/**
+ * Converts a dronepath object to a JSON object.
+ * @param {*} dronepath The dronepath to convert.
+ * @returns A dronepath JSON object.
+ */
 function createPathJSON(dronepath) {
   return JSON.stringify(dronepath);
 }
 
+/**
+ * Converts a dronepath JSON to a dronepath object.
+ * @param {*} pathJSON The dronepath JSON to convert.
+ * @returns A dronepath object.
+ */
 function createDronepathFromJSON(pathJSON) {
   const data = JSON.parse(pathJSON);
 

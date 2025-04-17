@@ -22,7 +22,7 @@ function MapClick({ drawingMode, isLaunched }) {
     const { zones } = useZones();
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
-    const { setDronepaths, dronepaths } = useDronepaths();
+    const { addDronepath } = useDronepaths();
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -48,7 +48,7 @@ function MapClick({ drawingMode, isLaunched }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
-    useLaunch(isLaunched, nodesRef.current, setDronepaths, setNodes, dronepaths);
+    useLaunch(isLaunched, nodes, addDronepath, setNodes);
 
     return (
         <>
@@ -158,13 +158,12 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, setDronepaths, setNodes, dronepaths) {
+function useLaunch(isLaunched, nodes, addDronepath, setNodes) {
     useEffect(() => {
         if (isLaunched) {
-            for (var i = 0; i < nodes.length; i++) console.log(nodes[i].position);
-            CreateDronepath(nodes, setDronepaths, dronepaths);
+            CreateDronepath(nodes, addDronepath);
+            setNodes([]);
         }
-        setNodes([]);
     }, [isLaunched]);
 }
 
