@@ -5,12 +5,14 @@ import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './ZonesContext.jsx'
 import { useNodes } from './nodesContext.jsx'
+import { CreateDronepath } from './dronepathHandler.jsx'
+import { useDronepaths } from './dronepathsContext.jsx'
 
 /*
     Handles what happens when the user clicks on the map
     Rename to PathDrawing
 */
-function MapClick({ drawingMode }) {
+function MapClick({ drawingMode, isLaunched }) {
     const [popupPos, setPopupPos] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const map = useMap();
@@ -20,6 +22,7 @@ function MapClick({ drawingMode }) {
     const { zones } = useZones();
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
+    const { setDronepaths, dronepaths } = useDronepaths();
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -45,11 +48,13 @@ function MapClick({ drawingMode }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
+    useLaunch(isLaunched, nodesRef.current, setDronepaths, setNodes, dronepaths);
+
     return (
         <>
             <DrawNodes nodes={nodes} color="blue"/>
-            <DrawPaths paths={paths}/>
-            <DrawBufferZones bufferZones={bufferZones}/>
+            <DrawPaths paths={paths} color="blue"/>
+            <DrawBufferZones bufferZones={bufferZones} color="blue"/>
             {showPopup && popupPos && (
             <Popup position={popupPos} onClose={() => setShowPopup(false)}>
                 ⚠️ You cannot draw through or on a red zone ⚠️.
@@ -151,6 +156,16 @@ function useSyncedRef(ref, value) {
     useEffect(() => {
         ref.current = value;
     }, [value]);
+}
+
+function useLaunch(isLaunched, nodes, setDronepaths, setNodes, dronepaths) {
+    useEffect(() => {
+        if (isLaunched) {
+            for (var i = 0; i < nodes.length; i++) console.log(nodes[i].position);
+            CreateDronepath(nodes, setDronepaths, dronepaths);
+        }
+        setNodes([]);
+    }, [isLaunched]);
 }
 
 /*
