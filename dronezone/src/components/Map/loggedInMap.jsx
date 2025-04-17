@@ -180,7 +180,7 @@ const LoggedInMap = () => {
 
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
-          <HamburgerButton position={position} />
+          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} />
           <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
