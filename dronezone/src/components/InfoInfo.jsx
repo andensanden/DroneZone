@@ -2,7 +2,7 @@ export function InfolineInfo() {
   return (
     <div className="w-full">
       {/* 🔶 Full-width Yellow Header */}
-      <div className="bg-primary-yellow w-full text-center py-20">
+      <div className="bg-primary-yellow w-full text-center py-17">
         <h2 className="text-3xl font-bold mb-4">How to Navigate in DroneZone</h2>
         <h5 className="font-bold">
           Here is a quick overview of the key features and how to navigate around the website
@@ -11,7 +11,7 @@ export function InfolineInfo() {
 
       {/* 🧭 Info Content (centered) */}
       <div className="flex justify-center w-full">
-        <div className="flex flex-row gap-25 mt-10 p-10 max-w-6xl w-full justify-center">
+        <div className="flex flex-row gap-25 p-10  justify-center">
           {/* Register */}
           <div className="flex flex-col w-72">
             <h2 className="font-bold text-xl">Register Your Drone</h2>
