@@ -26,8 +26,8 @@ Welcome to the official repository for Team ELIZA's project in the KTH course II
 
 To run the project locally:
 
-    Clone the repository:
-
+Clone the repository:
+    
 git clone https://github.com/andensanden/II1305.git
 cd II1305/dronezone
 
@@ -40,6 +40,7 @@ Start the development server:
 npm run dev
 
 The app will be available at http://localhost:5173.
+
 📦 dronezone/src/ – Source Code Overview
 
 This is the heart of the application, containing all UI logic, state management, and external integrations.
@@ -87,7 +88,7 @@ Directory Breakdown
     Jesper Sandberg Hesselgren, Developer
     Wasim Shamieh, Developer
     Rasmus Sundbom, Developer
-    Alexander Timsäter, Prodict Owner
+    Alexander Timsäter, Product Owner
 
 🛠️ Tech Stack
 
