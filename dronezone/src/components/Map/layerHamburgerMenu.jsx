@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useZones } from '@/mapScripts/ZonesContext'
 
-export function HamburgerButton() {
+export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const { showRestrictedZones, toggleZones } = useZones();
-  const [trackingEnabled, setTrackingEnabled] = useState(true);
 
   const clearLayers = () => {
     setShowActiveDrones(false);
