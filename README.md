@@ -8,19 +8,19 @@ Welcome to the official repository for Team ELIZA's project in the KTH course II
 
 📁 Project Structure:
 
-II1305/
-│
-├── dronezone/              # Main application source
-│   ├── public/             # Static assets
-│   ├── src/                # Frontend source code (see details below)
-│   ├── index.html          # Entry HTML file
-│   ├── mapstyle.css        # Custom map styling
-│   ├── package.json        # Project metadata & scripts
-│   └── vite.config.js      # Vite configuration
-│
-├── eliza_members.txt       # Team member list
-├── .gitignore              # Git ignore rules
-└── README.md               # Project documentation (you are here)
+    II1305/
+    │
+    ├── dronezone/              # Main application source
+    │   ├── public/             # Static assets
+    │   ├── src/                # Frontend source code (see details below)
+    │   ├── index.html          # Entry HTML file
+    │   ├── mapstyle.css        # Custom map styling
+    │   ├── package.json        # Project metadata & scripts
+    │   └── vite.config.js      # Vite configuration
+    │
+    ├── eliza_members.txt       # Team member list
+    ├── .gitignore              # Git ignore rules
+    └── README.md               # Project documentation (you are here)
 
 🚀 Getting Started
 
@@ -80,8 +80,6 @@ Directory Breakdown
     supabase/ – Supabase client and backend interaction logic
 
 🧑‍💻 Team Members
-
-Add the names and roles of your team members here:
 
     Malin Andreasson, Scrum Master
     Rebecca Erhnrooth From, Developer
