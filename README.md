@@ -1,10 +1,12 @@
 II1305 – Team ELIZA
 
 Welcome to the official repository for Team ELIZA's project in the KTH course II1305 – Project in Computer Engineering. This project is a web-based application built with React, Vite, and Supabase, focusing on an interactive drone management interface.
-🌐 Live Demo
 
-👉 ii-1305.vercel.app
-📁 Project Structure
+🌐 Live Demo
+👉 dronezone.se
+
+
+📁 Project Structure:
 
 II1305/
 │
@@ -35,7 +37,7 @@ npm install
 
 Start the development server:
 
-    npm run dev
+npm run dev
 
 The app will be available at http://localhost:5173.
 📦 dronezone/src/ – Source Code Overview
