@@ -7,6 +7,8 @@ import L from "leaflet";
 import { DroneClient } from "./socketClient";
 import { supabase } from "@/supabase/config";
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 export let droneClient = null;
 
 /**
@@ -36,28 +38,28 @@ export function DronepathHandler() {
 
     // Run once on initial mounting of component
     // Use this to fetch all dronepaths
-    /*useEffect(() => {
+    useEffect(() => {
     async function fetchData() {
-        const response = await fetch("http://localhost:8080/api/zone/restricted", 
+        const response = await fetch(backendURL + "/api/zone/restricted", 
                         {method: "GET", headers: { "Content-Type": "application/json"}});
         const data = await response.json();
         
         data.forEach((dronepathJSON, index) => {
             const newDronepath = createDronepathFromJSON(dronepathJSON);
-            setDronepaths((prevPaths) => {
+            addDronepath((prevPaths) => {
                 const newPaths = [...prevPaths, newDronepath];
                 return newPaths;
             });
         })
         }
         fetchData();
-    }, []);*/
+    }, []);
 
     // Temporary for testing
-    useEffect(() => {
+    /*useEffect(() => {
             addDronepath(dronepathTest);
             addDronepath(dronepathTest2);
-        }, []);
+        }, []);*/
 
     return (
         <>
@@ -137,4 +139,8 @@ function createDronepathFromJSON(pathJSON) {
   });
 
   return dronepath;
+}
+
+export function EndFlight() {
+    droneClient.endFlight(5);
 }

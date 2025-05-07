@@ -69,6 +69,7 @@ export class DroneClient{
       this.socket.on("takeDownDrone", (data) => {
           console.log(data);
           this.socket.disconnect();
+          alert("TAKE DOWN DRONE");
         });
         
       // Event that is being sent when the client disconnects from the server

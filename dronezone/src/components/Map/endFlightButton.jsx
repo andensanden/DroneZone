@@ -1,9 +1,15 @@
 import React from 'react';
 import { useFlightMode } from './inFlightContext'; // Adjust the path as necessary
-import { EndFlightButton } from './endFlightButton';
 
-export function LaunchButton({ onLaunchClick, onEndClick }) {
-  const { flightMode, toggleMode } = useFlightMode();
+export function EndFlightButton({ onClick }) {
+  const { toggleMode } = useFlightMode();
+
+  const handleClick = () => {
+    toggleMode();
+    if (onClick) {
+      onClick();
+    }
+  };
 
   return (
     <div
@@ -15,22 +21,7 @@ export function LaunchButton({ onLaunchClick, onEndClick }) {
         zIndex: 1000
       }}
     >
-      {flightMode === 'drawFlightMode' ? <ButtonStart onClick={onLaunchClick} toggleMode={toggleMode}/> 
-                  : <EndFlightButton onClick={onEndClick}/>}
-    </div>
-  );
-}
-
-function ButtonStart({onClick, toggleMode}) {
-  const handleClick = () => {
-    toggleMode();
-    if (onClick) {
-      onClick();
-    }
-  };
-
-  return(
-  <button
+      <button
         style={{
           backgroundColor: '#1D4ED8',
           color: 'white',
@@ -44,7 +35,8 @@ function ButtonStart({onClick, toggleMode}) {
         }}
         onClick={handleClick}
       >
-        Launch
+        End Flight
       </button>
+    </div>
   );
 }

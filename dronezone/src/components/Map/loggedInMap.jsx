@@ -21,7 +21,7 @@ import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
 import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
-import { DronepathHandler } from "@/mapScripts/dronepathHandler";
+import { DronepathHandler, EndFlight } from "@/mapScripts/dronepathHandler";
 
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
@@ -108,6 +108,12 @@ const LoggedInMap = () => {
     setLaunch((prevState) => !prevState);
   };
 
+  const handleEndFlightClick = () => {
+    setShowDashboard((prevState) => !prevState);
+    setLaunch((prevState) => !prevState);
+    EndFlight();
+  }
+
   return (
     //Overall map component generation with styling
     <div style={{ position: "relative", height: "82vh", width: "100%" }}>
@@ -138,7 +144,7 @@ const LoggedInMap = () => {
           }}
         ></div>
         <InFlightProvider>
-          <LaunchButton onClick={handleLaunchClick} />
+          <LaunchButton onLaunchClick={handleLaunchClick} onEndClick={handleEndFlightClick} />
           {showDashboard && (
             <div
               style={{
