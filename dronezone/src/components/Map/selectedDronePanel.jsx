@@ -5,8 +5,8 @@ export function SelectedDronePanel({ drone, onClose }) {
       <div
         style={{
           position: "absolute",
-          top: "20px",
-          left: "20px",
+          top: "80px",
+          right: "20px",
           zIndex: 1000,
           width: "260px",
           background: "white",
@@ -29,7 +29,7 @@ export function SelectedDronePanel({ drone, onClose }) {
           <div><strong>ID</strong> &nbsp; | &nbsp; {drone.id}</div>
           <div><strong>Longitude</strong> &nbsp; | &nbsp; {drone.lng}</div>
           <div><strong>Latitude</strong> &nbsp; | &nbsp; {drone.lat}</div>
-          <div><strong>Altitude</strong> &nbsp; | &nbsp; 150 m</div>
+          <div><strong>Altitude:</strong> &nbsp; | &nbsp;{drone.altitude} m</div>
         </div>
       </div>
     );

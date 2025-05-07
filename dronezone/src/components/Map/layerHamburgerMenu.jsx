@@ -1,10 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useZones } from '@/mapScripts/ZonesContext'
 
-export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
+export function HamburgerButton({ trackingEnabled, setTrackingEnabled,showActiveDrones,
+  setShowActiveDrones }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showActiveDrones, setShowActiveDrones] = useState(true);
   const { showRestrictedZones, toggleZones } = useZones();
+  const menuRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const clearLayers = () => {
     setShowActiveDrones(false);
@@ -12,8 +23,14 @@ export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
     setTrackingEnabled(false);
   };
 
+  
+
+
   return (
-    <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+    <div 
+    ref={menuRef}
+    style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+      
       <button
         onClick={() => setMenuOpen(!menuOpen)}
         style={{

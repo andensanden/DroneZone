@@ -26,7 +26,7 @@ import { DronepathHandler } from "@/mapScripts/dronepathHandler";
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
 import GPSToggleControl from "@/mapScripts/gpsToggleControl";
-
+import { PopUpDrone } from "./popUpDrone";
 
 
 /**MARKER ON MAP DEPLOYED VERSION*/
@@ -49,7 +49,8 @@ const Map = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState("path");
   const position = [59.3293, 18.0686]; // Stockholm coordinates
-
+  const [showActiveDrones, setShowActiveDrones] = useState(true);
+  
 
   const toggleTracking = () => {
     setTrackingEnabled((prev) => !prev);
@@ -89,6 +90,8 @@ const Map = () => {
         <DronepathsProvider>
           <DronepathHandler/>
         </DronepathsProvider>
+        
+        {showActiveDrones && <PopUpDrone />}
       </MapContainer>
     </div>
   );
