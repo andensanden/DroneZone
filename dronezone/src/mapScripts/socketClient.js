@@ -4,7 +4,9 @@ import { io } from "socket.io-client";
 //TODO: State management and error handling need to be implemented on the client side,
 // this should be handeled under the clientInit method for the different events
 
-
+/**
+ * -- The class is used to send the flight data to the server and receive data from the server
+ */
 export class DroneClient{
 
     constructor(userID, deviceID, currentPosition, flyingRoute) {
@@ -79,13 +81,24 @@ export class DroneClient{
   }
 
   //Method for ending a flight
+
+  /**
+   * Ends the flight and sends the flight time to the server.
+   * @param {number} flightTime - The flight time in seconds.
+   */
   endFlight(flightTime) {
     this.activeFlight = false;
     this.socket.emit("endFlight", 
       { userID: this.userID, deviceID: this.deviceID,
         flightTime: flightTime, activeFlight: this.activeFlight });
   }
+  
 
+  /**
+   * Sends the position data to the server.
+   * @param {object} position - The position data to send.
+   */
+  // Update the position of the drone
   updatePosition(position) {
     this.socket.emit("updatePosition", position);
   }
