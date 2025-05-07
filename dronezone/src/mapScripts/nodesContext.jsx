@@ -27,7 +27,7 @@ export function NodesProvider({ children }) {
   const clearNodes = () => {
     setNodes([]);
   };
-  #// Adds a new node to the state.
+  // Adds a new node to the state.
   return (
     <NodesContext.Provider value={{ nodes, setNodes, clearNodes }}>
       {children}
