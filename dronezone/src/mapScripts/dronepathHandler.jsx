@@ -18,48 +18,24 @@ export let droneClient = null;
 export function DronepathHandler() {
     const { dronepaths, addDronepath } = useDronepaths();
 
-    // Temporary for testing
-    const [dronepathTest] = useState(() => {
-        const path = new Dronepath(1);
-        path.addNode(new Node(L.latLng(59.3250, 18.0708)));
-        path.addNode(new Node(L.latLng(59.3470, 18.0726)));
-        path.addNode(new Node(L.latLng(59.3326, 18.0649)));
-        return path;
-    });
-
-    const [dronepathTest2] = useState(() => {
-        const path = new Dronepath(1, "green");
-        path.addNode(new Node(L.latLng(59.3275, 18.0546)));
-        path.addNode(new Node(L.latLng(59.3178, 18.0845)));
-        path.addNode(new Node(L.latLng(59.3240, 18.1030)));
-        return path;
-    });
-    
-
-    // Run once on initial mounting of component
-    // Use this to fetch all dronepaths
     useEffect(() => {
     async function fetchData() {
-        const response = await fetch(backendURL + "/api/zone/restricted", 
+        const response = await fetch(backendURL + "/api/drone/activeDrones", 
                         {method: "GET", headers: { "Content-Type": "application/json"}});
         const data = await response.json();
+
+        let dronepaths = [];
+        data.forEach((dataObject, index) => {
+            dronepaths.push(dataObject.dronePath);
+        })
         
-        data.forEach((dronepathJSON, index) => {
+        dronepaths.forEach((dronepathJSON, index) => {
             const newDronepath = createDronepathFromJSON(dronepathJSON);
-            addDronepath((prevPaths) => {
-                const newPaths = [...prevPaths, newDronepath];
-                return newPaths;
-            });
+            addDronepath(newDronepath);
         })
         }
         fetchData();
     }, []);
-
-    // Temporary for testing
-    /*useEffect(() => {
-            addDronepath(dronepathTest);
-            addDronepath(dronepathTest2);
-        }, []);*/
 
     return (
         <>
@@ -78,19 +54,18 @@ export function DronepathHandler() {
 export async function CreateDronepath(nodes, addDronepath, position) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
-        console.log(nodes[i].position);
         newDronepath.addNode(nodes[i]);
     }
     addDronepath(newDronepath);
-    // Send newDronepath to database
-    const dronepathJSON = createPathJSON(newDronepath);
+    sendDronepathToDatabase(newDronepath, position);
+}
+
+async function sendDronepathToDatabase(dronepath, position) {
+    const dronepathJSON = createPathJSON(dronepath);
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
-    console.log(userID);
-    droneClient = new DroneClient(userID,
-  "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
-   positionJSON, 
-   dronepathJSON);
+    droneClient = new DroneClient(userID, "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
+        positionJSON, dronepathJSON);
     droneClient.clientInit();
 }
 
@@ -128,7 +103,6 @@ function createPathJSON(dronepath) {
  */
 function createDronepathFromJSON(pathJSON) {
   const data = JSON.parse(pathJSON);
-
   const dronepath = new Dronepath(1);
 
   data.nodes.forEach(nodeData => {
@@ -142,5 +116,6 @@ function createDronepathFromJSON(pathJSON) {
 }
 
 export function EndFlight() {
-    droneClient.endFlight(5);
+    const temporaryFlightTime = 5;  // For testing, remove when actual time is added
+    droneClient.endFlight(temporaryFlightTime);
 }

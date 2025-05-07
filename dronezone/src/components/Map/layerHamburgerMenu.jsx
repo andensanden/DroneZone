@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useZones } from '@/mapScripts/ZonesContext'
+import { useZones } from '@/mapScripts/zonesContext'
 
 export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
   const [menuOpen, setMenuOpen] = useState(false);

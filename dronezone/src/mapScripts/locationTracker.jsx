@@ -7,15 +7,14 @@ import { droneClient } from './dronepathHandler';
 
 /**
  * Method for tracking user's location.
- * @param {boolean} trackingEnabled - whether to track user's location 
+ * @param {boolean} trackingEnabled - Whether to track user's location 
  * @returns {JSX.Element} - Return a marker at given position
  * 
  */
 function LocationTracker({ trackingEnabled }) {
   const map = useMap();
   const dispatch = useDispatch();
-  const {position} = useSelector((state) => state.gpsPos);
-  //const [accuracy, setAccuracy] = useState(null); REMOVE ALL MENTIONS OF ACCURACY IF NOT DESIRED
+  const { position } = useSelector((state) => state.gpsPos);
   const [watchId, setWatchId] = useState(null);
   const [mapCentered, setMapCentered] = useState(false);
 
@@ -31,12 +30,9 @@ function LocationTracker({ trackingEnabled }) {
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
           dispatch(setPosition(newPos));
-          if (droneClient) {
-            const posJSON = JSON.stringify(newPos);
-            droneClient.updatePosition(posJSON);
-          }
-          //setAccuracy(pos.coords.accuracy);
-          // Center map if it has not already been centered
+
+          updatePositionInDatabase(newPos);
+
           if (!mapCentered) {
             map.flyTo(newPos, map.getZoom());
             setMapCentered(true);
@@ -73,19 +69,17 @@ function LocationTracker({ trackingEnabled }) {
       {trackingEnabled && position && (
         <>
           <Marker position={position} />
-          {/*accuracy && (
-                      <Circle
-                        center={position}
-                        radius={accuracy}
-                        color="blue"
-                        fillColor="blue"
-                        fillOpacity={0.2}
-                      />
-                    )*/}
         </>
       )}
     </>
   );
+}
+
+function updatePositionInDatabase(newPos) {
+  if (droneClient) {
+    const posJSON = JSON.stringify(newPos);
+    droneClient.updatePosition(posJSON);
+  }
 }
 
 export default LocationTracker;

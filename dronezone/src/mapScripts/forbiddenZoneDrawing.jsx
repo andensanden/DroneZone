@@ -12,7 +12,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useMap, Polygon } from 'react-leaflet';
 import { ForbiddenZone } from './forbiddenZone.js';
-import { useZones } from './ZonesContext.jsx';
+import { useZones } from './zonesContext.jsx';
 import L from 'leaflet';
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
