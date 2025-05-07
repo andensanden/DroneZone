@@ -30,6 +30,8 @@ import { DrawFlightPathMenu } from "./drawFlightPath";
 import { YourDevicesMenu } from "./yourDevicesMenu";
 import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
+import { PopUpDrone } from "./popUpDrone";
+
 
 //-------- Main Map Component -------
 const LoggedInMap = () => {
@@ -206,6 +208,8 @@ const LoggedInMap = () => {
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
           </NodesProvider>
         </ZonesProvider>
+            
+        <PopUpDrone />
       </MapContainer>
     </div>
   );

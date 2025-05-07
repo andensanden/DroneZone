@@ -1,0 +1,37 @@
+export function SelectedDronePanel({ drone, onClose }) {
+    if (!drone) return null;
+  
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1000,
+          width: "260px",
+          background: "white",
+          borderRadius: "16px",
+          boxShadow: "0 6px 20px rgba(0, 0, 0, 0.2)",
+          overflow: "hidden",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        <div style={{ background: "#0066ff", color: "white", padding: "12px 16px", fontWeight: "bold", fontSize: "16px", borderBottom: "4px solid #0af" }}>
+          Selected Device
+          <button
+            onClick={onClose}
+            style={{ float: "right", background: "none", border: "none", color: "white", fontWeight: "bold", cursor: "pointer" }}
+          >
+            ✕
+          </button>
+        </div>
+        <div style={{ padding: "12px 16px", fontSize: "14px" }}>
+          <div><strong>ID</strong> &nbsp; | &nbsp; {drone.id}</div>
+          <div><strong>Longitude</strong> &nbsp; | &nbsp; {drone.lng}</div>
+          <div><strong>Latitude</strong> &nbsp; | &nbsp; {drone.lat}</div>
+          <div><strong>Altitude</strong> &nbsp; | &nbsp; 150 m</div>
+        </div>
+      </div>
+    );
+  }
+  
