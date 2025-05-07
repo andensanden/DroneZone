@@ -23,6 +23,10 @@ import LocationTracker from "@/mapScripts/locationTracker";
 import { DronepathHandler } from "@/mapScripts/dronepathHandler";
 
 
+//--------------- Active Drones
+
+import { ActiveDronesDisplayer} from "../ActiveDrones/activeDronesDisplayer";
+
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
 import GPSToggleControl from "@/mapScripts/gpsToggleControl";
@@ -55,6 +59,14 @@ const Map = () => {
     setTrackingEnabled((prev) => !prev);
   };
 
+  // ------------ACTIVE DRONE ----------------
+
+  let droneManager = new ActiveDronesDisplayer;
+  //console.log(droneManager.getDroneID(droneManager.AD2));
+
+
+
+  ///
   return (
     //Overall map component generation with styling
     <div style={{ position: "relative", height: "82vh", width: "100%" }}>
