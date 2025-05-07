@@ -84,4 +84,8 @@ export class DroneClient{
       { userID: this.userID, deviceID: this.deviceID,
         flightTime: flightTime, activeFlight: this.activeFlight });
   }
+
+  updatePosition(position) {
+    this.socket.emit("updatePosition", position);
+  }
 }

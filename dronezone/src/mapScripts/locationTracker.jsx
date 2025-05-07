@@ -3,6 +3,7 @@ import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { droneClient } from './dronepathHandler';
 
 /**
  * Method for tracking user's location.
@@ -30,6 +31,10 @@ function LocationTracker({ trackingEnabled }) {
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
           dispatch(setPosition(newPos));
+          if (droneClient) {
+            const posJSON = JSON.stringify(newPos);
+            droneClient.updatePosition(posJSON);
+          }
           //setAccuracy(pos.coords.accuracy);
           // Center map if it has not already been centered
           if (!mapCentered) {

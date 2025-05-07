@@ -6,7 +6,8 @@ import { useDronepaths } from "./dronepathsContext";
 import L from "leaflet";
 import { DroneClient } from "./socketClient";
 import { supabase } from "@/supabase/config";
-import { useSelector } from "react-redux";
+
+export let droneClient = null;
 
 /**
  * Fetches and sends all dronepaths to and from the database.
@@ -84,7 +85,7 @@ export async function CreateDronepath(nodes, addDronepath, position) {
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
     console.log(userID);
-    const droneClient = new DroneClient(userID,
+    droneClient = new DroneClient(userID,
   "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
    positionJSON, 
    dronepathJSON);
