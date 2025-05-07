@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 /**
  * Method for tracking user's location.
@@ -10,7 +12,8 @@ import 'leaflet/dist/leaflet.css';
  */
 function LocationTracker({ trackingEnabled }) {
   const map = useMap();
-  const [position, setPosition] = useState(null);
+  const dispatch = useDispatch();
+  const {position} = useSelector((state) => state.gpsPos);
   //const [accuracy, setAccuracy] = useState(null); REMOVE ALL MENTIONS OF ACCURACY IF NOT DESIRED
   const [watchId, setWatchId] = useState(null);
   const [mapCentered, setMapCentered] = useState(false);
@@ -26,7 +29,7 @@ function LocationTracker({ trackingEnabled }) {
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
-          setPosition(newPos);
+          dispatch(setPosition(newPos));
           //setAccuracy(pos.coords.accuracy);
           // Center map if it has not already been centered
           if (!mapCentered) {

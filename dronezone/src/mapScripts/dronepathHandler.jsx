@@ -4,6 +4,9 @@ import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { Node } from "./node";
 import { useDronepaths } from "./dronepathsContext";
 import L from "leaflet";
+import { DroneClient } from "./socketClient";
+import { supabase } from "@/supabase/config";
+import { useSelector } from "react-redux";
 
 /**
  * Fetches and sends all dronepaths to and from the database.
@@ -69,7 +72,7 @@ export function DronepathHandler() {
  * @param {*} nodes An array of nodes which will be used for the dronepath.
  * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
  */
-export function CreateDronepath(nodes, addDronepath) {
+export async function CreateDronepath(nodes, addDronepath, position) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
         console.log(nodes[i].position);
@@ -77,6 +80,20 @@ export function CreateDronepath(nodes, addDronepath) {
     }
     addDronepath(newDronepath);
     // Send newDronepath to database
+    const dronepathJSON = createPathJSON(newDronepath);
+    const positionJSON = createPathJSON(position);
+    const userID = await getUserID();
+    console.log(userID);
+    const droneClient = new DroneClient(userID,
+  "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
+   positionJSON, 
+   dronepathJSON);
+    droneClient.clientInit();
+}
+
+async function getUserID() {
+    const userID = await supabase.auth.getUser();
+    return userID.data.user.id;
 }
 
 /**
