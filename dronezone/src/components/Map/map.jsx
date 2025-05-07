@@ -82,7 +82,8 @@ const Map = () => {
         <NodesProvider>
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
-          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} />
+          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
+  setShowActiveDrones={setShowActiveDrones} />
           {/*<MapClick drawingMode={drawingMode} />*/}
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
@@ -90,7 +91,7 @@ const Map = () => {
         <DronepathsProvider>
           <DronepathHandler/>
         </DronepathsProvider>
-        
+
         {showActiveDrones && <PopUpDrone />}
       </MapContainer>
     </div>
