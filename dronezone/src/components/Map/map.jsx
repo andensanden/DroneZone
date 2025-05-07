@@ -61,8 +61,14 @@ const Map = () => {
 
   // ------------ACTIVE DRONE ----------------
 
-  let droneManager = new ActiveDronesDisplayer;
-  //console.log(droneManager.getDroneID(droneManager.AD2));
+  let droneManager = new ActiveDronesDisplayer();
+  droneManager.getAllActive();
+  /*
+  console.log(droneManager.getInfoFromDrone(droneManager.allActiveDrones[0]));
+  droneManager.updateArray();
+  console.log(droneManager.getInfoFromDrone(droneManager.allActiveDrones[0]));*/
+
+
 
 
 
