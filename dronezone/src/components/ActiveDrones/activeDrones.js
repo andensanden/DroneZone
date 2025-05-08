@@ -15,7 +15,7 @@ class ActiveDrone {
     constructor(id, latLng, heading, altitude, activePath) {
         this.id = id;
         this.lat = latLng.lat;
-        this.lng = latLng.lng;;
+        this.lng = latLng.lng;
         this.heading = heading;
         this.altitude = altitude;
         this.activePath = activePath;
