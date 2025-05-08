@@ -1,3 +1,10 @@
+/**
+ * -- Check if a line segment intersects with any forbidden zones
+ * @param {*} newPoint - The new point to check
+ * @param {*} coords - The existing coordinates of the path
+ * @param {*} zones - The forbidden zones
+ * @returns - True if the line segment intersects with any forbidden zones, otherwise false
+ */
 export function wouldLineIntersectForbiddenZone(newPoint, coords, zones) {
   if (coords.length === 0) {
     return isPointInForbiddenZone(newPoint, zones);
@@ -14,7 +21,14 @@ export function wouldLineIntersectForbiddenZone(newPoint, coords, zones) {
   return false;
 }
 
- // Check if a line segment intersects with a polygon
+ /**
+  * - Check if a line segment intersects with a polygon
+  * - This function checks if either of the endpoints of the line segment is inside the polygon
+  * @param {*} p1 - The first point of the line segment
+  * @param {*} p2 - The second point of the line segment
+  * @param {*} polygon - The polygon to check against
+  * @returns 
+  */
  function doesLineIntersectPolygon(p1, p2, polygon) {
   if (!polygon) return false;
   const polygonCoords = polygon.coords;
