@@ -31,7 +31,7 @@ import { YourDevicesMenu } from "./yourDevicesMenu";
 import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
-
+import { WarningMode } from "./warningMode";
 
 //-------- Main Map Component -------
 const LoggedInMap = () => {
@@ -214,6 +214,7 @@ const LoggedInMap = () => {
 
         {showActiveDrones && <PopUpDrone />}
       </MapContainer>
+      <WarningMode  />
     </div>
   );
 };
