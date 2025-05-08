@@ -5,6 +5,8 @@ import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { droneClient } from './dronepathHandler';
 
+
+
 /**
  * Method for tracking user's location.
  * @param {boolean} trackingEnabled - Whether to track user's location 
@@ -17,21 +19,26 @@ function LocationTracker({ trackingEnabled }) {
   const { position } = useSelector((state) => state.gpsPos);
   const [watchId, setWatchId] = useState(null);
   const [mapCentered, setMapCentered] = useState(false);
+  const { userID } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     // Start or stop tracking based on the trackingEnabled prop
     if (trackingEnabled) {
+
       if (!navigator.geolocation) {
         console.log("Your browser does not support geolocation!");
         return;
       }
+
       // Get Position and update it
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
+          console.log(newPos);
           dispatch(setPosition(newPos));
 
-          updatePositionInDatabase(newPos);
+          updatePositionInDatabase(newPos, userID);
 
           if (!mapCentered) {
             map.flyTo(newPos, map.getZoom());
@@ -43,7 +50,7 @@ function LocationTracker({ trackingEnabled }) {
         },
         {
           enableHighAccuracy: true,
-          maximumAge: 10000,
+          maximumAge: 0,
           timeout: 15000
         }
       );
@@ -75,10 +82,11 @@ function LocationTracker({ trackingEnabled }) {
   );
 }
 
-function updatePositionInDatabase(newPos) {
+function updatePositionInDatabase(newPos, userID) {
+
   if (droneClient) {
     const posJSON = JSON.stringify(newPos);
-    droneClient.updatePosition(posJSON);
+    droneClient.updatePosition(posJSON, userID);
   }
 }
 
