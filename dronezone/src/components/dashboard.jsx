@@ -1,7 +1,10 @@
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 
 const DashboardPanel = ({ data }) => {
+
+  const { position } = useSelector((state) => state.gpsPos);
+
   return (
     <div style={{
       backgroundColor: 'white',
@@ -22,8 +25,8 @@ const DashboardPanel = ({ data }) => {
         Dashboard
       </div>
       <div style={{ padding: '12px 16px' }}>
-        <DashboardRow label="Longitude" value={data.longitude} />
-        <DashboardRow label="Latitude" value={data.latitude} />
+        <DashboardRow label="Longitude" value={Number(position[0]).toFixed(4)} />
+        <DashboardRow label="Latitude" value={Number(position[1]).toFixed(4)} />
         <DashboardRow label="Altitude" value={data.altitude} />
         <DashboardRow label="Time Elapsed" value={data.timeElapsed || ''} bold />
       </div>
