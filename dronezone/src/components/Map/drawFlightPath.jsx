@@ -55,7 +55,7 @@ export function DrawFlightPathMenu({
           gap: "30px",
         }}
       >
-        <span>Draw Flight Path</span>
+        <span className="hidden md:block">Draw Flight Path</span>
         <GiPathDistance size={24} />
       </button>
 
