@@ -1,34 +1,45 @@
 import { useEffect, useState } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { droneClient } from './dronepathHandler';
+
+
 
 /**
  * Method for tracking user's location.
- * @param {boolean} trackingEnabled - whether to track user's location 
+ * @param {boolean} trackingEnabled - Whether to track user's location 
  * @returns {JSX.Element} - Return a marker at given position
  * 
  */
 function LocationTracker({ trackingEnabled }) {
   const map = useMap();
-  const [position, setPosition] = useState(null);
-  //const [accuracy, setAccuracy] = useState(null); REMOVE ALL MENTIONS OF ACCURACY IF NOT DESIRED
+  const dispatch = useDispatch();
+  const { position } = useSelector((state) => state.gpsPos);
   const [watchId, setWatchId] = useState(null);
   const [mapCentered, setMapCentered] = useState(false);
+  const { userID } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     // Start or stop tracking based on the trackingEnabled prop
     if (trackingEnabled) {
+
       if (!navigator.geolocation) {
         console.log("Your browser does not support geolocation!");
         return;
       }
+
       // Get Position and update it
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
-          setPosition(newPos);
-          //setAccuracy(pos.coords.accuracy);
-          // Center map if it has not already been centered
+          console.log(newPos);
+          dispatch(setPosition(newPos));
+
+          updatePositionInDatabase(newPos, userID);
+
           if (!mapCentered) {
             map.flyTo(newPos, map.getZoom());
             setMapCentered(true);
@@ -39,7 +50,7 @@ function LocationTracker({ trackingEnabled }) {
         },
         {
           enableHighAccuracy: true,
-          maximumAge: 10000,
+          maximumAge: 0,
           timeout: 15000
         }
       );
@@ -65,19 +76,18 @@ function LocationTracker({ trackingEnabled }) {
       {trackingEnabled && position && (
         <>
           <Marker position={position} />
-          {/*accuracy && (
-                      <Circle
-                        center={position}
-                        radius={accuracy}
-                        color="blue"
-                        fillColor="blue"
-                        fillOpacity={0.2}
-                      />
-                    )*/}
         </>
       )}
     </>
   );
+}
+
+function updatePositionInDatabase(newPos, userID) {
+
+  if (droneClient) {
+    const posJSON = JSON.stringify(newPos);
+    droneClient.updatePosition(posJSON, userID);
+  }
 }
 
 export default LocationTracker;

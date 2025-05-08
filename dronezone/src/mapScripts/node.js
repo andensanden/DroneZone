@@ -1,5 +1,3 @@
-import { TbHomeSignal } from "react-icons/tb";
-
 const defaultRadius = 20;
 
 /**

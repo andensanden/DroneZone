@@ -23,7 +23,7 @@ export function LoginForm() {
       return;
     }
 
-    dispatch(login(data.user.email));
+    dispatch(login({email: data.user.email, userID: data.user.id}));
     toast.success("You have been logged in");
     navigate("/");
   }

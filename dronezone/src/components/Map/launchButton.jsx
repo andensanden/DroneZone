@@ -1,15 +1,9 @@
 import React from 'react';
 import { useFlightMode } from './inFlightContext'; // Adjust the path as necessary
+import { EndFlightButton } from './endFlightButton';
 
-export function LaunchButton({ onClick }) {
+export function LaunchButton({ onLaunchClick, onEndClick }) {
   const { flightMode, toggleMode } = useFlightMode();
-
-  const handleClick = () => {
-    toggleMode();
-    if (onClick) {
-      onClick();
-    }
-  };
 
   return (
     <div
@@ -21,12 +15,27 @@ export function LaunchButton({ onClick }) {
         zIndex: 1000
       }}
     >
-      <button className="bg-primary-blue text-white font-bold text-xl md:text-3xl pt-[10px] pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px] rounded-xl boarder-none cursor-pointer"
-        
+
+      {flightMode === 'drawFlightMode' ? <ButtonStart onClick={onLaunchClick} toggleMode={toggleMode}/> 
+                  : <EndFlightButton onClick={onEndClick}/>}
+    </div>
+  );
+}
+
+function ButtonStart({onClick, toggleMode}) {
+  const handleClick = () => {
+    toggleMode();
+    if (onClick) {
+      onClick();
+    }
+  };
+
+  return(
+  <button
+        className="bg-primary-blue text-white font-bold text-xl md:text-3xl pt-[10px] pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px] rounded-xl boarder-none cursor-pointer"
         onClick={handleClick}
       >
-        {flightMode === 'drawFlightMode' ? 'Launch' : 'In Flight'}
+        Launch
       </button>
-    </div>
   );
 }
