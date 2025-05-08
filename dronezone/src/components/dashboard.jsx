@@ -1,31 +1,22 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import useFlightTimer from './Map/dashboardTimer';
 
+const DashboardPanel = ({ data,launchActive,resetKey }) => {
 
-const DashboardPanel = ({ data }) => {
+  const { position } = useSelector((state) => state.gpsPos);
+  const { formatted: formattedTime } = useFlightTimer(launchActive, resetKey);
+
   return (
-    <div style={{
-      backgroundColor: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-      width: '260px',
-      fontFamily: 'Arial, sans-serif',
-    }}>
-      <div style={{
-        backgroundColor: '#2563eb',
-        color: 'white',
-        padding: '12px 16px',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        borderBottom: '4px solid #1e40af',
-      }}>
+    <div className="hidden sm:block bg-white rounded-2xl w-[170px] md:w-[250px]">
+      <div className="bg-primary-blue text-white rounded-t-2xl pt-[12px] pb-[12px] pl-[16px] pr-[16px] font-bold text-base border-b-[4px] border-b-solid border-blue-900">
         Dashboard
       </div>
       <div style={{ padding: '12px 16px' }}>
-        <DashboardRow label="Longitude" value={data.longitude} />
-        <DashboardRow label="Latitude" value={data.latitude} />
+        <DashboardRow label="Longitude" value={Number(position[0]).toFixed(4)} />
+        <DashboardRow label="Latitude" value={Number(position[1]).toFixed(4)} />
         <DashboardRow label="Altitude" value={data.altitude} />
-        <DashboardRow label="Time Elapsed" value={data.timeElapsed || ''} bold />
+        <DashboardRow label="Time Elapsed" value={formattedTime} bold />
       </div>
     </div>
   );

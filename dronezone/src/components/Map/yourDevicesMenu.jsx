@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
+import { Logo } from '../logo';
 
 
 export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom, onToggleMenu }) {
@@ -11,7 +12,8 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
 
   const [deviceName, setDeviceName] = useState([]);
 
- /* useEffect(() => { 
+  useEffect(() => { 
+
       const fetchData = async() => {
 
         const { data, error } = await supabase.auth.getUser();
@@ -26,7 +28,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       fetchData();
       }, []);
 
-*/
+
   return (
     <div
       style={{

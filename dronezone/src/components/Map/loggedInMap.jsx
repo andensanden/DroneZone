@@ -32,6 +32,7 @@ import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
 import { WarningMode } from "./warningMode";
+import { SmallDashboard } from "../smallDashboard";
 
 //import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
 import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";
@@ -86,21 +87,8 @@ const LoggedInMap = () => {
     });
   };
   // For timer in dashpanel
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => {
-      setElapsedSeconds((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-  const formatTime = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-      2,
-      "0"
-    )}`;
-  };
+  const [resetTimerCounter, setResetTimerCounter] = useState(0);
+
   //-----------------------
 
   const toggleTracking = () => {
@@ -111,15 +99,16 @@ const LoggedInMap = () => {
   const [showDashboard, setShowDashboard] = useState(false);
 
   const handleLaunchClick = () => {
-    setShowDashboard((prevState) => !prevState);
-    setLaunch((prevState) => !prevState);
+    setShowDashboard(true);
+    setLaunch(launch);
   };
 
   const handleEndFlightClick = () => {
-    setShowDashboard((prevState) => !prevState);
-    setLaunch((prevState) => !prevState);
+    setShowDashboard(false);
+    setLaunch(false);
+    setResetTimerCounter(prev => prev + 1); // trigger reset
     EndFlight();
-  }
+  };
 
   return (
     //Overall map component generation with styling
@@ -161,12 +150,14 @@ const LoggedInMap = () => {
                 zIndex: 1000,
               }}
             >
+              <SmallDashboard />
               <DashboardPanel
+                launchActive={showDashboard}
+                resetKey={resetTimerCounter}
                 data={{
                   longitude: position[0],
                   latitude: position[1],
-                  altitude: "N/A", // Replace when you have real data
-                  timeElapsed: formatTime(elapsedSeconds),
+                  altitude: "N/A",
                 }}
               />
             </div>
@@ -201,7 +192,7 @@ const LoggedInMap = () => {
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
-  setShowActiveDrones={setShowActiveDrones} />
+                          setShowActiveDrones={setShowActiveDrones} />
           <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
