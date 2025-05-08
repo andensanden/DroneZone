@@ -42,7 +42,7 @@ export function DrawFlightPathMenu({
           setDevicesMenuOpen(false);
         }}
         style={{
-          background: "#FFD700",
+          background: "#FFCC00",
           padding: "10px 16px",
           borderRadius: "12px",
           boxShadow: "0 2px 10px rgba(0,0,0,0.2)",

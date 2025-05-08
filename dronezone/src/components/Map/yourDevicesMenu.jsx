@@ -43,7 +43,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       <button
         onClick={onToggleMenu} 
         style={{
-          background: '#FFD700',
+          background: '#FFCC00',
           padding: '10px 16px',
           borderRadius: '12px',
           boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
@@ -119,7 +119,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
                 fontSize: '14px',
                 }}
               >
-              <button className='text-primary-yellow hover:scale-107 transition-all duration-200'
+              <button className='text-primary-yellow hover:scale-107 transition-all duration-200 pl-10'
                onClick={() => navigate("/account")}>
                 + Add New Device 
               </button>
