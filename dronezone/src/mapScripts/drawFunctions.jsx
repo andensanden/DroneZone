@@ -10,7 +10,7 @@ import { Circle, Polyline, Polygon } from 'react-leaflet'
 function DrawNodes({nodes, color}) {
     return (
         <>
-            {nodes.map((node, index) => { if (node.visible) return(
+            {nodes && nodes.map((node, index) => { if (node.visible) return(
                 <Circle className = "map-clickable"
                 key={index} center={node.position} radius={node.radius}
                 color={color} fillColor={color} fillOpacity={0.5}/>
@@ -29,7 +29,7 @@ function DrawNodes({nodes, color}) {
 function DrawPaths({paths, color}) {
     return (
         <>
-            {paths.map((path, index) => { return(
+            {paths && paths.map((path, index) => { return(
                 <Polyline className = "map-clickable"
                 key={index} positions={path}
                 color={color} weight={1}/>
@@ -48,7 +48,7 @@ function DrawPaths({paths, color}) {
 function DrawBufferZones({bufferZones, color}) {
     return (
         <>
-            {bufferZones.map((zone, index) => { return(
+            {bufferZones && bufferZones.map((zone, index) => { return(
                 <Polygon className = "map-clickable"
                 key={index} positions={zone}
                 color={color} fillOpacity={0.3} weight={1}/>

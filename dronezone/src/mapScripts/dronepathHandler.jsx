@@ -4,6 +4,12 @@ import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
 import { Node } from "./node";
 import { useDronepaths } from "./dronepathsContext";
 import L from "leaflet";
+import { DroneClient } from "./socketClient";
+import { supabase } from "@/supabase/config";
+
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+export let droneClient = null;
 
 /**
  * Fetches and sends all dronepaths to and from the database.
@@ -12,48 +18,24 @@ import L from "leaflet";
 export function DronepathHandler() {
     const { dronepaths, addDronepath } = useDronepaths();
 
-    // Temporary for testing
-    const [dronepathTest] = useState(() => {
-        const path = new Dronepath(1);
-        path.addNode(new Node(L.latLng(59.3250, 18.0708)));
-        path.addNode(new Node(L.latLng(59.3470, 18.0726)));
-        path.addNode(new Node(L.latLng(59.3326, 18.0649)));
-        return path;
-    });
-
-    const [dronepathTest2] = useState(() => {
-        const path = new Dronepath(1, "green");
-        path.addNode(new Node(L.latLng(59.3275, 18.0546)));
-        path.addNode(new Node(L.latLng(59.3178, 18.0845)));
-        path.addNode(new Node(L.latLng(59.3240, 18.1030)));
-        return path;
-    });
-    
-
-    // Run once on initial mounting of component
-    // Use this to fetch all dronepaths
-    /*useEffect(() => {
+    useEffect(() => {
     async function fetchData() {
-        const response = await fetch("http://localhost:8080/api/zone/restricted", 
+        const response = await fetch(backendURL + "/api/drone/activeDrones", 
                         {method: "GET", headers: { "Content-Type": "application/json"}});
         const data = await response.json();
+
+        let dronepaths = [];
+        data.forEach((dataObject, index) => {
+            dronepaths.push(dataObject.dronePath);
+        })
         
-        data.forEach((dronepathJSON, index) => {
+        dronepaths.forEach((dronepathJSON, index) => {
             const newDronepath = createDronepathFromJSON(dronepathJSON);
-            setDronepaths((prevPaths) => {
-                const newPaths = [...prevPaths, newDronepath];
-                return newPaths;
-            });
+            addDronepath(newDronepath);
         })
         }
         fetchData();
-    }, []);*/
-
-    // Temporary for testing
-    useEffect(() => {
-            addDronepath(dronepathTest);
-            addDronepath(dronepathTest2);
-        }, []);
+    }, []);
 
     return (
         <>
@@ -69,14 +51,27 @@ export function DronepathHandler() {
  * @param {*} nodes An array of nodes which will be used for the dronepath.
  * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
  */
-export function CreateDronepath(nodes, addDronepath) {
+export async function CreateDronepath(nodes, addDronepath, position) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
-        console.log(nodes[i].position);
         newDronepath.addNode(nodes[i]);
     }
     addDronepath(newDronepath);
-    // Send newDronepath to database
+    sendDronepathToDatabase(newDronepath, position);
+}
+
+async function sendDronepathToDatabase(dronepath, position) {
+    const dronepathJSON = createPathJSON(dronepath);
+    const positionJSON = createPathJSON(position);
+    const userID = await getUserID();
+    droneClient = new DroneClient(userID, "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
+        positionJSON, dronepathJSON);
+    droneClient.clientInit();
+}
+
+async function getUserID() {
+    const userID = await supabase.auth.getUser();
+    return userID.data.user.id;
 }
 
 /**
@@ -106,9 +101,8 @@ function createPathJSON(dronepath) {
  * @param {*} pathJSON The dronepath JSON to convert.
  * @returns A dronepath object.
  */
-function createDronepathFromJSON(pathJSON) {
+export function createDronepathFromJSON(pathJSON) {
   const data = JSON.parse(pathJSON);
-
   const dronepath = new Dronepath(1);
 
   data.nodes.forEach(nodeData => {
@@ -119,4 +113,9 @@ function createDronepathFromJSON(pathJSON) {
   });
 
   return dronepath;
+}
+
+export function EndFlight() {
+    const temporaryFlightTime = 5;  // For testing, remove when actual time is added
+    droneClient.endFlight(temporaryFlightTime);
 }

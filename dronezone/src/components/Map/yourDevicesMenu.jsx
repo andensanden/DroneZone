@@ -24,7 +24,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         
       }
       fetchData();
-      }, [deviceName]);
+      }, []);
 
 */
   return (
@@ -126,5 +126,5 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         </div>
       )}
     </div>
-  );
+  );*/
 }

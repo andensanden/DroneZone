@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 import { useMap, Popup } from 'react-leaflet'
 import { Node } from './node.js'
-import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
+import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
-import { useZones } from './ZonesContext.jsx'
-import { useNodes } from './nodesContext.jsx'
-import { CreateDronepath } from './dronepathHandler.jsx'
-import { useDronepaths } from './dronepathsContext.jsx'
+import { useZones } from './zonesContext'
+import { useNodes } from './nodesContext'
+import { CreateDronepath } from './dronepathHandler'
+import { useDronepaths } from './dronepathsContext'
+import { useSelector } from 'react-redux'
 
 /*
     Handles what happens when the user clicks on the map
@@ -23,6 +24,7 @@ function MapClick({ drawingMode, isLaunched }) {
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
     const { addDronepath } = useDronepaths();
+    const {position} = useSelector((state) => state.gpsPos);
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -48,7 +50,7 @@ function MapClick({ drawingMode, isLaunched }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
-    useLaunch(isLaunched, nodes, addDronepath, setNodes);
+    useLaunch(isLaunched, nodes, addDronepath, setNodes, position);
 
     return (
         <>
@@ -158,10 +160,10 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, addDronepath, setNodes) {
+function useLaunch(isLaunched, nodes, addDronepath, setNodes, position) {
     useEffect(() => {
         if (isLaunched) {
-            CreateDronepath(nodes, addDronepath);
+            CreateDronepath(nodes, addDronepath, position);
             setNodes([]);
         }
     }, [isLaunched]);

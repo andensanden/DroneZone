@@ -12,8 +12,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { useMap, Polygon } from 'react-leaflet';
 import { ForbiddenZone } from './forbiddenZone.js';
-import { useZones } from './ZonesContext.jsx';
+import { useZones } from './zonesContext';
 import L from 'leaflet';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -91,7 +92,7 @@ function ForbiddenZoneDrawing({ drawingMode }) {
   // Use this to create all forbidden zones
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("http://localhost:8080/api/zone/restricted", 
+      const response = await fetch(backendURL + "/api/zone/restricted", 
                       {method: "GET", headers: { "Content-Type": "application/json"}});
       const data = await response.json();
 
