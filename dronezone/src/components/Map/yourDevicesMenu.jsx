@@ -11,7 +11,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
 
   const [deviceName, setDeviceName] = useState([]);
 
-  /*useEffect(() => { 
+ /* useEffect(() => { 
       const fetchData = async() => {
 
         const { data, error } = await supabase.auth.getUser();
@@ -26,7 +26,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       fetchData();
       }, []);
 
-
+*/
   return (
     <div
       style={{
@@ -126,5 +126,5 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         </div>
       )}
     </div>
-  );*/
+  );
 }

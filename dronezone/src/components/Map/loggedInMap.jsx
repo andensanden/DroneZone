@@ -30,7 +30,11 @@ import { DrawFlightPathMenu } from "./drawFlightPath";
 import { YourDevicesMenu } from "./yourDevicesMenu";
 import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
+import { PopUpDrone } from "./popUpDrone";
+import { WarningMode } from "./warningMode";
 
+//import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
+import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";
 //-------- Main Map Component -------
 const LoggedInMap = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
@@ -40,6 +44,9 @@ const LoggedInMap = () => {
   //-----------------
   //For launch functionality
   const [launch, setLaunch] = useState(false);
+
+  const [showActiveDrones, setShowActiveDrones] = useState(true);
+  const drones = ActiveDronesDisplayer();
 
   //-----------------
   //For draw path menu
@@ -190,10 +197,11 @@ const LoggedInMap = () => {
             onToggleMenu={toggleDevicesMenu}
           />
         )}
-
+       
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
-          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} />
+          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
+  setShowActiveDrones={setShowActiveDrones} />
           <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
@@ -212,7 +220,10 @@ const LoggedInMap = () => {
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
           </NodesProvider>
         </ZonesProvider>
+
+        {showActiveDrones && <PopUpDrone  />}
       </MapContainer>
+      <WarningMode  />
     </div>
   );
 };
