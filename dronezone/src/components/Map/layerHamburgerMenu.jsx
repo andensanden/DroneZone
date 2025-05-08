@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useZones } from '@/mapScripts/ZonesContext'
+import { useZones } from '@/mapScripts/zonesContext'
 import { IoMenu } from "react-icons/io5";
 
 export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
