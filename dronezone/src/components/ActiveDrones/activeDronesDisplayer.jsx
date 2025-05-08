@@ -8,6 +8,9 @@ import ActiveDrone from './activeDrones'
 export class ActiveDronesDisplayer {
 
   allActiveDrones = [];
+  
+  //Synka med becca om interval killswitch med layersbutton 
+  intervalId = setInterval(this.updateArray, 5000);
 
   constructor(){
         // Dynamically create ActiveDrone instances and add them to the allActiveDrones array
@@ -25,6 +28,8 @@ export class ActiveDronesDisplayer {
           const drone = new ActiveDrone(data.ID, data.flightPath);
           this.allActiveDrones.push(drone);
         });
+
+        
   }
 
   //Returns all of the active drones Info
@@ -60,13 +65,13 @@ export class ActiveDronesDisplayer {
   };
 
   getDroneID(activeDrone){
-
+    //Returns the droneID of the active drone
     return activeDrone.ID;
 
   };
 
   getInfoFromDrone(ActiveDrone){
-
+    //Returns all of the info of an active drone
     const droneInfo = {
       ID: ActiveDrone.ID,
       flightPath: ActiveDrone.flightPath,
