@@ -3,6 +3,8 @@ import React from 'react';
 //----- ActiveDrone Class Import --------
 import ActiveDrone from './activeDrones'
 
+import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler';
+
 
 
 export class ActiveDronesDisplayer {
@@ -74,7 +76,33 @@ export class ActiveDronesDisplayer {
       latitude: ActiveDrone.latitude
     };
 
+    async function fetchPaths(data) {
+      const dronepathJSONS = [];
+      data.forEach((dataObject, index) => {
+          dronepathJSONS.push(dataObject.dronePath);
+      })
+
+      const dronepaths = [];
+      dronepathJSONS.forEach((dronepathJSON, index) => {
+        const newDronepath = createDronepathFromJSON(dronepathJSON);
+        dronepaths.push(newDronepath);
+      })
+
+      return dronepaths;
+    }
+
+    async function fetchIDs() {
+
+    }
+
+    async function fetchData() {
+      const response = await fetch(backendURL + "/api/drone/activeDrones", 
+                      {method: "GET", headers: { "Content-Type": "application/json"}});
+      const data = await response.json();
+
+      return data;
+      }
+
     return droneInfo;
   };
-
 };

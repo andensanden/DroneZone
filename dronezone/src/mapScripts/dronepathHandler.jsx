@@ -101,7 +101,7 @@ function createPathJSON(dronepath) {
  * @param {*} pathJSON The dronepath JSON to convert.
  * @returns A dronepath object.
  */
-function createDronepathFromJSON(pathJSON) {
+export function createDronepathFromJSON(pathJSON) {
   const data = JSON.parse(pathJSON);
   const dronepath = new Dronepath(1);
 

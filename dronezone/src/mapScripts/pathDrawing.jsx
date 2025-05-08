@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react'
 import { useMap, Popup } from 'react-leaflet'
 import { Node } from './node.js'
-import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions.jsx'
+import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
-import { useZones } from './zonesContext.jsx'
-import { useNodes } from './nodesContext.jsx'
-import { CreateDronepath } from './dronepathHandler.jsx'
-import { useDronepaths } from './dronepathsContext.jsx'
+import { useZones } from './zonesContext'
+import { useNodes } from './nodesContext'
+import { CreateDronepath } from './dronepathHandler'
+import { useDronepaths } from './dronepathsContext'
 import { useSelector } from 'react-redux'
 
 /*
