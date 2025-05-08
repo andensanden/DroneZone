@@ -221,7 +221,7 @@ const LoggedInMap = () => {
           </NodesProvider>
         </ZonesProvider>
 
-        {showActiveDrones && <PopUpDrone drones={drones} />}
+        {showActiveDrones && <PopUpDrone  />}
       </MapContainer>
       <WarningMode  />
     </div>
