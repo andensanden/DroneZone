@@ -16,7 +16,7 @@ export function SelectedDronePanel({ drone, onClose }) {
           fontFamily: "Arial, sans-serif",
         }}
       >
-        <div style={{ background: "#2137F8", color: "white", padding: "12px 16px", fontWeight: "bold", fontSize: "16px", borderBottom: "4px solid #0af" }}>
+        <div style={{ background: "#2137F8", color: "white", padding: "12px 16px", fontWeight: "bold", fontSize: "16px", borderBottom: "4px solid #1c398e" }}>
           Selected Device
           <button
             onClick={onClose}
