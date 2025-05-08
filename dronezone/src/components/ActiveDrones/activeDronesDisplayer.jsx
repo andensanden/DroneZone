@@ -58,7 +58,6 @@ export function ActiveDronesDisplayer() {
   async function updateActiveDrones() {
     const data = await fetchData();
     buildActiveDrones(data);
-    console.log(droneDataRef.current);
   };
 
   function getDroneID(activeDrone){
