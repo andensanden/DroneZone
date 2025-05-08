@@ -150,7 +150,7 @@ const LoggedInMap = () => {
               }}
             >
               <DashboardPanel
-                launchActive={launch}
+                launchActive={showDashboard}
                 resetKey={resetTimerCounter}
                 data={{
                   longitude: position[0],
