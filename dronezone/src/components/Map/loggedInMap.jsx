@@ -32,6 +32,7 @@ import DashboardPanel from "../dashboard";
 import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
 import { WarningMode } from "./warningMode";
+import { SmallDashboard } from "../smallDashboard";
 
 //import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
 import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";
@@ -149,6 +150,7 @@ const LoggedInMap = () => {
                 zIndex: 1000,
               }}
             >
+              <SmallDashboard />
               <DashboardPanel
                 launchActive={showDashboard}
                 resetKey={resetTimerCounter}
@@ -190,7 +192,7 @@ const LoggedInMap = () => {
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
-  setShowActiveDrones={setShowActiveDrones} />
+                          setShowActiveDrones={setShowActiveDrones} />
           <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu

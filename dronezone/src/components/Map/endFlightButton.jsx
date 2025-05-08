@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFlightMode } from './inFlightContext'; // Adjust the path as necessary
+import { useFlightMode } from './inFlightContext';
 
 export function EndFlightButton({ onClick }) {
   const { toggleMode } = useFlightMode();
@@ -22,19 +22,8 @@ export function EndFlightButton({ onClick }) {
       }}
     >
       <button
-        style={{
-          backgroundColor: '#1D4ED8',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: '30px',
-          padding: '10px 55px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          border: 'none',
-          cursor: 'pointer',
-          whiteSpace: 'nowrap',     // <- forces single line
-    display: 'inline-block' 
-        }}
+        className="bg-red-600 text-white font-bold text-lg md:text-2xl pt-[10px] pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px]
+         rounded-xl boarder-none hover:scale-107 transition-all duration-200 whitespace-nowrap"
         onClick={handleClick}
       >
         End Flight
