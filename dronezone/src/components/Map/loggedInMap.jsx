@@ -33,7 +33,7 @@ import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
 import { WarningMode } from "./warningMode";
 
-import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
+//import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
 import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";
 //-------- Main Map Component -------
 const LoggedInMap = () => {
@@ -46,7 +46,7 @@ const LoggedInMap = () => {
   const [launch, setLaunch] = useState(false);
 
   const [showActiveDrones, setShowActiveDrones] = useState(true);
-  const drones = getAllActiveDrones();
+  const drones = ActiveDronesDisplayer();
 
   //-----------------
   //For draw path menu

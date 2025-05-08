@@ -10,7 +10,7 @@ const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export function ActiveDronesDisplayer() {
 
-  let allActiveDrones = [new ActiveDrone("XYZ456", 59.3287, 18.1712, 135, 89, null),
+  const allActiveDrones = [new ActiveDrone("XYZ456", 59.3287, 18.1712, 135, 89, null),
   new ActiveDrone("A73X9Z", 59.4080, 17.9390, 45, 110, null),
   new ActiveDrone("M12KD7", 59.4105, 17.9500, 90, 131, null),
   new ActiveDrone("X8W3P0", 59.4052, 17.9555, 320, 7, null),
