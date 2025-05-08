@@ -33,10 +33,10 @@ export function Header() {
         </div> : null}
 
         {/* mobile compatible menu */}
-        <button className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden hover:scale-107 transition-all duration-200" >
+        <div className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden hover:scale-107 transition-all duration-200" >
           <NavigationMenu />
 
-        </button>
+        </div>
         <div className="hidden sm:flex items-center mr-5 h-12 bg-gray-200 rounded-2xl">
 
 
@@ -62,13 +62,13 @@ export function Header() {
           <button className=" p-3 rounded-xl"><GoQuestion size={25} className="text-gray-700  hover:scale-107 transition-all duration-200"
           onClick={() => navigate("/info")}/> </button> 
 
-          <button
+          <div
             className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
           >
 
 
             {isAuth ? <LoginDropDown /> : <GrLogin size={20} onClick={() => navigate("/login")}/>}
-          </button>
+          </div>
         </div>
       </div>
     </div>

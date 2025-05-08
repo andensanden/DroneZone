@@ -13,6 +13,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
   const [deviceName, setDeviceName] = useState([]);
 
   useEffect(() => { 
+
       const fetchData = async() => {
 
         const { data, error } = await supabase.auth.getUser();

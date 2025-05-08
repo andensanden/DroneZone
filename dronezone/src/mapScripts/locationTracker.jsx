@@ -35,7 +35,6 @@ function LocationTracker({ trackingEnabled }) {
       const id = navigator.geolocation.watchPosition(
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
-          console.log(newPos);
           dispatch(setPosition(newPos));
 
           updatePositionInDatabase(newPos, userID);
