@@ -12,10 +12,10 @@ class ActiveDrone {
 
     //-----Constructor--------
 
-    constructor(id, lat, lng, heading, altitude, activePath) {
+    constructor(id, latLng, heading, altitude, activePath) {
         this.id = id;
-        this.lat = lat;
-        this.lng = lng;;
+        this.lat = latLng.lat;
+        this.lng = latLng.lng;;
         this.heading = heading;
         this.altitude = altitude;
         this.activePath = activePath;

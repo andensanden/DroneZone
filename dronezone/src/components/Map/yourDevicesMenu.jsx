@@ -54,7 +54,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
           gap: '55px'
         }}
       >
-        <span>Your Devices</span>
+        <span className="hidden md:block">Your Devices</span>
         <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />
       </button>
 
