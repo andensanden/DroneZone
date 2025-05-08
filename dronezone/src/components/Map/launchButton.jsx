@@ -21,18 +21,8 @@ export function LaunchButton({ onClick }) {
         zIndex: 1000
       }}
     >
-      <button
-        style={{
-          backgroundColor: '#1D4ED8',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: '30px',
-          padding: '10px 55px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          border: 'none',
-          cursor: 'pointer'
-        }}
+      <button className="bg-primary-blue text-white font-bold text-xl md:text-3xl pt-[10px] pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px] rounded-xl boarder-none cursor-pointer"
+        
         onClick={handleClick}
       >
         {flightMode === 'drawFlightMode' ? 'Launch' : 'In Flight'}
