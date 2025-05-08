@@ -59,10 +59,6 @@ const Map = () => {
     setTrackingEnabled((prev) => !prev);
   };
 
-  // ------------ACTIVE DRONE ----------------
-
-  let droneManager = new ActiveDronesDisplayer();
-  droneManager.getAllActive();
   /*
   console.log(droneManager.getInfoFromDrone(droneManager.allActiveDrones[0]));
   droneManager.updateArray();
@@ -95,6 +91,8 @@ const Map = () => {
 
         {/* User tracking functionality*/}
         <LocationTracker trackingEnabled={trackingEnabled} />
+
+        <ActiveDronesDisplayer/>
 
         <NodesProvider>
         <ZonesProvider>

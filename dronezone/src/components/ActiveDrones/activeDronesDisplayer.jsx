@@ -1,20 +1,24 @@
 import React from 'react';
+import { useEffect } from 'react';
 
 //----- ActiveDrone Class Import --------
 import ActiveDrone from './activeDrones'
 
 import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler';
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
+export function ActiveDronesDisplayer() {
 
-export class ActiveDronesDisplayer {
+  const allActiveDrones = [];
 
-  allActiveDrones = [];
-
-  constructor(){
+  /*constructor(){
         // Dynamically create ActiveDrone instances and add them to the allActiveDrones array
         
-        //Temp data, this will be updated 
+        //Temp data, this will be updated
+        const data = fetchData(); 
+        const dronepaths = fetchPaths(data);
+        console.log(dronepaths[0]);
         const droneData = [
           { ID: 'ABC123', flightPath: null },
           { ID: 'DEF456', flightPath: null },
@@ -25,27 +29,74 @@ export class ActiveDronesDisplayer {
 
         droneData.forEach(data => {
           const drone = new ActiveDrone(data.ID, data.flightPath);
-          this.allActiveDrones.push(drone);
+           allActiveDrones.push(drone);
         });
-  }
+  }*/
+
+  useEffect(() => {
+    async function init() {
+      function fetchPaths(dataOb) {
+        console.log(dataOb);
+        const dronepathJSONS = [];
+        dataOb.forEach((dataObject) => {
+          dronepathJSONS.push(dataObject.dronePath);
+        });
+        console.log("JSONs: " + dronepathJSONS);
+  
+        const dronepaths = [];
+        dronepathJSONS.forEach((dronepathJSON) => {
+          const newDronepath = createDronepathFromJSON(dronepathJSON);
+          dronepaths.push(newDronepath);
+        });
+        console.log("Dronepaths: ", dronepaths);
+  
+        return dronepaths;
+      }
+  
+      async function fetchData() {
+        const response = await fetch(`${backendURL}/api/drone/activeDrones`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        return await response.json();
+      }
+  
+      const data = await fetchData();
+      const dronepaths = fetchPaths(data); // Now data is an array
+  
+      console.log(dronepaths[0]);
+  
+      const droneData = data.map((d, idx) => ({
+        ID: d.ID,
+        flightPath: dronepaths[idx] || null,
+      }));
+  
+      droneData.forEach((data) => {
+        const drone = new ActiveDrone(data.ID, data.flightPath);
+        allActiveDrones.push(drone);
+      });
+    }
+  
+    init(); // Call the async function
+      }, []);
 
   //Returns all of the active drones Info
-  getAllActive() {
+  function getAllActive() {
 
     const currArr = [];
 
     //Iterates over all of the current drones
-    this.allActiveDrones.forEach((activeDrone, index) => {
-      const dID = this.getInfoFromDrone(activeDrone);
+    allActiveDrones.forEach((activeDrone, index) => {
+      const dID =  getInfoFromDrone(activeDrone);
       currArr[index] = dID;
     });
 
     return currArr;
   }
 
-  updateArray(){
+  function updateArray(){
     // Remove previous data
-    this.allActiveDrones.splice(0, this.allActiveDrones.length);
+     allActiveDrones.splice(0,  allActiveDrones.length);
     
     //Temp data, this will be replaced with a database query
     const newDroneData = [
@@ -56,18 +107,18 @@ export class ActiveDronesDisplayer {
     //Write new data gathered from the Database query
     newDroneData.forEach(data => {
       const drone = new ActiveDrone(data.ID, data.flightPath);
-      this.allActiveDrones.push(drone);
+       allActiveDrones.push(drone);
     });
 
   };
 
-  getDroneID(activeDrone){
+  function getDroneID(activeDrone){
 
     return activeDrone.ID;
 
   };
 
-  getInfoFromDrone(ActiveDrone){
+  function getInfoFromDrone(ActiveDrone){
 
     const droneInfo = {
       ID: ActiveDrone.ID,
@@ -75,34 +126,5 @@ export class ActiveDronesDisplayer {
       longitude: ActiveDrone.longitude, 
       latitude: ActiveDrone.latitude
     };
-
-    async function fetchPaths(data) {
-      const dronepathJSONS = [];
-      data.forEach((dataObject, index) => {
-          dronepathJSONS.push(dataObject.dronePath);
-      })
-
-      const dronepaths = [];
-      dronepathJSONS.forEach((dronepathJSON, index) => {
-        const newDronepath = createDronepathFromJSON(dronepathJSON);
-        dronepaths.push(newDronepath);
-      })
-
-      return dronepaths;
-    }
-
-    async function fetchIDs() {
-
-    }
-
-    async function fetchData() {
-      const response = await fetch(backendURL + "/api/drone/activeDrones", 
-                      {method: "GET", headers: { "Content-Type": "application/json"}});
-      const data = await response.json();
-
-      return data;
-      }
-
-    return droneInfo;
-  };
-};
+}
+}
