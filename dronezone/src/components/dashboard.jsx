@@ -3,22 +3,8 @@ import React from 'react';
 
 const DashboardPanel = ({ data }) => {
   return (
-    <div style={{
-      backgroundColor: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-      width: '260px',
-      fontFamily: 'Arial, sans-serif',
-    }}>
-      <div style={{
-        backgroundColor: '#2563eb',
-        color: 'white',
-        padding: '12px 16px',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        borderBottom: '4px solid #1e40af',
-      }}>
+    <div className="bg-white rounded-2xl w-[260px]">
+      <div className="bg-primary-blue text-white rounded-t-2xl pt-[12px] pb-[12px] pl-[16px] pr-[16px] font-bold text-base border-b-[4px] border-b-solid border-blue-900">
         Dashboard
       </div>
       <div style={{ padding: '12px 16px' }}>

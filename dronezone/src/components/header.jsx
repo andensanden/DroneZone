@@ -33,7 +33,7 @@ export function Header() {
         </div> : null}
 
         {/* mobile compatible menu */}
-        <button className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden" >
+        <button className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden hover:scale-107 transition-all duration-200" >
           <NavigationMenu />
 
         </button>
