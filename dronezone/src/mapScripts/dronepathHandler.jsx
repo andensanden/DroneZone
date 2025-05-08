@@ -18,7 +18,7 @@ export let droneClient = null;
 export function DronepathHandler() {
     const { dronepaths, addDronepath } = useDronepaths();
 
-    useEffect(() => {
+    /*useEffect(() => {
     async function fetchData() {
         const response = await fetch(backendURL + "/api/drone/activeDrones", 
                         {method: "GET", headers: { "Content-Type": "application/json"}});
@@ -43,7 +43,7 @@ export function DronepathHandler() {
                 <DrawDronepath key={index} dronepath={dronepath} color={dronepath.color}/>
             ))}
         </>
-    );
+    );*/
 }
 
 /**

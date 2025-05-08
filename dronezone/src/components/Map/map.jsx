@@ -30,7 +30,7 @@ import { ActiveDronesDisplayer} from "../ActiveDrones/activeDronesDisplayer";
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
 import GPSToggleControl from "@/mapScripts/gpsToggleControl";
-
+import { PopUpDrone } from "./popUpDrone";
 
 
 /**MARKER ON MAP DEPLOYED VERSION*/
@@ -53,16 +53,13 @@ const Map = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [drawingMode, setDrawingMode] = useState("path");
   const position = [59.3293, 18.0686]; // Stockholm coordinates
-
+  const [showActiveDrones, setShowActiveDrones] = useState(true);
+  
 
   const toggleTracking = () => {
     setTrackingEnabled((prev) => !prev);
   };
 
-  // ------------ACTIVE DRONE ----------------
-
-  let droneManager = new ActiveDronesDisplayer();
-  droneManager.getAllActive();
   /*
   console.log(droneManager.getInfoFromDrone(droneManager.allActiveDrones[0]));
   droneManager.updateArray();
@@ -96,10 +93,13 @@ const Map = () => {
         {/* User tracking functionality*/}
         <LocationTracker trackingEnabled={trackingEnabled} />
 
+        <ActiveDronesDisplayer/>
+
         <NodesProvider>
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
-          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} />
+          <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
+  setShowActiveDrones={setShowActiveDrones} />
           {/*<MapClick drawingMode={drawingMode} />*/}
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
@@ -107,6 +107,8 @@ const Map = () => {
         <DronepathsProvider>
           <DronepathHandler/>
         </DronepathsProvider>
+
+        {showActiveDrones && <PopUpDrone />}
       </MapContainer>
     </div>
   );

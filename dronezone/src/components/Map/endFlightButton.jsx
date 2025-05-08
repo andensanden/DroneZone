@@ -15,7 +15,7 @@ export function EndFlightButton({ onClick }) {
     <div
       style={{
         position: 'absolute',
-        bottom: '20px',
+        bottom: '3px',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 1000
@@ -31,7 +31,9 @@ export function EndFlightButton({ onClick }) {
           borderRadius: '12px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           border: 'none',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          whiteSpace: 'nowrap',     // <- forces single line
+    display: 'inline-block' 
         }}
         onClick={handleClick}
       >
