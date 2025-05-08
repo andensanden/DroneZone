@@ -4,15 +4,17 @@ class ActiveDrone {
     //-----Attributes-------
 
     ID = null;
-    longitude = null;
     latitude = null;
+    longitude = null;
     // altitude = null;
     activePath = null;
 
     //-----Constructor--------
 
-    constructor(ID, activePath) {
+    constructor(ID, latLng, activePath) {
         this.ID = ID;
+        this.latitude = latLng.lat;
+        this.longitude = latLng.lng;
         this.activePath = activePath;
     }
 
