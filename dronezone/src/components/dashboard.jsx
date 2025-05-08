@@ -6,7 +6,7 @@ const DashboardPanel = ({ data }) => {
   const { position } = useSelector((state) => state.gpsPos);
 
   return (
-    <div className="bg-white rounded-2xl w-[260px]">
+    <div className="bg-white rounded-2xl w-[200px] md:w-[260px]">
       <div className="bg-primary-blue text-white rounded-t-2xl pt-[12px] pb-[12px] pl-[16px] pr-[16px] font-bold text-base border-b-[4px] border-b-solid border-blue-900">
         Dashboard
       </div>
