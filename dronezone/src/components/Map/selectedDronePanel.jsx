@@ -10,7 +10,7 @@ export function SelectedDronePanel({ drone, onClose }) {
         top: "80px",
         right: "20px",
         zIndex: 1000,
-        width: "260px",
+        width: "220px",
         backgroundColor: "white",
         borderRadius: "16px",
         boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
