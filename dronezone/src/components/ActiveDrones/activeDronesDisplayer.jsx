@@ -14,11 +14,7 @@ export function ActiveDronesDisplayer() {
   const droneDataRef = useRef([]); // Use droneDataRef.current to access the array
 
   useEffect(() => {
-    async function initActiveDrones() {
-      const data = await fetchData();
-      buildActiveDrones(data);
-    }
-    initActiveDrones();
+    updateActiveDrones();
   }, []);
 
   function buildActiveDrones(data) {
@@ -59,22 +55,10 @@ export function ActiveDronesDisplayer() {
     return currArr;
   }
 
-  function updateArray(){
-    // Remove previous data
-     allActiveDrones.splice(0,  allActiveDrones.length);
-    
-    //Temp data, this will be replaced with a database query
-    const newDroneData = [
-      { ID: 'henri1a', flightPath: null },
-      // Add more drone data as needed
-    ];
-
-    //Write new data gathered from the Database query
-    newDroneData.forEach(data => {
-      const drone = new ActiveDrone(data.ID, data.flightPath);
-       allActiveDrones.push(drone);
-    });
-
+  async function updateActiveDrones() {
+    const data = await fetchData();
+    buildActiveDrones(data);
+    console.log(droneDataRef.current);
   };
 
   function getDroneID(activeDrone){
