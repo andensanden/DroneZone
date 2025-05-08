@@ -105,16 +105,8 @@ export function PopUpDrone() {
         map.on("zoom", handleZoom);
         return () => map.off("zoom", handleZoom); // cleanup
         }, [map]);
-        function calculateBearing([lat1, lng1], [lat2, lng2]) {
-            const toRad = (deg) => deg * (Math.PI / 180);
-            const y = Math.sin(toRad(lng2 - lng1)) * Math.cos(toRad(lat2));
-            const x =
-              Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
-              Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(toRad(lng2 - lng1));
-            const bearing = Math.atan2(y, x);
-            return (bearing * 180) / Math.PI;
-          }
-          
+    
+          //Heatmap
             if (zoom < 14) {
                 return <DroneHeatMap droneData={dummyDrones} />;
               }
@@ -133,7 +125,6 @@ export function PopUpDrone() {
           drone.lng + 0.0005 * Math.cos((drone.heading * Math.PI) / 180),
           drone.altitude + 0.0005 * Math.cos((drone.heading * Math.PI) / 180),
         ];
-        const bearing = calculateBearing(position, headingEnd);
 
 
         const labelIcon = L.divIcon({
