@@ -126,5 +126,5 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         </div>
       )}
     </div>
-  );*/
+  );
 }
