@@ -115,25 +115,6 @@ export function PopUpDrone() {
             return (bearing * 180) / Math.PI;
           }
           
-          
-          const triangleIcon = (heading,zoom) =>
-            
-            L.divIcon({
-              className: "arrowhead-icon",
-              html: `
-                <div style="
-                  width: 0;
-                  height: 0;
-                  border-left: 8px solid transparent;
-                  border-right: 8px solid transparent;
-                  border-top: 12px solid #555;
-                  transform: rotate(${heading+180}deg);
-                  transform-origin: center;
-                "></div>
-              `,
-              iconSize: [12, 12],
-              iconAnchor: [6, 6],
-            });
             if (zoom < 14) {
                 return <DroneHeatMap droneData={dummyDrones} />;
               }
