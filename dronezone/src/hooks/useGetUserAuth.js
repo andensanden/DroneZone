@@ -16,7 +16,7 @@ export function useGetUserAuth() {
 
             //TODO: Could potentially call db to get user data and set in application state??
             if (data.session !== null) {
-                dispatch(login(data.session.user.email));
+                dispatch(login({email: data.session.user.email, userID: data.session.user.id}));
             }else{
                 dispatch(logout()); //setting state as a logged out user
             }
@@ -28,7 +28,7 @@ export function useGetUserAuth() {
         const listener =  supabase.auth.onAuthStateChange((event, session) => {
 
             if(session?.user) {
-                dispatch(login(session.user.email));
+                dispatch(login({email: session.user.email, userID: session.user.id}));
             } else {
                 dispatch(logout());
             }

@@ -1,19 +1,19 @@
 export function InfolineInfo() {
   return (
-    <div className="w-full">
+    <div >
       {/* 🔶 Full-width Yellow Header */}
-      <div className="bg-primary-yellow w-full text-center py-17">
-        <h2 className="text-3xl font-bold mb-4">How to Navigate in DroneZone</h2>
-        <h5 className="font-bold">
+      <div className="bg-primary-yellow pl-5  md:text-center py-17">
+        <h2 className=" text-2xl md:text-3xl font-bold mb-4">How to Navigate in DroneZone</h2>
+        <h5 className="font-bold text-sm md:text-xl">
           Here is a quick overview of the key features and how to navigate around the website
         </h5>
       </div>
 
       {/* 🧭 Info Content (centered) */}
-      <div className="flex justify-center w-full">
-        <div className="flex flex-row gap-25 p-10  justify-center">
+      <div >
+        <div className="flex flex-col md:flex-row gap-10 md:gap-25 p-10  justify-center">
           {/* Register */}
-          <div className="flex flex-col w-72">
+          <div className="flex flex-col md:w-72">
             <h2 className="font-bold text-xl">Register Your Drone</h2>
             <p className="text-sm">
               You can register your drone under My Account or in Your Devices on the homepage.

@@ -83,7 +83,7 @@ export function AccountInfo() {
  
   return (
     <div className="bg-primary-yellow flex grow ">
-      <div className="flex p-10 w-full">
+      <div className="flex flex-col md:flex-row p-10 w-full">
         <div className="flex flex-col">
           <h2 className="text-3xl font-bold my-4">My Account</h2>
 
@@ -130,7 +130,7 @@ export function AccountInfo() {
         </div>
 
         {/*Devices column starts here. använd map funktion för att diplaya all drones */}
-        <div className="ml-50 flex flex-col">
+        <div className="md:ml-50 flex flex-col">
           <h2 className="text-3xl font-bold my-4 ">Devices</h2>
           {devices.map((device)=> {
            return( 
@@ -145,7 +145,7 @@ export function AccountInfo() {
           )}
           )}
           <DropdownMenu>
-            <DropdownMenuTrigger className=" bg-gray-200 flex flex-row justify-center gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
+            <DropdownMenuTrigger className=" bg-gray-200 flex flex-row justify-center w-3/8 md:w-full gap-3 items-center my-2 px-4 py-2 rounded-md shadow-lg hover:scale-105 transition-all duration-200  text-gray-700 font-bold text-sm">
               <p>Add new drone </p>
               <TbDrone size={18} />
             </DropdownMenuTrigger>
@@ -157,26 +157,7 @@ export function AccountInfo() {
         </DropdownMenu>
         </div>
 
-        {/*Licence column ends here */}
-        <div className="ml-50 flex flex-col">
-          <h2 className="text-3xl font-bold my-4">Drone Licence</h2>
-          <div className="flex flex-row gap-3">
-            <label className="flex item-center bg-primary-white w-11 h-11 text-gray-700 my-2 px-2 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200">
-              <input
-                class="hidden"
-                type="file"
-                id="fileUpload"
-                accept=".pdf, .png"
-              ></input>
-              <BsPaperclip size={40} />
-            </label>
-            <div className="flex flex-col justify-center items-center">
-              <a href="/map.png" download>
-                droneLicence.pdf
-              </a>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );

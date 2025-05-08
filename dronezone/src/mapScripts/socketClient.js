@@ -86,6 +86,7 @@ export class DroneClient{
    * Ends the flight and sends the flight time to the server.
    * @param {number} flightTime - The flight time in seconds.
    */
+
   endFlight(flightTime) {
     this.activeFlight = false;
     this.socket.emit("endFlight", 
@@ -99,7 +100,7 @@ export class DroneClient{
    * @param {object} position - The position data to send.
    */
   // Update the position of the drone
-  updatePosition(position) {
-    this.socket.emit("updatePosition", position);
+  updatePosition(currentPosition, userID) {
+    this.socket.emit("updatePosition", { userID, currentPosition });
   }
 }

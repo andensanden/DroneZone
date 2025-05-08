@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { useZones } from '@/mapScripts/zonesContext'
+import { IoMenu } from "react-icons/io5";
 
 export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,24 +20,19 @@ export function HamburgerButton({ trackingEnabled, setTrackingEnabled }) {
         onClick={() => setMenuOpen(!menuOpen)}
         style={{
           background: 'white',
-          padding: '10px',
+          padding: '5px',
           borderRadius: '12px',
           boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
           border: 'none',
           cursor: 'pointer',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
+          // flexDirection: 'column',
+          justifyContent: 'center',
           height: '40px',
           width: '50px'
         }}
       >
-        {[...Array(3)].map((_, i) => (
-          <span
-            key={i}
-            style={{ height: '3px', backgroundColor: '#FFD700', borderRadius: '20px' }}
-          />
-        ))}
+        <IoMenu size={32} className="text-primary-yellow" />
       </button>
 
       {menuOpen && (
