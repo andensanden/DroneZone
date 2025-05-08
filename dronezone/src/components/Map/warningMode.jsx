@@ -15,7 +15,7 @@ export function WarningMode() {
           bottom: "7px",
           left: "23px",
           zIndex: 1100,
-          fontSize: "24px",            // ← Bigger emoji
+          fontSize: "22px",            // ← Bigger emoji
             background: "none",          // ← Remove background
             border: "none",              // ← No border
             padding: 0,                  // ← No padding around it
