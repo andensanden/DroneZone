@@ -110,6 +110,7 @@ export function PopUpDrone() {
       
         useEffect(() => {
           updateActiveDrones();
+          setInterval(updateActiveDrones, 5000);
         }, []);
       
         function buildActiveDrones(data) {
@@ -136,20 +137,6 @@ export function PopUpDrone() {
             headers: { "Content-Type": "application/json" },
           });
           return await response.json();
-        }
-      
-        //Returns all of the active drones Info
-        function getAllActiveDrones() {
-      
-          const currArr = [];
-      
-          //Iterates over all of the current drones
-          /*allActiveDrones.forEach((activeDrone, index) => {
-            const did =  getInfoFromDrone(activeDrone);
-            currArr[index] = did;
-          }); */
-      
-          return allActiveDrones;
         }
       
         async function updateActiveDrones() {
