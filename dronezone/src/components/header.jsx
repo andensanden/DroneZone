@@ -37,7 +37,7 @@ export function Header() {
           <NavigationMenu />
 
         </button>
-        <div className="hidden sm:flex items-center mr-10 h-12 bg-gray-200 rounded-2xl">
+        <div className="hidden sm:flex items-center mr-5 h-12 bg-gray-200 rounded-2xl">
 
 
           <button
