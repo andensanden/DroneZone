@@ -24,7 +24,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         
       }
       fetchData();
-      }, [deviceName]);
+      }, []);
 
 
   return (
