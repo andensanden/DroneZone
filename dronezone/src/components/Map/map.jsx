@@ -20,7 +20,6 @@ import { NodesProvider } from "@/mapScripts/nodesContext";
 import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 //import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from "@/mapScripts/locationTracker";
-import { DronepathHandler } from "@/mapScripts/dronepathHandler";
 
 
 //--------------- Active Drones
@@ -104,9 +103,6 @@ const Map = () => {
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
         </NodesProvider>
-        <DronepathsProvider>
-          <DronepathHandler/>
-        </DronepathsProvider>
 
         {showActiveDrones && <PopUpDrone />}
       </MapContainer>

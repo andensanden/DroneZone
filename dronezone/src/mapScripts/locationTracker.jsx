@@ -3,9 +3,8 @@ import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { droneClient } from './dronepathHandler';
+import { droneClient } from './dronepathHandler.js';
 import L from 'leaflet';
-import { FaLocationDot } from "react-icons/fa6";
 import ReactDOMServer from 'react-dom/server';
 
 

@@ -5,7 +5,7 @@ import { DrawNodes, DrawPaths, DrawBufferZones } from './drawFunctions'
 import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './zonesContext'
 import { useNodes } from './nodesContext'
-import { CreateDronepath } from './dronepathHandler'
+import { CreateDronepath } from './dronepathHandler.js'
 import { useDronepaths } from './dronepathsContext'
 import { useSelector } from 'react-redux'
 
@@ -163,11 +163,9 @@ function useSyncedRef(ref, value) {
 function useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID) {
     useEffect(() => {
         if (isLaunched) {
-            console.log("Launch");
             CreateDronepath(nodes, addDronepath, position, currentDeviceID);
             setNodes([]);
         }
-        console.log("Not launch");
     }, [isLaunched]);
 }
 

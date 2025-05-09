@@ -10,9 +10,10 @@ import { useRef } from "react";
 import "leaflet-arrowheads"; 
 import { DroneHeatMap } from "./droneHeatMap";
 import ActiveDrone from "../ActiveDrones/activeDrones";
+import { SelectedDronepath } from "./selectedDronepath";
 
 
-import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler';
+import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler.js';
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -116,7 +117,7 @@ export function PopUpDrone() {
         function buildActiveDrones(data) {
           const droneData = [];
           data.forEach((dataObject) => {
-            const newDrone = new ActiveDrone(dataObject.deviceID,
+            const newDrone = new ActiveDrone(dataObject.droneID,
               getLatLng(dataObject.currentPosition),
               5,
               100,
@@ -246,6 +247,7 @@ export function PopUpDrone() {
 
       <SelectedDronePanel drone={selectedDrone}
       onClose={() => setClickedDrone(null)} />
+      <SelectedDronepath selectedDrone={selectedDrone} hoveredDrone={hoveredDrone}/>
     </>
   );
 }

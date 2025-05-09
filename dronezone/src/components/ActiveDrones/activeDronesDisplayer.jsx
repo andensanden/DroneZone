@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 //----- ActiveDrone Class Import --------
 import ActiveDrone from './activeDrones'
 
-import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler';
+import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler.js';
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
