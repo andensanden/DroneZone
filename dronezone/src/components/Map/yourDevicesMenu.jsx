@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; 
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
+import { useSelector, useDispatch } from 'react-redux';
+import { setAllDrones, setCurrentDeviceID } from '@/Redux/gpsPos/gpsPosSlice';
 
 
-export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom, onToggleMenu }) {
+export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) {
   const navigate = useNavigate();
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-  const [deviceName, setDeviceName] = useState([]);
+  const dispatch = useDispatch();
+  const { allDrones, currentDeviceID } = useSelector((state) => state.gpsPos);
 
   useEffect(() => { 
 
@@ -20,7 +23,8 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
         const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); 
 
         const parsedDeviceData = await deviceRespone.json()
-        setDeviceName(parsedDeviceData)
+        console.log(parsedDeviceData);
+        dispatch(setAllDrones(parsedDeviceData));
         
         
       }
@@ -63,10 +67,13 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
                   </input>
                   <input
                     type="checkbox"
+                    checked={currentDeviceID === deviceName.deviceID}
                     onChange={() => {
-                      const updated = [...deviceStates];
-                      updated[index].checked = !updated[index].checked;
-                      setDeviceStates(updated);
+                      if (currentDeviceID === deviceName.deviceID) {
+                        dispatch(setCurrentDeviceID(null));
+                      } else {
+                        dispatch(setCurrentDeviceID(deviceName.deviceID));
+                      }
                     }}
                     className="w-[16px] h-[16px] accent-primary-yellow" />
                 </div>  

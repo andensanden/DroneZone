@@ -58,10 +58,10 @@ const LoggedInMap = () => {
   const devicesPanelHeight = 260;
   //For your devices
   const [devicesMenuOpen, setDevicesMenuOpen] = useState(false);
-  const [deviceStates, setDeviceStates] = useState([
+  /*const [deviceStates, setDeviceStates] = useState([
     { name: "DJI AIR 3S – Photography...", checked: false },
     { name: "Tinyhawk III Plus – Racing", checked: true },
-  ]);
+  ]);*/
   const drawFlightBottom =
     baseBottom +
     (devicesMenuOpen ? devicesPanelHeight : devicesButtonHeight) +
@@ -100,7 +100,7 @@ const LoggedInMap = () => {
 
   const handleLaunchClick = () => {
     setShowDashboard(true);
-    setLaunch(launch);
+    setLaunch(!launch);
   };
 
   const handleEndFlightClick = () => {
@@ -181,8 +181,6 @@ const LoggedInMap = () => {
 
         {(!flightPathMenuOpen || devicesMenuOpen) && (
           <YourDevicesMenu
-            deviceStates={deviceStates}
-            setDeviceStates={setDeviceStates}
             menuOpen={devicesMenuOpen}
             bottom={devicesMenuOpen ? 21 + 170 : 21}
             onToggleMenu={toggleDevicesMenu}
@@ -198,6 +196,8 @@ const LoggedInMap = () => {
               <DrawFlightPathMenu
                 flightPathMenuOpen={flightPathMenuOpen}
                 onToggleMenu={toggleFlightPathMenu}
+                setFlightPathMenuOpen={setFlightPathMenuOpen}
+                setDevicesMenuOpen={setDevicesMenuOpen}
                 confirmFlightPath={confirmFlightPath}
                 setConfirmFlightPath={setConfirmFlightPath}
                 setDrawingMode={setDrawingMode}
