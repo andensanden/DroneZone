@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { useFlightMode } from "./inFlightContext"; // adjust path if needed
+import { useSelector } from "react-redux";
+import { toggleTakeDownDrone } from "@/Redux/event/eventSlice";
+import { useDispatch } from "react-redux";
 
 export function WarningMode() {
-  const [warningActive, setWarningActive] = useState(false);
+
+  const takeDownDrone = useSelector((state) => state.event.takeDownDrone);
+  const dispatch = useDispatch();
 
   return (
     <>
       {/* Toggle Button for Testing */}
       <button
-        onClick={() => setWarningActive((prev) => !prev)}
+        onClick={() => dispatch(toggleTakeDownDrone())}
         className="absolute -bottom-1 left-[20px] z-999 cursor-pointer text-xl"
       >
         ⚠️
       </button>
 
-      {warningActive && (
+      {takeDownDrone && (
         <>
           {/* Red overlay */}
           <div

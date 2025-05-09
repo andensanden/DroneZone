@@ -15,11 +15,14 @@ const eventSlice = createSlice({
         },
         setTakeDownDroneFalse: (state, action) => {
             state.takeDownDrone = false
+        },
+        toggleTakeDownDrone: (state, action) => {
+            state.takeDownDrone = !state.takeDownDrone
         }
     }
 })
 
 
 export default eventSlice.reducer
-export const { setTakeDownDroneTrue, setTakeDownDroneFalse } = eventSlice.actions
+export const { setTakeDownDroneTrue, setTakeDownDroneFalse, toggleTakeDownDrone } = eventSlice.actions
     
