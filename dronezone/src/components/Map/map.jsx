@@ -17,7 +17,6 @@ import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
 import { NodesProvider } from "@/mapScripts/nodesContext";
-import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 //import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from "@/mapScripts/locationTracker";
 

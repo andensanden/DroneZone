@@ -11,12 +11,11 @@ export let droneClient;
  * @param {*} nodes An array of nodes which will be used for the dronepath.
  * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
  */
-export async function CreateDronepath(nodes, addDronepath, position, currentDeviceID, dispatch) {
+export async function CreateDronepath(nodes, position, currentDeviceID, dispatch) {
     const newDronepath = new Dronepath();
     for (var i = 0; i < nodes.length; i++) {
         newDronepath.addNode(nodes[i]);
     }
-    addDronepath(newDronepath);
     sendDronepathToDatabase(newDronepath, position, currentDeviceID, dispatch);
 }
 

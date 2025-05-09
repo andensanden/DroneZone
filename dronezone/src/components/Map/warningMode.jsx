@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux"; // Import useSelector
-
+import { useSelector, useDispatch } from "react-redux"; // Import useSelector and useDispatch
+import { useFlightMode } from "./inFlightContext"; // adjust path if needed
+import { toggleTakeDownDrone } from "@/Redux/event/eventSlice";
 import { supabase } from "@/supabase/config";
-
 
 export function WarningMode() {
   const [warningActive, setWarningActive] = useState(false);
@@ -10,6 +10,8 @@ export function WarningMode() {
 
   // Use useSelector at the top level of the component
   const { isAuth, email, userID, phone } = useSelector((state) => state.auth);
+  const takeDownDrone = useSelector((state) => state.event.takeDownDrone);
+  const dispatch = useDispatch();
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   // Function to get user information when warned
@@ -19,16 +21,15 @@ export function WarningMode() {
     }
   }
 
-  //Function to send a new alert to the database
+  // Function to send a new alert to the database
   async function addAlert() {
-
     const { data } = await supabase.auth.getUser();
 
     await fetch(`${backendURL}/api/alerts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        },
+      },
       body: JSON.stringify({
         user_id: data.user.id,
         alertContent: "You have been warned bitch, last chance - we will call you on this number: "
@@ -44,13 +45,14 @@ export function WarningMode() {
           getWarnedUser(); // Corrected function name
           setWarningActive((prev) => !prev);
           addAlert();
+          dispatch(toggleTakeDownDrone());
         }}
         className="absolute bottom-0 left-[20px] z-999 cursor-pointer text-xl"
       >
         ⚠️
       </button>
 
-      {warningActive && (
+      {takeDownDrone && (
         <>
           {/* Red overlay */}
           <div

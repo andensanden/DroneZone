@@ -22,9 +22,10 @@ function DrawNodes({nodes, color}) {
 
 /**
  * Renders path lines on the map using blue polyline.
- * @param {{ paths: Dronepath[] }} props - Component props
- * @param {Dronepath[]} props.paths - An array where each element is a path made of [lat, lng] coordinate pairs
- * @returns {JSX.Element} A fragment containing all the path polylines
+ * @param {{ paths: Dronepath[], color: string }} props - Component props.
+ * @param {Dronepath[]} props.paths - An array where each element is a path made of [lat, lng] coordinate pairs.
+ * @param {string} props.color - The color to use for the path.
+ * @returns {JSX.Element} A fragment containing all the path polylines.
  */
 function DrawPaths({paths, color}) {
     return (
@@ -41,9 +42,10 @@ function DrawPaths({paths, color}) {
 
 /**
  * Renders buffer zone on the map using blue polygons.
- * @param {{ bufferZones: Array<Array<[number, number]>> }} props - Component props
- * @param {Array<Array<[number, number]>>} props.bufferZones - An array of coordinate arrays representing buffer zones
- * @returns {JSX.Element} A fragment containing all buffer zone polygons
+ * @param {{ bufferZones: Array<Array<[number, number]>>, color: string }} props - Component props.
+ * @param {Array<Array<[number, number]>>} props.bufferZones - An array of coordinate arrays representing buffer zones.
+ * @param {string} props.color - The color to use for the buffer zones.
+ * @returns {JSX.Element} A fragment containing all buffer zone polygons.
  */
 function DrawBufferZones({bufferZones, color}) {
     return (
@@ -58,4 +60,21 @@ function DrawBufferZones({bufferZones, color}) {
     )
 }
 
-export { DrawNodes, DrawPaths, DrawBufferZones }
+/**
+ * Draw a dronepath on the map.
+ * @param {{ dronepath: Dronepath, color: string }} props - Component props.
+ * @param {Dronepath} props.dronepath - The dronepath to draw.
+ * @param {string} props.color - The color to use for the dronepath.
+ * @returns {JSX.Element} A fragment containing the dronepath.
+ */
+function DrawDronepath({ dronepath, color }) {
+    return (
+        <>
+            <DrawNodes nodes={dronepath.nodes} color={color}/>
+            <DrawPaths paths={dronepath.paths} color={color}/>
+            <DrawBufferZones bufferZones={dronepath.bufferZones} color={color}/>
+        </>
+    )
+}
+
+export { DrawNodes, DrawPaths, DrawBufferZones, DrawDronepath }
