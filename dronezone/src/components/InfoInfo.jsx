@@ -64,7 +64,7 @@ export function InfolineInfo() {
             <li>Restricted Zones where you can’t fly</li>
             <li className="relative pr-8">
               Current Location: your own coordinates, toggleable in the upper
-              left
+              left corner
               <MdMyLocation size={25} className="absolute right-0 top-0" />
             </li>
           </ul>
