@@ -54,7 +54,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
       {menuOpen && (
         <div className="absolute top-[60px] left-0 bg-white rounded-2xl shadow-sm w-[220px] overflow-hidden" >
           <div className="px-[14px] py-[14px]">
-          {deviceName.map((deviceName, index)=> {
+          {allDrones.map((deviceName, index)=> {
             return(
                 <div
                   key={deviceName.deviceTableID}

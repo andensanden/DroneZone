@@ -1,54 +1,75 @@
+import * as React from "react";
+import icon from "@/assets/icon.svg";
+import { GiPathDistance } from "react-icons/gi";
+import { FaRegUser } from "react-icons/fa";
+import { IoMenu } from "react-icons/io5";
+import { MdMyLocation } from "react-icons/md";
+
 export function InfolineInfo() {
   return (
-    <div >
-      {/* 🔶 Full-width Yellow Header */}
-      <div className="bg-primary-yellow pl-5  md:text-center py-17">
-        <h2 className=" text-2xl md:text-3xl font-bold mb-4">How to Navigate in DroneZone</h2>
+    <div className="text-black">
+      {/* 🔶 Header */}
+      <div className="bg-primary-yellow pl-5 md:text-center py-12">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          How to Navigate in DroneZone
+        </h2>
         <h5 className="font-bold text-sm md:text-xl">
-          Here is a quick overview of the key features and how to navigate around the website
+          Here is a quick overview of the key features and how to navigate
+          around the website
         </h5>
       </div>
 
-      {/* 🧭 Info Content (centered) */}
-      <div >
-        <div className="flex flex-col md:flex-row gap-10 md:gap-25 p-10  justify-center">
-          {/* Register */}
-          <div className="flex flex-col md:w-72">
-            <h2 className="font-bold text-xl">Register Your Drone</h2>
-            <p className="text-sm">
-              You can register your drone under My Account or in Your Devices on the homepage.
-              Additionally, you can upload your Drone License on your Account page.
-            </p>
-          </div>
+      {/* 🧭 Info Sections */}
+      <div className="flex flex-col md:flex-row gap-10 md:gap-20 p-10 justify-center">
+        {/* 🔹 Register Section */}
+        <div className="flex flex-col md:w-72">
+          <h2 className="font-bold text-xl mb-3">Register your drone</h2>
+          <p className="text-sm mb-2 flex justify-between">
+            Can be done under My Account <FaRegUser size={20} />
+          </p>
+          <p className="text-sm mb-2 flex justify-between">
+            And also in Your Devices on the homepage{" "}
+            <img
+              src={icon}
+              alt="Drone icon"
+              style={{ width: "22px", height: "22px" }}
+            />
+          </p>
+        </div>
 
-          {/* Draw */}
-          <div className="flex flex-col w-72">
-            <h2 className="font-bold text-xl">Draw Your Path</h2>
-            <p className="text-sm">
-              Plan your flight path by placing nodes on the map.
-              Use the Undo button to remove the last node if needed.
-              Once you're finished, confirm the flight path to save it.
-            </p>
-          </div>
+        {/* 🔹 Draw Section */}
+        <div className="flex flex-col md:w-72">
+          <h2 className="font-bold text-xl mb-3">Draw your flight</h2>
+          <p className="text-sm mb-2 flex justify-between">
+            Draw your planned flight path with nodes{" "}
+            <GiPathDistance size={30} />
+          </p>
+          <p className="text-sm mb-2 flex justify-between">
+            Use the Undo button to remove the last node you placed
+          </p>
+          <p className="text-sm mb-2 flex justify-between">
+            Confirm the flight path when you are done
+          </p>
+        </div>
 
-          {/* Layers */}
-          <div className="flex flex-col w-72">
-            <h2 className="font-bold text-xl">Choose Your Layers</h2>
-            <p className="text-sm mb-2">
-              Customize your map view using <span className="font-semibold italic">map layers</span>:
-            </p>
-            <ul className="list-disc text-sm space-y-1 pl-5">
-              <li>Show nearby <span className="font-semibold">active drones</span></li>
-              <li>Highlight <span className="font-semibold">restricted zones</span> where flying isn’t allowed</li>
-              <li>Display your <span className="font-semibold">current location</span>. This is also toggleable in the top left corner.</li>
-            </ul>
-          </div>
+        {/* 🔹 Layers Section */}
+        <div className="flex flex-col md:w-72">
+          <h2 className="font-bold text-xl mb-3">Choose your layers</h2>
+          <p className="text-sm mb-2 flex justify-between">
+            You can choose what you want to be displayed on your map with Layers{" "}
+            <IoMenu size={40} className="text-primary-yellow" />
+          </p>
+          <ul className="list-disc text-sm space-y-1 pl-5">
+            <li>Active Drones that are near</li>
+            <li>Restricted Zones where you can’t fly</li>
+            <li className="relative pr-8">
+              Current Location: your own coordinates, toggleable in the upper
+              left
+              <MdMyLocation size={25} className="absolute right-0 top-0" />
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   );
 }
-
-
-  
-  
