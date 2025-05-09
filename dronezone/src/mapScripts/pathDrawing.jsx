@@ -7,7 +7,7 @@ import { useZones } from './zonesContext'
 import { useNodes } from './nodesContext'
 import { CreateDronepath } from './dronepathHandler'
 import { useDronepaths } from './dronepathsContext'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 /*
     Handles what happens when the user clicks on the map
@@ -25,6 +25,7 @@ function MapClick({ drawingMode, isLaunched }) {
     const zonesRef = useRef(zones);
     const { addDronepath } = useDronepaths();
     const {position} = useSelector((state) => state.gpsPos);
+    const dispatch = useDispatch();
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -50,7 +51,7 @@ function MapClick({ drawingMode, isLaunched }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
-    useLaunch(isLaunched, nodes, addDronepath, setNodes, position);
+    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, dispatch);
 
     return (
         <>
@@ -160,10 +161,13 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, addDronepath, setNodes, position) {
+function useLaunch(isLaunched, nodes, addDronepath, setNodes, position, dispatch) {
+    
+
+    
     useEffect(() => {
         if (isLaunched) {
-            CreateDronepath(nodes, addDronepath, position);
+            CreateDronepath(nodes, addDronepath, position, dispatch);
             setNodes([]);
         }
     }, [isLaunched]);
