@@ -1,18 +1,39 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux"; // Import useSelector
 
+import { supabase } from "@/supabase/config";
+
+
 export function WarningMode() {
   const [warningActive, setWarningActive] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
   // Use useSelector at the top level of the component
   const { isAuth, email, userID, phone } = useSelector((state) => state.auth);
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   // Function to get user information when warned
   function getWarnedUser() {
     if (isAuth) {
       setUserInfo({ email, userID, phone });
     }
+  }
+
+  //Function to send a new alert to the database
+  async function addAlert() {
+
+    const { data } = await supabase.auth.getUser();
+
+    await fetch(`${backendURL}/api/alerts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+      body: JSON.stringify({
+        user_id: data.user.id,
+        alertContent: "You have been warned bitch, last chance - we will call you on this number: "
+      }),
+    });
   }
 
   return (
@@ -22,6 +43,7 @@ export function WarningMode() {
         onClick={() => {
           getWarnedUser(); // Corrected function name
           setWarningActive((prev) => !prev);
+          addAlert();
         }}
         className="absolute bottom-0 left-[20px] z-999 cursor-pointer text-xl"
       >
@@ -65,7 +87,7 @@ export function WarningMode() {
               {userInfo && (
                 <>
                   <p>User: {userInfo.userID}</p>
-                  <p>Phonenumber: {userInfo.phone}</p>
+                  <p>Phone Number: {userInfo.phone}</p>
                   <p>email: {userInfo.email}</p>
                 </>
               )}
