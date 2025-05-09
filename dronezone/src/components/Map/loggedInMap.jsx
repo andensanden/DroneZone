@@ -115,6 +115,8 @@ const LoggedInMap = () => {
       <MapContainer
         center={position}
         zoom={13}
+        minZoom={5}
+        maxZoom={18}
         style={{ height: "100%", width: "100%" }}
       >
         {/* Initializing the leaflet-map*/}
@@ -161,6 +163,8 @@ const LoggedInMap = () => {
               />
             </div>
           )}
+
+        {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
         </InFlightProvider>
 
         {/* User tracking functionality*/}
@@ -210,7 +214,7 @@ const LoggedInMap = () => {
           </NodesProvider>
         </ZonesProvider>
 
-        {showActiveDrones && <PopUpDrone  />}
+        
       </MapContainer>
       <WarningMode  />
     </div>

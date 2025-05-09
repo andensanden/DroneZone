@@ -11,6 +11,7 @@ import { DroneHeatMap } from "./droneHeatMap";
 import ActiveDrone from "../ActiveDrones/activeDrones";
 import { SelectedDronepath } from "./selectedDronepath";
 import { useSelector } from "react-redux";
+import { useFlightMode } from "./inFlightContext";
 
 
 import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler.js';
@@ -41,7 +42,7 @@ function ArrowPolyline({ positions }) {
     return <Polyline ref={polylineRef} positions={positions} color="gray" weight={2} />;
 }
 
-export function PopUpDrone() {
+export function PopUpDrone({ launch }) {
     const [hoveredDrone, setHoveredDrone] = useState(null);
     const [clickedDrone, setClickedDrone] = useState(null);
     const selectedDrone = clickedDrone || hoveredDrone;
@@ -51,6 +52,7 @@ export function PopUpDrone() {
     const [allActiveDrones, setAllActiveDrones] = useState([]);
     const hasChecked = useRef(false);
     const { userID } = useSelector((state) => state.auth);
+    const { toggleMode } = useFlightMode();
 
     useEffect(() => {
         const handleZoom = () => setZoom(map.getZoom());
@@ -154,6 +156,8 @@ export function PopUpDrone() {
             console.log("DataObject ID: " + dataObject.userID);
             if (dataObject.userID === userID) {
               console.log("This user is already in flight");
+              //toggleMode();
+              //launch();
             }
           });
           hasChecked.current = true;

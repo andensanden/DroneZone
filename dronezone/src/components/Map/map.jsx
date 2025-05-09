@@ -74,6 +74,8 @@ const Map = () => {
       <MapContainer
         center={position}
         zoom={13}
+        minZoom={5}
+        maxZoom={18}
         style={{ height: "100%", width: "100%" }}
       >
         {/* Initializing the leaflet-map*/}
