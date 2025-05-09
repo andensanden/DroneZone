@@ -29,7 +29,7 @@ export function DrawFlightPathMenu({
     <div
       style={{
         position: "absolute",
-        bottom: `${bottom}px`, // ✅ use dynamic value from parent
+        bottom: `${bottom}px`, 
         left: "20px",
         zIndex: 1000,
         transition: "bottom 0.5s ease",
@@ -41,19 +41,8 @@ export function DrawFlightPathMenu({
           setFlightPathMenuOpen(!flightPathMenuOpen);
           setDevicesMenuOpen(false);
         }}
-        style={{
-          background: "#FFCC00",
-          padding: "10px 16px",
-          borderRadius: "12px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: "bold",
-          fontSize: "14px",
-          display: "flex",
-          alignItems: "center",
-          gap: "30px",
-        }}
+        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
+                    hover:scale-107 transition-all duration-200"
       >
         <span className="hidden md:block">Draw Flight Path</span>
         <GiPathDistance size={24} />
@@ -68,7 +57,7 @@ export function DrawFlightPathMenu({
             background: "#fff",
             borderRadius: "16px",
             boxShadow: "0 6px 20px rgba(0, 0, 0, 0.2)",
-            width: "260px",
+            width: "220px",
             overflow: "hidden",
             fontFamily: "Arial, sans-serif",
           }}

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
-import { Logo } from '../logo';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAllDrones, setCurrentDeviceID } from '@/Redux/gpsPos/gpsPosSlice';
 
@@ -37,7 +36,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
     <div
       style={{
         position: 'absolute',
-        bottom: `${bottom}px`, // ← passed as a prop from the parent
+        bottom: `${bottom}px`, 
         left: '20px',
         zIndex: 1000,
         transition: 'bottom 0.5s ease'
@@ -46,19 +45,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
     >
       <button
         onClick={onToggleMenu} 
-        style={{
-          background: '#FFCC00',
-          padding: '10px 16px',
-          borderRadius: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          border: 'none',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '14px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '55px'
-        }}
+        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[55px] hover:scale-107 transition-all duration-200 shadow-sm"
       >
         <span className="hidden md:block">Your Devices</span>
         <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />
@@ -73,7 +60,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
             background: '#fff',
             borderRadius: '16px',
             boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '260px',
+            width: '220px',
             overflow: 'hidden'
           }}
         >
@@ -89,12 +76,14 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
                     padding: '8px 0',
                     
                     fontWeight: 'bold',
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    
                   }}
                 >
                   <input
                     disabled
                     value = {deviceName.deviceName}
+                    className="py-1"
                   >
                   </input>
                   <input
@@ -117,16 +106,10 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
                 )}
                 )}
 
-            <div
-              style={{
-                paddingTop: '10px',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                }}
-              >
-              <button className='text-primary-yellow hover:scale-107 transition-all duration-200 pl-10'
+            <div className="font-bold text-sm" >
+              <button className='text-primary-yellow hover:scale-107 transition-all duration-200 px-1 py-1.5'
                onClick={() => navigate("/account")}>
-                + Add New Device 
+              + Add New Device 
               </button>
             </div>
           </div>

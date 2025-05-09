@@ -1,12 +1,13 @@
-import 'leaflet/dist/leaflet.css';
-import {VscPerson} from "react-icons/vsc"
+import "leaflet/dist/leaflet.css";
+import { VscPerson } from "react-icons/vsc"; /*person icon, not used any more*/
+import { MdMyLocation } from "react-icons/md";
 
 // GPS Toggle Control
 
 /**
  * A Leaflet map control that toggles GPS location tracking.
  *
- * Displays a button with a person icon. When clicked, it calls `toggleTracking`
+ * Displays a button with a location icon. When clicked, it calls `toggleTracking`
  * to either enable or disable GPS-based user location tracking.
  *
  * @param {{ trackingEnabled: boolean, toggleTracking: () => void }} props - Component props
@@ -16,22 +17,31 @@ import {VscPerson} from "react-icons/vsc"
  */
 
 function GPSToggleControl({ trackingEnabled, toggleTracking }) {
-    return (
-      <div className="leaflet-bar leaflet-control" style={{ position: 'absolute', top: '20%', left: '0.5%', zIndex: 1000, pointerEvents: 'auto', }}>
-        <button
-          onClick={toggleTracking}
-          style={{
-            backgroundColor: trackingEnabled ? '#fff' : '#fff',
-            padding: '8px',
-            border: '2px solid rgba(0,0,0,0.2)',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          <VscPerson size={24}/>
-        </button>
-      </div>
-    );
+  return (
+    <div
+      className="leaflet-bar leaflet-control"
+      style={{
+        position: "absolute",
+        top: "14%",
+        left: "0.7%",
+        zIndex: 1000,
+        pointerEvents: "auto",
+      }}
+    >
+      <button
+        onClick={toggleTracking}
+        style={{
+          backgroundColor: trackingEnabled ? "#fff" : "#fff",
+          padding: "4px",
+          border: "2px solid rgba(0,0,0,0.1)",
+          borderRadius: "3px",
+          cursor: "pointer",
+        }}
+      >
+        <MdMyLocation size={20} />
+      </button>
+    </div>
+  );
 }
 
 export default GPSToggleControl;
