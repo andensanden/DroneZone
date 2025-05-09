@@ -188,8 +188,8 @@ export function PopUpDrone() {
               background: #fff;
               border: 3px solid #555;
               border-radius: 2px;
-              padding: 4px 16px;
-              min-width: 130px; 
+              padding: 4px 10px;
+              min-width: 100px; 
               font-family: monospace;
               font-weight: bold;
               font-size: 14px;
@@ -236,7 +236,7 @@ export function PopUpDrone() {
                   },  }}
             />
             {zoom >= 15 && (
-            <Marker position={[drone.lat + 0.0005, drone.lng + 0.0003, drone.altitude]} icon={labelIcon} interactive={false} />)}
+            <Marker position={[drone.lat + 0.00005, drone.lng + 0.00005 , drone.altitude]} icon={labelIcon} interactive={false} />)}
             {zoom >= 15 && <ArrowPolyline positions={[position, headingEnd]} />}
 
            

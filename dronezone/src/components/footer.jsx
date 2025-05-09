@@ -6,7 +6,7 @@ export function Footer() {
       <div className="flex flex-col basis-1 gap-10 p-10 lg:flex-row lg:gap-30 lg:basis-1/2 flex-grow lg:p-16">
         <div className="flex flex-col">
           <h2 className="font-bold text-xl">Contact</h2>
-          <p className="text-lg text-gray-400">
+          <p className="text-base text-gray-400">
             <a href="mailto:teameliza@proton.me"> teameliza@proton.me </a>
           </p>
         </div>
