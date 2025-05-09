@@ -1,4 +1,4 @@
-import { DrawNodes, DrawPaths, DrawBufferZones } from "@/mapScripts/drawFunctions";
+import { DrawDronepath } from "@/mapScripts/drawFunctions";
 import { GiConsoleController } from "react-icons/gi";
 
 export function SelectedDronepath({ selectedDrone, hoveredDrone }) {
@@ -18,17 +18,4 @@ export function SelectedDronepath({ selectedDrone, hoveredDrone }) {
             <DrawDronepath dronepath={drone.activePath} color={"green"}/>
         </>
     );
-
-    /**
-     * Draws a dronepath on the map.
-     */
-    function DrawDronepath({ dronepath, color }) {
-        return (
-            <>
-                <DrawNodes nodes={dronepath.nodes} color={color}/>
-                <DrawPaths paths={dronepath.paths} color={color}/>
-                <DrawBufferZones bufferZones={dronepath.bufferZones} color={color}/>
-            </>
-        )
-    }
 }
