@@ -1,9 +1,11 @@
 import React from 'react';
 import { useFlightMode } from './inFlightContext'; // Adjust the path as necessary
 import { EndFlightButton } from './endFlightButton';
+import { useSelector } from 'react-redux';
 
 export function LaunchButton({ onLaunchClick, onEndClick }) {
   const { flightMode, toggleMode } = useFlightMode();
+  const { currentDeviceID } = useSelector((state) => state.gpsPos);
 
   return (
     <div
@@ -16,8 +18,8 @@ export function LaunchButton({ onLaunchClick, onEndClick }) {
       }}
     >
 
-      {flightMode === 'drawFlightMode' ? <ButtonStart onClick={onLaunchClick} toggleMode={toggleMode}/> 
-                  : <EndFlightButton onClick={onEndClick}/>}
+      {currentDeviceID && (flightMode === 'drawFlightMode' ? <ButtonStart onClick={onLaunchClick} toggleMode={toggleMode}/> 
+                  : <EndFlightButton onClick={onEndClick}/>)}
     </div>
   );
 }

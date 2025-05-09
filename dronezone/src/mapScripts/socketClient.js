@@ -4,6 +4,8 @@ import { io } from "socket.io-client";
 //TODO: State management and error handling need to be implemented on the client side,
 // this should be handeled under the clientInit method for the different events
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 /**
  * -- The class is used to send the flight data to the server and receive data from the server
  */
@@ -17,7 +19,7 @@ export class DroneClient{
         this.activeFlight = true;
 
         //Connect to server and setting up socket
-        this.socket = io("http://localhost:8080", { 
+        this.socket = io(backendURL, { 
             auth:{
                 userID: userID,
                 deviceID: deviceID,
