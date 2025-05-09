@@ -41,7 +41,8 @@ export function DrawFlightPathMenu({
           setFlightPathMenuOpen(!flightPathMenuOpen);
           setDevicesMenuOpen(false);
         }}
-        className="bg-primary-yellow pt-[10px] pb-[10px] pl-[16px] pr-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm"
+        className="bg-primary-yellow px-[10px] py-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
+                    hover:scale-107 transition-all duration-200"
       >
         <span className="hidden md:block">Draw Flight Path</span>
         <GiPathDistance size={24} />

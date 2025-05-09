@@ -30,23 +30,11 @@ export function HamburgerButton({ trackingEnabled, setTrackingEnabled,showActive
   return (
     <div 
     ref={menuRef}
-    style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+    className="absolute top-[20px] right-[20px] z-1000">
       
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        style={{
-          background: 'white',
-          padding: '5px',
-          borderRadius: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          border: 'none',
-          cursor: 'pointer',
-          display: 'flex',
-          // flexDirection: 'column',
-          justifyContent: 'center',
-          height: '40px',
-          width: '50px'
-        }}
+       className="flex justify-center bg-white rounded-xl p-[5px] shadow-sm  h-[40px] w-[50px] hover:scale-107 transition-all duration-200"
       >
         <IoMenu size={32} className="text-primary-yellow" />
       </button>

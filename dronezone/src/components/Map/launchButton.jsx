@@ -33,7 +33,7 @@ function ButtonStart({onClick, toggleMode}) {
   return(
   <button
         className="bg-primary-blue text-white font-bold text-xl md:text-3xl pt-[10px] shadow-sm
-         pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px] rounded-xl boarder-none hover:scale-107 transition-all duration-200"
+         px-[20px] py-[10px] md:px-[55px] rounded-xl boarder-none hover:scale-107 transition-all duration-200"
         onClick={handleClick}
       >
         Launch
