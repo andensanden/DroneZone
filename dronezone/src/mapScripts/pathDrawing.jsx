@@ -24,7 +24,7 @@ function MapClick({ drawingMode, isLaunched }) {
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
     const { addDronepath } = useDronepaths();
-    const {position} = useSelector((state) => state.gpsPos);
+    const {position, currentDeviceID} = useSelector((state) => state.gpsPos);
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -50,7 +50,7 @@ function MapClick({ drawingMode, isLaunched }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
-    useLaunch(isLaunched, nodes, addDronepath, setNodes, position);
+    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID);
 
     return (
         <>
@@ -160,12 +160,14 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, addDronepath, setNodes, position) {
+function useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID) {
     useEffect(() => {
         if (isLaunched) {
-            CreateDronepath(nodes, addDronepath, position);
+            console.log("Launch");
+            CreateDronepath(nodes, addDronepath, position, currentDeviceID);
             setNodes([]);
         }
+        console.log("Not launch");
     }, [isLaunched]);
 }
 
