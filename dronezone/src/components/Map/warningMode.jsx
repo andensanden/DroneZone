@@ -1,15 +1,29 @@
 import React, { useState } from "react";
-import { useFlightMode } from "./inFlightContext"; // adjust path if needed
+import { useSelector } from "react-redux"; // Import useSelector
 
 export function WarningMode() {
   const [warningActive, setWarningActive] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+  // Use useSelector at the top level of the component
+  const { isAuth, email, userID, phone } = useSelector((state) => state.auth);
+
+  // Function to get user information when warned
+  function getWarnedUser() {
+    if (isAuth) {
+      setUserInfo({ email, userID, phone });
+    }
+  }
 
   return (
     <>
       {/* Toggle Button for Testing */}
       <button
-        onClick={() => setWarningActive((prev) => !prev)}
-        className="absolute -bottom-1 left-[20px] z-999 cursor-pointer text-xl"
+        onClick={() => {
+          getWarnedUser(); // Corrected function name
+          setWarningActive((prev) => !prev);
+        }}
+        className="absolute bottom-0 left-[20px] z-999 cursor-pointer text-xl"
       >
         ⚠️
       </button>
@@ -45,11 +59,16 @@ export function WarningMode() {
               boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
             }}
           >
-            <h2 className=" text-xl font-bold mb-[10px]">WARNING</h2>
-            <p className=" text-sm w-[300px]">
-              Bring your drone down immediately. This airspace is currently in
-              use and must be cleared. Failure to comply may result in
-              enforcement action.
+            <h2 className="text-xl font-bold mb-[10px]">WARNING</h2>
+            <p className="text-sm w-[300px]">
+              Bring your drone down immediately. This airspace is currently in use and must be cleared. Failure to comply may result in enforcement action.
+              {userInfo && (
+                <>
+                  <p>User: {userInfo.userID}</p>
+                  <p>Phonenumber: {userInfo.phone}</p>
+                  <p>email: {userInfo.email}</p>
+                </>
+              )}
             </p>
           </div>
         </>
