@@ -6,7 +6,6 @@ import { wouldLineIntersectForbiddenZone } from './intersectHandler.js'
 import { useZones } from './zonesContext'
 import { useNodes } from './nodesContext'
 import { CreateDronepath } from './dronepathHandler.js'
-import { useDronepaths } from './dronepathsContext'
 import { useSelector } from 'react-redux'
 
 /*
@@ -23,7 +22,6 @@ function MapClick({ drawingMode, isLaunched }) {
     const { zones } = useZones();
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
-    const { addDronepath } = useDronepaths();
     const {position, currentDeviceID} = useSelector((state) => state.gpsPos);
 
     const onMapClick = (e) => {
@@ -50,7 +48,7 @@ function MapClick({ drawingMode, isLaunched }) {
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
 
-    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID);
+    useLaunch(isLaunched, nodes, setNodes, position, currentDeviceID);
 
     return (
         <>
@@ -160,10 +158,10 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID) {
+function useLaunch(isLaunched, nodes, setNodes, position, currentDeviceID) {
     useEffect(() => {
         if (isLaunched) {
-            CreateDronepath(nodes, addDronepath, position, currentDeviceID);
+            CreateDronepath(nodes, position, currentDeviceID);
             setNodes([]);
         }
     }, [isLaunched]);

@@ -17,7 +17,6 @@ import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
 import { NodesProvider } from "@/mapScripts/nodesContext";
-import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
 import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
@@ -206,9 +205,7 @@ const LoggedInMap = () => {
                 bottom={flightPathMenuOpen ? 80 + 150 : 80}
               />
             )}
-            <DronepathsProvider>
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
-            </DronepathsProvider>
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
           </NodesProvider>
         </ZonesProvider>

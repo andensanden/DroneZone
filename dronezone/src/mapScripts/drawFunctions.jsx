@@ -58,4 +58,19 @@ function DrawBufferZones({bufferZones, color}) {
     )
 }
 
-export { DrawNodes, DrawPaths, DrawBufferZones }
+/**
+ * Draw a dronepath on the map.
+ * @param {*} param0 
+ * @returns 
+ */
+function DrawDronepath({ dronepath, color }) {
+    return (
+        <>
+            <DrawNodes nodes={dronepath.nodes} color={color}/>
+            <DrawPaths paths={dronepath.paths} color={color}/>
+            <DrawBufferZones bufferZones={dronepath.bufferZones} color={color}/>
+        </>
+    )
+}
+
+export { DrawNodes, DrawPaths, DrawBufferZones, DrawDronepath }
