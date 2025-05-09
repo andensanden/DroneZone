@@ -165,7 +165,9 @@ const LoggedInMap = () => {
         </InFlightProvider>
 
         {/* User tracking functionality*/}
-        <LocationTracker trackingEnabled={trackingEnabled} />
+        {!showDashboard && (
+          <LocationTracker trackingEnabled={trackingEnabled} />
+        )}
 
         {/* draw flight path Menu*/}
         {/*} {(!devicesMenuOpen || flightPathMenuOpen) && (
