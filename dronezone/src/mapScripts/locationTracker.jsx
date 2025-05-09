@@ -1,13 +1,11 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { setPosition } from '@/Redux/gpsPos/gpsPosSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { droneClient } from './dronepathHandler';
+import { droneClient } from './dronepathHandler.js';
 import L from 'leaflet';
-import { FaLocationDot } from "react-icons/fa6";
 import ReactDOMServer from 'react-dom/server';
-
 
 
 
@@ -24,6 +22,7 @@ function LocationTracker({ trackingEnabled }) {
   const [watchId, setWatchId] = useState(null);
   const [mapCentered, setMapCentered] = useState(false);
   const { userID } = useSelector((state) => state.auth);
+  const previousPosition = useRef(null);
   
   const [heading, setHeading] = useState(null);
 
@@ -122,8 +121,12 @@ function LocationTracker({ trackingEnabled }) {
         (pos) => {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
           dispatch(setPosition(newPos));
-
-          updatePositionInDatabase(newPos, userID);
+          
+          if (!previousPosition.current || previousPosition.current[0] !== newPos[0] || 
+            previousPosition.current[1] !== newPos[1]) {
+              updatePositionInDatabase(newPos, userID);
+              previousPosition.current = newPos;
+          }
 
           if (!mapCentered) {
             map.flyTo(newPos, map.getZoom());

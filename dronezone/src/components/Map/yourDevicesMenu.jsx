@@ -23,7 +23,6 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
         const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); 
 
         const parsedDeviceData = await deviceRespone.json()
-        console.log(parsedDeviceData);
         dispatch(setAllDrones(parsedDeviceData));
         
         

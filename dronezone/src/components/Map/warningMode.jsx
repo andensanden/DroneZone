@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useFlightMode } from "./inFlightContext"; // adjust path if needed
 
-
 export function WarningMode() {
   const [warningActive, setWarningActive] = useState(false);
-  
+
   return (
     <>
       {/* Toggle Button for Testing */}
       <button
         onClick={() => setWarningActive((prev) => !prev)}
-        className="absolute bottom-0 left-[20px] z-999 cursor-pointer text-xl">
+        className="absolute -bottom-1 left-[20px] z-999 cursor-pointer text-xl"
+      >
         ⚠️
       </button>
 
@@ -45,11 +45,11 @@ export function WarningMode() {
               boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
             }}
           >
-            <h2 className=" text-xl font-bold mb-[10px]">
-              WARNING
-            </h2>
+            <h2 className=" text-xl font-bold mb-[10px]">WARNING</h2>
             <p className=" text-sm w-[300px]">
-              Bring your drone down immediately. This airspace is currently in use and must be cleared. Failure to comply may result in enforcement action.
+              Bring your drone down immediately. This airspace is currently in
+              use and must be cleared. Failure to comply may result in
+              enforcement action.
             </p>
           </div>
         </>
