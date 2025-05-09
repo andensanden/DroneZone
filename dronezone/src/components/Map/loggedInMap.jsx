@@ -99,7 +99,6 @@ const LoggedInMap = () => {
 
   const handleLaunchClick = () => {
     setShowDashboard(true);
-    setLaunch(!launch);
   };
 
   const handleEndFlightClick = () => {
