@@ -51,21 +51,20 @@ export function DronepathHandler() {
  * @param {*} nodes An array of nodes which will be used for the dronepath.
  * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
  */
-export async function CreateDronepath(nodes, addDronepath, position) {
+export async function CreateDronepath(nodes, addDronepath, position, currentDeviceID) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
         newDronepath.addNode(nodes[i]);
     }
     addDronepath(newDronepath);
-    sendDronepathToDatabase(newDronepath, position);
+    sendDronepathToDatabase(newDronepath, position, currentDeviceID);
 }
 
-async function sendDronepathToDatabase(dronepath, position) {
+async function sendDronepathToDatabase(dronepath, position, currentDeviceID) {
     const dronepathJSON = createPathJSON(dronepath);
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
-    const deviceID = await getDeviceID(userID);
-    droneClient = new DroneClient(userID, deviceID, 
+    droneClient = new DroneClient(userID, currentDeviceID, 
         positionJSON, dronepathJSON);
     droneClient.clientInit();
 }
@@ -73,11 +72,6 @@ async function sendDronepathToDatabase(dronepath, position) {
 async function getUserID() {
     const userID = await supabase.auth.getUser();
     return userID.data.user.id;
-}
-
-async function getDeviceID() {
-    //const deviceID = await supabase;
-    //return deviceID.data.;
 }
 
 /**
