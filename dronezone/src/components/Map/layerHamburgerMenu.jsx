@@ -25,8 +25,6 @@ export function HamburgerButton({ trackingEnabled, setTrackingEnabled,showActive
   };
 
   
-
-
   return (
     <div 
     ref={menuRef}
@@ -40,68 +38,33 @@ export function HamburgerButton({ trackingEnabled, setTrackingEnabled,showActive
       </button>
 
       {menuOpen && (
-        <div style={{
-          position: 'absolute',
-          top: '60px',
-          right: '0',
-          background: '#fff',
-          borderRadius: '16px',
-          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-          width: '260px',
-          overflow: 'hidden',
-          padding: '16px'
-        }}>
-          <div style={{
-            fontWeight: 'bold',
-            fontSize: '16px',
-            padding: '16px 0',
-          }}>
+        <div className="absolute top-[60px] right-0 bg-white cursor-default rounded-2xl shadow-sm overflow-hidden p-[16px] w-[200px] ">
+          <div className="font-bold text-base pb-[7px] ">
             Layers
           </div>
 
-          <div style={{
-            height: '2px',
-            backgroundColor: '#e5e7eb',
-            width: '100%',
-            margin: 0,
-            padding: 0
-          }} />
+          <div className="h-[2px] bg-white w-full" />
 
           {[
             { label: 'Active Drones', checked: showActiveDrones, toggle: () => setShowActiveDrones(!showActiveDrones) },
             { label: 'Restricted Zones', checked: showRestrictedZones, toggle: () => toggleZones() },
             { label: 'Current Location', checked: trackingEnabled, toggle: () => setTrackingEnabled(!trackingEnabled) }
           ].map((layer, i) => (
-            <label key={i} style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              margin: '10px 0',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
+            <label key={i} className="flex justify-between items-center py-[3px] text-xs font-semibold" >
               {layer.label}
               <input
                 type="checkbox"
                 checked={layer.checked}
                 onChange={layer.toggle}
-                style={{ width: '18px', height: '18px', accentColor: '#FFD700', cursor: 'pointer' }}
+                className="w-[18px] h-[18px] cursor-pointer accent-primary-yellow"
               />
             </label>
           ))}
 
           <button
             onClick={clearLayers}
-            style={{
-              marginTop: '12px',
-              background: 'transparent',
-              border: 'none',
-              color: 'red',
-              fontWeight: 'bold',
-              fontSize: '14px',
-              cursor: 'pointer'
-            }}
-          >
+            className="font-bold text-sm pt-[12px] text-red-600 cursor-pointer"
+            >
             Clear Layers
           </button>
         </div>

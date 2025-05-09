@@ -41,7 +41,7 @@ export function DrawFlightPathMenu({
           setFlightPathMenuOpen(!flightPathMenuOpen);
           setDevicesMenuOpen(false);
         }}
-        className="bg-primary-yellow px-[10px] py-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
+        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
                     hover:scale-107 transition-all duration-200"
       >
         <span className="hidden md:block">Draw Flight Path</span>
@@ -57,7 +57,7 @@ export function DrawFlightPathMenu({
             background: "#fff",
             borderRadius: "16px",
             boxShadow: "0 6px 20px rgba(0, 0, 0, 0.2)",
-            width: "260px",
+            width: "220px",
             overflow: "hidden",
             fontFamily: "Arial, sans-serif",
           }}

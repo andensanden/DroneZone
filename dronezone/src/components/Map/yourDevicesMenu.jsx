@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import icon from '@/assets/icon.svg'; // Update this path as needed
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
-import { Logo } from '../logo';
 
 
 export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMenuOpen,bottom, onToggleMenu }) {
@@ -33,7 +32,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
     <div
       style={{
         position: 'absolute',
-        bottom: `${bottom}px`, // ← passed as a prop from the parent
+        bottom: `${bottom}px`, 
         left: '20px',
         zIndex: 1000,
         transition: 'bottom 0.5s ease'
@@ -42,7 +41,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
     >
       <button
         onClick={onToggleMenu} 
-        className="bg-primary-yellow pt-[10px] pb-[10px] pl-[16px] pr-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[55px] hover:scale-107 transition-all duration-200 shadow-sm"
+        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[55px] hover:scale-107 transition-all duration-200 shadow-sm"
       >
         <span className="hidden md:block">Your Devices</span>
         <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />
@@ -61,7 +60,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
             overflow: 'hidden'
           }}
         >
-          <div className="px-[12px] py-[16px]">
+          <div className="px-[14px] py-[14px]">
           {deviceName.map((deviceName, index)=> {
             return(
                 <div

@@ -9,10 +9,10 @@ const DashboardPanel = ({ data,launchActive,resetKey }) => {
 
   return (
     <div className="hidden sm:block bg-white rounded-2xl shadow-sm cursor-default w-[170px] md:w-[220px]">
-      <div className="bg-primary-blue text-white rounded-t-2xl pt-[12px] pb-[12px] pl-[16px] pr-[16px] font-bold text-base border-b-[4px] border-b-solid border-blue-900">
+      <div className="bg-primary-blue text-white rounded-t-2xl py-[12px] px-[16px] font-bold text-base border-b-[4px] border-b-solid border-blue-900">
         Dashboard
       </div>
-      <div className="pt-[7px] pb-[12px] pl-[16px] pr-[16px]">
+      <div className="pt-[7px] pb-[12px] px-[16px]">
         <DashboardRow label="Longitude" value={Number(position[0]).toFixed(4)} />
         <DashboardRow label="Latitude" value={Number(position[1]).toFixed(4)} />
         <DashboardRow label="Altitude" value={data.altitude} />
