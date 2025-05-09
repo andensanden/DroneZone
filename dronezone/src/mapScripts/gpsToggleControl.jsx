@@ -20,7 +20,7 @@ function GPSToggleControl({ trackingEnabled, toggleTracking }) {
     <div className="absolute top-[80px] left-[12px] z-1000 leaflet-control" >
       <button
         onClick={toggleTracking}
-        className="bg-white p-[4px] rounded-sm border-2" >
+        className="bg-white p-[4px] rounded-sm border-2 hover:bg-gray-100" >
         <MdMyLocation size={20} />
       </button>
     </div>

@@ -10,19 +10,7 @@ export function WarningMode() {
       {/* Toggle Button for Testing */}
       <button
         onClick={() => setWarningActive((prev) => !prev)}
-        style={{
-          position: "absolute",
-          bottom: "7px",
-          left: "250px",
-          zIndex: 1100,
-          fontSize: "22px",            // ← Bigger emoji
-            background: "none",          // ← Remove background
-            border: "none",              // ← No border
-            padding: 0,                  // ← No padding around it
-            cursor: "pointer",           // ← Keep pointer on hover
-            lineHeight: 1, 
-        }}
-      >
+        className="absolute bottom-0 left-[20px] z-999 cursor-pointer text-xl">
         ⚠️
       </button>
 
@@ -57,10 +45,10 @@ export function WarningMode() {
               boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
             }}
           >
-            <h2 style={{ color: "black", fontSize: "24px",fontWeight: "bold", marginBottom: "10px" }}>
+            <h2 className=" text-xl font-bold mb-[10px]">
               WARNING
             </h2>
-            <p style={{ color: "black", fontSize: "16px", maxWidth: "300px" }}>
+            <p className=" text-sm w-[300px]">
               Bring your drone down immediately. This airspace is currently in use and must be cleared. Failure to comply may result in enforcement action.
             </p>
           </div>
