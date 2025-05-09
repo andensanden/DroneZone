@@ -122,15 +122,10 @@ function LocationTracker({ trackingEnabled }) {
           const newPos = [pos.coords.latitude, pos.coords.longitude];
           dispatch(setPosition(newPos));
           
-          
-          
-          if (!previousPosition.current || previousPosition.current[0] !== newPos[0]|| previousPosition.current[1] !== newPos[1]
-          ) {
-        
-            updatePositionInDatabase(newPos, userID);
-            previousPosition.current = newPos; // Update the previous position
-          } else {
-            console.log("Position is the same, not updating.");
+          if (!previousPosition.current || previousPosition.current[0] !== newPos[0] || 
+            previousPosition.current[1] !== newPos[1]) {
+              updatePositionInDatabase(newPos, userID);
+              previousPosition.current = newPos;
           }
 
           if (!mapCentered) {
