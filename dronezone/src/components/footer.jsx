@@ -12,7 +12,7 @@ export function Footer() {
         </div>
         <div className="flex flex-col">
           <h2 className="font-bold text-xl">Terms and conditions</h2>
-          <p className="text-lg text-gray-400">
+          <p className="text-base text-gray-400">
             This website is operated by a student team from KTH as part of a
             course project. By using the site, you agree to comply with Swedish
             law and our terms of use. Personal data is handled in accordance

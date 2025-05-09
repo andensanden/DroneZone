@@ -6,10 +6,12 @@ import L from "leaflet";
 import droneIconUrl from "@/assets/icon.svg";
 import { SelectedDronePanel } from "./selectedDronePanel";
 import { useMap } from "react-leaflet";
+import ReactDOMServer from 'react-dom/server';
 import { useRef } from "react";
 import "leaflet-arrowheads"; 
 import { DroneHeatMap } from "./droneHeatMap";
 import ActiveDrone from "../ActiveDrones/activeDrones";
+import { DroneLabel } from "./droneLabel";
 
 
 import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler';
@@ -164,6 +166,8 @@ export function PopUpDrone() {
                 return <DroneHeatMap droneData={allActiveDrones} />;
               }
 
+
+
   return (
     <>
     
@@ -171,7 +175,7 @@ export function PopUpDrone() {
         const isActive =
         (hoveredDrone && hoveredDrone.id === drone.id) ||
         (clickedDrone && clickedDrone.id === drone.id);
-      
+        
         const position = [drone.lat, drone.lng, drone.altitude];
         const headingEnd = [
           drone.lat + 0.0005 * Math.sin((drone.heading * Math.PI) / 180),
@@ -179,38 +183,15 @@ export function PopUpDrone() {
           drone.altitude + 0.0005 * Math.cos((drone.heading * Math.PI) / 180),
         ];
 
-
         const labelIcon = L.divIcon({
-          className: "drone-label-icon",
-          html: `
-            <div style="
-              background: #fff;
-              border: 3px solid #555;
-              border-radius: 2px;
-              padding: 4px 16px;
-              min-width: 130px; 
-              font-family: monospace;
-              font-weight: bold;
-              font-size: 14px;
-              position: relative;
-              color: #555;
-            ">
-              ID: ${drone.id}
-              <div style="
-                position: absolute;
-                bottom: -12px;
-                left: 0px;
-                width: 0;
-                height: 0;
-                border-left: 8px solid transparent;
-                border-right: 8px solid transparent;
-                border-top: 12px solid #555;
-              "></div>
-            </div>
-          `,
+          className: 'drone-label-icon',
+          html: ReactDOMServer.renderToString(<DroneLabel id={drone.id} />),
           iconAnchor: [20, 45],
         });
 
+
+
+        
         return (
           <div key={drone.id}>
             
@@ -227,25 +208,37 @@ export function PopUpDrone() {
                 },
                 click: () => {
                     if (clickedDrone?.id === drone.id) {
-                      setClickedDrone(null); // same drone clicked → close panel
+                      setClickedDrone(null); 
                     } else {
-                      setClickedDrone(drone); // new drone clicked → open panel
+                      setClickedDrone(drone); 
                       setHoveredDrone(null);
                     }
                   },  }}
             />
-            {zoom >= 15 && (
-            <Marker position={[drone.lat + 0.0005, drone.lng + 0.0003, drone.altitude]} icon={labelIcon} interactive={false} />)}
+            <DroneLabel id={drone.id}/>
             {zoom >= 15 && <ArrowPolyline positions={[position, headingEnd]} />}
 
+            {zoom >= 15 && (
+            <>
+              <Marker
+              position={[drone.lat + 0.0005, drone.lng + 0.0003, drone.altitude]}
+              icon={labelIcon}
+              interactive={false}
+              />
+              <ArrowPolyline positions={[position, headingEnd]} />
+            </>
+      )}
+            </div>
            
 
-            </div>
         );
       })}
+      
 
       <SelectedDronePanel drone={selectedDrone}
       onClose={() => setClickedDrone(null)} />
+
+
     </>
   );
 }
