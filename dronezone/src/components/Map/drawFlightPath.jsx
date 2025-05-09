@@ -30,7 +30,7 @@ export function DrawFlightPathMenu({
       style={{
         position: "absolute",
         bottom: `${bottom}px`, 
-        left: "20px",
+        left: "12px",
         zIndex: 1000,
         transition: "bottom 0.5s ease",
       }}

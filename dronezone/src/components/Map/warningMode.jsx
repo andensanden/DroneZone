@@ -13,7 +13,7 @@ export function WarningMode() {
         style={{
           position: "absolute",
           bottom: "7px",
-          left: "23px",
+          left: "250px",
           zIndex: 1100,
           fontSize: "22px",            // ← Bigger emoji
             background: "none",          // ← Remove background
