@@ -184,7 +184,7 @@ const LoggedInMap = () => {
             deviceStates={deviceStates}
             setDeviceStates={setDeviceStates}
             menuOpen={devicesMenuOpen}
-            bottom={devicesMenuOpen ? 40 + 170 : 40}
+            bottom={devicesMenuOpen ? 21 + 170 : 21}
             onToggleMenu={toggleDevicesMenu}
           />
         )}
@@ -201,7 +201,7 @@ const LoggedInMap = () => {
                 confirmFlightPath={confirmFlightPath}
                 setConfirmFlightPath={setConfirmFlightPath}
                 setDrawingMode={setDrawingMode}
-                bottom={flightPathMenuOpen ? 100 + 150 : 100}
+                bottom={flightPathMenuOpen ? 80 + 150 : 80}
               />
             )}
             <DronepathsProvider>

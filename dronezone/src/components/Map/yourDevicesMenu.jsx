@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import icon from '@/assets/icon.svg'; // Update this path as needed
+import icon from '@/assets/icon.svg'; 
 import { useNavigate } from "react-router";
 import { supabase } from "@/supabase/config";
 
@@ -17,7 +17,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
 
         const { data, error } = await supabase.auth.getUser();
 
-        const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); //Fetching device data
+        const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); 
 
         const parsedDeviceData = await deviceRespone.json()
         setDeviceName(parsedDeviceData)
@@ -33,7 +33,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
       style={{
         position: 'absolute',
         bottom: `${bottom}px`, 
-        left: '20px',
+        left: '12px',
         zIndex: 1000,
         transition: 'bottom 0.5s ease'
         

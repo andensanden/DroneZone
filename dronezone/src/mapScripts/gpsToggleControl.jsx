@@ -1,5 +1,4 @@
 import "leaflet/dist/leaflet.css";
-import { VscPerson } from "react-icons/vsc"; /*person icon, not used any more*/
 import { MdMyLocation } from "react-icons/md";
 
 // GPS Toggle Control
@@ -18,26 +17,10 @@ import { MdMyLocation } from "react-icons/md";
 
 function GPSToggleControl({ trackingEnabled, toggleTracking }) {
   return (
-    <div
-      className="leaflet-bar leaflet-control"
-      style={{
-        position: "absolute",
-        top: "14%",
-        left: "0.7%",
-        zIndex: 1000,
-        pointerEvents: "auto",
-      }}
-    >
+    <div className="absolute top-[80px] left-[12px] z-1000 leaflet-control" >
       <button
         onClick={toggleTracking}
-        style={{
-          backgroundColor: trackingEnabled ? "#fff" : "#fff",
-          padding: "4px",
-          border: "2px solid rgba(0,0,0,0.1)",
-          borderRadius: "3px",
-          cursor: "pointer",
-        }}
-      >
+        className="bg-white p-[4px] rounded-sm border-2" >
         <MdMyLocation size={20} />
       </button>
     </div>
