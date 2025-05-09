@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import { setTakeDownDroneTrue } from "@/Redux/event/eventSlice.js";
 
 
 //TODO: State management and error handling need to be implemented on the client side,
@@ -11,12 +12,15 @@ const backendURL = import.meta.env.VITE_BACKEND_URL;
  */
 export class DroneClient{
 
-    constructor(userID, deviceID, currentPosition, flyingRoute) {
+
+    constructor(userID, deviceID, currentPosition, flyingRoute, dispatch) {
+
         this.userID = userID;
         this.deviceID = deviceID;
         this.flyingRoute = flyingRoute;
         this.currentPosition = currentPosition;
         this.activeFlight = true;
+        this.dispatch = dispatch;
 
         //Connect to server and setting up socket
         this.socket = io(backendURL, { 
@@ -72,7 +76,7 @@ export class DroneClient{
       // Event that is being sent when a third party wants the drones to be taken down
       this.socket.on("takeDownDrone", (data) => {
           console.log(data);
-          this.socket.disconnect();
+          this.dispatch(setTakeDownDroneTrue());
           alert("TAKE DOWN DRONE");
         });
         

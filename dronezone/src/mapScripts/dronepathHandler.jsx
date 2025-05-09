@@ -20,8 +20,7 @@ export function DronepathHandler() {
 
     /*useEffect(() => {
     async function fetchData() {
-        const response = await fetch(backendURL + "/api/drone/activeDrones", 
-                        {method: "GET", headers: { "Content-Type": "application/json"}});
+        const response = await fetch(backendURL + "/api/drone/activeDrones", {method: "GET", headers: { "Content-Type": "application/json"}});
         const data = await response.json();
 
         let dronepaths = [];
@@ -51,21 +50,21 @@ export function DronepathHandler() {
  * @param {*} nodes An array of nodes which will be used for the dronepath.
  * @param {*} addDronepath The function (from dronepathsContext) which adds the dronepath to the array of dronepaths.
  */
-export async function CreateDronepath(nodes, addDronepath, position, currentDeviceID) {
+export async function CreateDronepath(nodes, addDronepath, position, currentDeviceID, dispatch) {
     const newDronepath = new Dronepath(1, "blue");
     for (var i = 0; i < nodes.length; i++) {
         newDronepath.addNode(nodes[i]);
     }
     addDronepath(newDronepath);
-    sendDronepathToDatabase(newDronepath, position, currentDeviceID);
+    sendDronepathToDatabase(newDronepath, position, currentDeviceID, dispatch);
 }
 
-async function sendDronepathToDatabase(dronepath, position, currentDeviceID) {
+async function sendDronepathToDatabase(dronepath, position, currentDeviceID, dispatch) {
     const dronepathJSON = createPathJSON(dronepath);
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
     droneClient = new DroneClient(userID, currentDeviceID, 
-        positionJSON, dronepathJSON);
+        positionJSON, dronepathJSON, dispatch);
     droneClient.clientInit();
 }
 
