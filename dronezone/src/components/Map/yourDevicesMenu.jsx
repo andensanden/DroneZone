@@ -42,19 +42,7 @@ export function YourDevicesMenu({ deviceStates, setDeviceStates, menuOpen, setMe
     >
       <button
         onClick={onToggleMenu} 
-        style={{
-          background: '#FFCC00',
-          padding: '10px 16px',
-          borderRadius: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          border: 'none',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '14px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '55px'
-        }}
+        className="bg-primary-yellow pt-[10px] pb-[10px] pl-[16px] pr-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[55px] shadow-sm"
       >
         <span className="hidden md:block">Your Devices</span>
         <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />

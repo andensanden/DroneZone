@@ -23,7 +23,7 @@ export function EndFlightButton({ onClick }) {
     >
       <button
         className="bg-red-600 text-white font-bold text-lg md:text-2xl pt-[10px] pb-[10px] pr-[20px] md:pr-[55px] pl-[20px] md:pl-[55px]
-         rounded-xl boarder-none hover:scale-107 transition-all duration-200 whitespace-nowrap"
+         rounded-xl boarder-none hover:scale-107 transition-all duration-200 whitespace-nowrap shadow-sm"
         onClick={handleClick}
       >
         End Flight

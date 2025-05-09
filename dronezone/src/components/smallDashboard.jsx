@@ -7,14 +7,14 @@ export function SmallDashboard() {
 		const { position } = useSelector((state) => state.gpsPos);
 			
 		const DashboardRow = ({ label, value }) => (
-			<div className="flex pt-[8px] pb-[8px] text-sm border-b border-neutral-300 flex justify-between">
+			<div className="flex pt-[8px] pb-[8px] text-sm border-b border-neutral-300 justify-between">
 				<span>{label}</span>
 				<span>{value}</span>
 			</div>
 		)
 
 		return (
-			<div className="bg-white rounded-2xl w-[110px] cursor-default sm:hidden">
+			<div className="bg-white rounded-2xl w-[110px] cursor-default shadow-sm sm:hidden">
 				<div className="bg-primary-blue text-white rounded-t-2xl pt-[12px] pb-[12px] pl-[16px] pr-[16px]
 								font-bold text-sm border-b-[4px] border-b-solid border-blue-900">
 					Dashboard
