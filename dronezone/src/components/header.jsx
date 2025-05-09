@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { useSelector, useDispatch } from "react-redux";
-import { LoginDropDown } from "@/components/loginDropDown"; 
+import { LoginDropDown } from "@/components/loginDropDown";
 import { LuInbox } from "react-icons/lu";
-import {GoQuestion} from "react-icons/go";
+import { GoQuestion } from "react-icons/go";
 import { NavigationMenu } from "./navigationMenu";
-
-
 
 export function Header() {
   const navigate = useNavigate();
@@ -26,20 +24,17 @@ export function Header() {
 
       {/*Navigation bar*/}
       <div className="flex items-center gap-4">
-
-        {isAuth ? <div className="relative hover:scale-107 transition-all duration-200">
+        {/*We dont need this NOTIFICATION button*/}
+        {/*x{isAuth ? <div className="relative hover:scale-107 transition-all duration-200">
           <button className="bg-primary-blue p-3 rounded-xl"><LuInbox size={20} className="text-white"/> </button> 
         <span className="text-white text-sm font-bold bg-red-600 rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0">1</span>
-        </div> : null}
+        </div> : null}*/}
 
         {/* mobile compatible menu */}
-        <div className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden hover:scale-107 transition-all duration-200" >
+        <div className="flex items-center p-3 mr-5 bg-primary-yellow  rounded-xl sm:hidden hover:scale-107 transition-all duration-200">
           <NavigationMenu />
-
         </div>
         <div className="hidden sm:flex items-center mr-5 h-12 bg-gray-200 rounded-2xl">
-
-
           <button
             className="text-gray-700 bg-transparent ml-2 font-bold text-sm p-2 w-16 hover:scale-107 transition-all duration-200"
             onClick={() => navigate("/")}
@@ -59,15 +54,20 @@ export function Header() {
             Guidelines
           </button>
 
-          <button className=" p-3 rounded-xl"><GoQuestion size={25} className="text-gray-700  hover:scale-107 transition-all duration-200"
-          onClick={() => navigate("/info")}/> </button> 
+          <button className=" p-3 rounded-xl">
+            <GoQuestion
+              size={25}
+              className="text-gray-700  hover:scale-107 transition-all duration-200"
+              onClick={() => navigate("/info")}
+            />{" "}
+          </button>
 
-          <div
-            className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
-          >
-
-
-            {isAuth ? <LoginDropDown /> : <GrLogin size={20} onClick={() => navigate("/login")}/>}
+          <div className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200">
+            {isAuth ? (
+              <LoginDropDown />
+            ) : (
+              <GrLogin size={20} onClick={() => navigate("/login")} />
+            )}
           </div>
         </div>
       </div>
