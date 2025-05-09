@@ -1,16 +1,16 @@
 
 // Active drones in area, currently with dummy drones. 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Marker, Polyline } from "react-leaflet";
 import L from "leaflet";
 import droneIconUrl from "@/assets/icon.svg";
 import { SelectedDronePanel } from "./selectedDronePanel";
 import { useMap } from "react-leaflet";
-import { useRef } from "react";
 import "leaflet-arrowheads"; 
 import { DroneHeatMap } from "./droneHeatMap";
 import ActiveDrone from "../ActiveDrones/activeDrones";
 import { SelectedDronepath } from "./selectedDronepath";
+import { useSelector } from "react-redux";
 
 
 import { createDronepathFromJSON } from '@/mapScripts/dronepathHandler.js';
@@ -49,6 +49,8 @@ export function PopUpDrone() {
     const map = useMap();
     const [zoom, setZoom] = useState(map.getZoom());
     const [allActiveDrones, setAllActiveDrones] = useState([]);
+    const hasChecked = useRef(false);
+    const { userID } = useSelector((state) => state.auth);
 
     useEffect(() => {
         const handleZoom = () => setZoom(map.getZoom());
@@ -142,8 +144,21 @@ export function PopUpDrone() {
       
         async function updateActiveDrones() {
           const data = await fetchData();
+          if (!hasChecked.current) checkIfUserIsInFlight(data);
           buildActiveDrones(data);
         };
+
+        function checkIfUserIsInFlight(data) {
+          console.log("My ID: " + userID);
+          data.forEach((dataObject) => {
+            console.log("DataObject ID: " + dataObject.userID);
+            if (dataObject.userID === userID) {
+              console.log("This user is already in flight");
+            }
+          });
+          hasChecked.current = true;
+          console.log("hasChecked: " + hasChecked.current);
+        }
       
         function getDroneID(activeDrone){
       
