@@ -40,13 +40,14 @@ function ArrowPolyline({ positions }) {
     return <Polyline ref={polylineRef} positions={positions} color="gray" weight={2} />;
 }
 
-export function PopUpDrone({drones}) {
+export function PopUpDrone() {
     const [hoveredDrone, setHoveredDrone] = useState(null);
     const [clickedDrone, setClickedDrone] = useState(null);
     const selectedDrone = clickedDrone || hoveredDrone;
 
     const map = useMap();
     const [zoom, setZoom] = useState(map.getZoom());
+    const [allActiveDrones, setAllActiveDrones] = useState([]);
 
     useEffect(() => {
         const handleZoom = () => setZoom(map.getZoom());
@@ -54,8 +55,7 @@ export function PopUpDrone({drones}) {
         return () => map.off("zoom", handleZoom); // cleanup
         }, [map]);
     
-          
-        const allActiveDrones = [
+        /*const allActiveDrones = [
           new ActiveDrone("XYZ456", new L.LatLng(59.3287, 18.1712), 135, 89, null),
           new ActiveDrone("A73X9Z", new L.LatLng(59.4080, 17.9390), 45, 110, null),
           new ActiveDrone("M12KD7", new L.LatLng(59.4105, 17.9500), 90, 131, null),
@@ -106,12 +106,11 @@ export function PopUpDrone({drones}) {
           new ActiveDrone("HUS004", new L.LatLng(59.4141, 17.9431), 180, 104, null),
           new ActiveDrone("HUS005", new L.LatLng(59.4169, 17.9344), 320, 99, null),
           new ActiveDrone("HUS006", new L.LatLng(59.4062, 17.9369), 230, 112, null),
-        ];
-      
-        const droneDataRef = useRef([]); // Use droneDataRef.current to access the array
+        ];*/
       
         useEffect(() => {
           updateActiveDrones();
+          setInterval(updateActiveDrones, 5000);
         }, []);
       
         function buildActiveDrones(data) {
@@ -119,10 +118,12 @@ export function PopUpDrone({drones}) {
           data.forEach((dataObject) => {
             const newDrone = new ActiveDrone(dataObject.deviceID,
               getLatLng(dataObject.currentPosition),
+              5,
+              100,
               createDronepathFromJSON(dataObject.dronePath));
             droneData.push(newDrone);
           });
-          droneDataRef.current = droneData;
+          setAllActiveDrones(droneData);
         }
       
         function getLatLng(posJSON) {
@@ -136,20 +137,6 @@ export function PopUpDrone({drones}) {
             headers: { "Content-Type": "application/json" },
           });
           return await response.json();
-        }
-      
-        //Returns all of the active drones Info
-        function getAllActiveDrones() {
-      
-          const currArr = [];
-      
-          //Iterates over all of the current drones
-          /*allActiveDrones.forEach((activeDrone, index) => {
-            const did =  getInfoFromDrone(activeDrone);
-            currArr[index] = did;
-          }); */
-      
-          return allActiveDrones;
         }
       
         async function updateActiveDrones() {
