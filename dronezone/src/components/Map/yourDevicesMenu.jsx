@@ -48,38 +48,17 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
         className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[55px] hover:scale-107 transition-all duration-200 shadow-sm"
       >
         <span className="hidden md:block">Your Devices</span>
-        <img src={icon} alt="Drone icon" style={{ width: '22px', height: '22px' }} />
+        <img src={icon} alt="Drone icon" className="w-[22px] h-[22px]" />
       </button>
 
       {menuOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '60px',
-            left: '0',
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
-            width: '220px',
-            overflow: 'hidden'
-          }}
-        >
-          <div style={{ padding: '10px 16px' }}>
-          {allDrones.map((deviceName, index)=> {
+        <div className="absolute top-[60px] left-0 bg-white rounded-2xl shadow-sm w-[220px] overflow-hidden" >
+          <div className="px-[14px] py-[14px]">
+          {deviceName.map((deviceName, index)=> {
             return(
                 <div
-                  key={deviceName.deviceID}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 0',
-                    
-                    fontWeight: 'bold',
-                    fontSize: '14px',
-                    
-                  }}
-                >
+                  key={deviceName.deviceTableID}
+                  className="flex justify-between items-center font-bold text-sm" >
                   <input
                     disabled
                     value = {deviceName.deviceName}
@@ -96,12 +75,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
                         dispatch(setCurrentDeviceID(deviceName.deviceID));
                       }
                     }}
-                    style={{
-                      width: '16px',
-                      height: '16px',
-                      accentColor: '#FFD700'
-                    }}
-                  />
+                    className="w-[16px] h-[16px] accent-primary-yellow" />
                 </div>  
                 )}
                 )}
