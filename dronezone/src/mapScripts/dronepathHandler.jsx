@@ -64,7 +64,8 @@ async function sendDronepathToDatabase(dronepath, position) {
     const dronepathJSON = createPathJSON(dronepath);
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
-    droneClient = new DroneClient(userID, "d7fdfdd6-e33a-4fda-a73d-0bbc43ba4804", 
+    const deviceID = await getDeviceID(userID);
+    droneClient = new DroneClient(userID, deviceID, 
         positionJSON, dronepathJSON);
     droneClient.clientInit();
 }
@@ -72,6 +73,11 @@ async function sendDronepathToDatabase(dronepath, position) {
 async function getUserID() {
     const userID = await supabase.auth.getUser();
     return userID.data.user.id;
+}
+
+async function getDeviceID() {
+    //const deviceID = await supabase;
+    //return deviceID.data.;
 }
 
 /**
