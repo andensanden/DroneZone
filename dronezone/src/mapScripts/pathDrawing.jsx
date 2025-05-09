@@ -24,12 +24,9 @@ function MapClick({ drawingMode, isLaunched }) {
     const nodesRef = useRef(nodes);
     const zonesRef = useRef(zones);
     const { addDronepath } = useDronepaths();
-<<<<<<< HEAD
+
     const {position, currentDeviceID} = useSelector((state) => state.gpsPos);
-=======
-    const {position} = useSelector((state) => state.gpsPos);
     const dispatch = useDispatch();
->>>>>>> 356b4d4 (Added logic for warninge event)
 
     const onMapClick = (e) => {
         if (drawingMode === 'path') {
@@ -54,12 +51,7 @@ function MapClick({ drawingMode, isLaunched }) {
 
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
-
-<<<<<<< HEAD
-    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID);
-=======
-    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, dispatch);
->>>>>>> 356b4d4 (Added logic for warninge event)
+    useLaunch(isLaunched, nodes, addDronepath, setNodes, position, currentDeviceID,dispatch);
 
     return (
         <>
