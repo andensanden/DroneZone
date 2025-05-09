@@ -10,7 +10,7 @@ export function SelectedDronePanel({ drone, onClose }) {
         top: "80px",
         right: "20px",
         zIndex: 1000,
-        width: "260px",
+        width: "220px",
         backgroundColor: "white",
         borderRadius: "16px",
         boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
@@ -20,12 +20,12 @@ export function SelectedDronePanel({ drone, onClose }) {
     >
       <div
         style={{
-          backgroundColor: "#2563eb",
+          backgroundColor: "#2137F8",
           color: "white",
           padding: "12px 16px",
           fontWeight: "bold",
           fontSize: "16px",
-          borderBottom: "4px solid #1e40af",
+          borderBottom: "4px solid #1c398e",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
