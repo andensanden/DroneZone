@@ -2,6 +2,9 @@ import { GiPathDistance } from "react-icons/gi";
 import { useNodes } from "@/mapScripts/nodesContext";
 import { useEffect } from "react";
 import UndoButton from "@/mapScripts/undoButton";
+import { useMap } from "react-leaflet";
+import { useSelector } from "react-redux";
+
 
 export function DrawFlightPathMenu({
   flightPathMenuOpen,
@@ -14,6 +17,8 @@ export function DrawFlightPathMenu({
   bottom,
 }) {
   const { undoLastNode, nodes, clearNodes } = useNodes();
+  const map = useMap();
+const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
 
   useEffect(() => {
     if (!flightPathMenuOpen && !confirmFlightPath) {
@@ -36,11 +41,25 @@ export function DrawFlightPathMenu({
       }}
     >
       <button
-        onClick={() => {
-          onToggleMenu();
-          setFlightPathMenuOpen(!flightPathMenuOpen);
-          setDevicesMenuOpen(false);
-        }}
+  onClick={() => {
+    const nextState = !flightPathMenuOpen;
+
+    onToggleMenu();
+    setFlightPathMenuOpen(nextState);
+    setDevicesMenuOpen(false);
+
+    if (
+      nextState &&
+      map &&
+      Array.isArray(position) &&
+      typeof position[0] === "number" &&
+      typeof position[1] === "number" &&
+      map.getZoom() < 14 
+    ) {
+      map.flyTo(position, 14);
+    }
+  }}
+
         className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
                     hover:scale-107 transition-all duration-200"
       >
