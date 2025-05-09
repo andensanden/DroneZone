@@ -134,7 +134,7 @@ export function AccountInfo() {
           <h2 className="text-3xl font-bold my-4 ">Devices</h2>
           {devices.map((device)=> {
            return( 
-            <div className="flex flex-row items-center justify-center gap-2" key={device.deviceTableID}>
+            <div className="flex flex-row items-center md:justify-center gap-2" key={device.deviceTableID}>
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 disabled
