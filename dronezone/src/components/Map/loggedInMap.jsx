@@ -21,7 +21,7 @@ import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
 import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
-import { DronepathHandler, EndFlight } from "@/mapScripts/dronepathHandler";
+import { EndFlight } from "@/mapScripts/dronepathHandler.js";
 
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
@@ -208,7 +208,6 @@ const LoggedInMap = () => {
             )}
             <DronepathsProvider>
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
-            <DronepathHandler/>
             </DronepathsProvider>
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
           </NodesProvider>
