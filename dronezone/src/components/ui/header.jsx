@@ -62,7 +62,7 @@ export function Header() {
 
           <div className="flex items-center justify-center text-gray-700 bg-primary-yellow h-12 font-bold text-sm rounded-2xl ml-2 p-2 w-16 hover:scale-107 transition-all duration-200"
                onClick={() =>  {
-                isAuth ? (<LoginDropDown/> ) : (<FaUser size={20}/>)
+                isAuth ? (<LoginDropDown />) : ( navigate("/login"))
               }}
           >
             {isAuth ? (
