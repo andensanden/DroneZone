@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { useSelector, useDispatch } from "react-redux";
-import { LoginDropDown } from "@/components/loginDropDown";
+import { LoginDropDown } from "./loginDropDown";
 import { GoQuestion } from "react-icons/go";
-import { NavigationMenu } from "./navigationMenu";
+import { NavigationMenu } from "../Navigation/navigationMenu";
 import { FaUser } from "react-icons/fa";
 
 
