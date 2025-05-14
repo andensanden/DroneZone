@@ -5,6 +5,7 @@ import UndoButton from "@/mapScripts/undoButton";
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { IoLockOpenOutline, IoLockClosedOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 
 export function DrawFlightPathMenu({
@@ -18,9 +19,11 @@ export function DrawFlightPathMenu({
   bottom,
   showDashboard
 }) {
+
+
   const { undoLastNode, nodes, clearNodes } = useNodes();
   const map = useMap();
-  const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
+  const { position, currentDeviceID } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
 
   // Hanterar ritläge beroende på meny- och bekräftelsestatus
   useEffect(() => {
@@ -95,30 +98,30 @@ export function DrawFlightPathMenu({
           <div style={{ padding: "12px 16px" }}>
             {/* Bekräfta flygväg */}
             <div
-  onClick={() => setConfirmFlightPath(!confirmFlightPath)}
-  style={{
-    padding: "8px 0px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "8px", // Space between icon and text
-    //borderBottom: "1px solid #ddd",
-    fontWeight: "bold",
-    fontSize: "14px",
-    backgroundColor: "#FFFFFF", // Always white
-    borderRadius: "8px",
-    cursor: "pointer",
-    color: confirmFlightPath ? "#333333" : "#333333", 
-    transition: "color 0.2s ease",
-  }}
->
-  <span>{confirmFlightPath ? "Edit Flight Path" : "Confirm Flight Path"}</span>
-  {confirmFlightPath ? (
-    <IoLockClosedOutline size={16}  />
-  ) : (
-    <IoLockOpenOutline size={16} />
-  )}
-</div>
+            onClick={() => handleConfirmFlightPath()}
+            style={{
+              padding: "8px 0px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "8px", // Space between icon and text
+              //borderBottom: "1px solid #ddd",
+              fontWeight: "bold",
+              fontSize: "14px",
+              backgroundColor: "#FFFFFF", // Always white
+              borderRadius: "8px",
+              cursor: "pointer",
+              color: confirmFlightPath ? "#333333" : "#333333", 
+              transition: "color 0.2s ease",
+            }}
+          >
+          <span>{confirmFlightPath ? "Edit Flight Path" : "Confirm Flight Path"}</span>
+          {confirmFlightPath ? (
+            <IoLockClosedOutline size={16}  />
+          ) : (
+            <IoLockOpenOutline size={16} />
+          )}
+        </div>
             {/* Ångra senaste nod */}
             <div
               onClick={undoLastNode} // Step 3 ✅
@@ -150,4 +153,24 @@ export function DrawFlightPathMenu({
       )}
     </div>
   );
+
+
+   //Logic for hanling and confirming flight 
+   function handleConfirmFlightPath() {
+
+    if (!currentDeviceID) {
+      toast.error("Please select a device");
+      return;
+    }
+
+    setConfirmFlightPath(!confirmFlightPath)
+  }
+
+
 }
+
+
+
+
+ 
+
