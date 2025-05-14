@@ -1,4 +1,4 @@
-import { LogoAnimated } from "@/components/logoAnimated";
+import { LogoAnimated } from "../logoAnimated";
 
 export function InfoFooter() {
   return (
