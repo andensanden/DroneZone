@@ -23,6 +23,12 @@ export function LoginForm() {
       return;
     }
 
+    const { data: user } = await supabase.auth.getUser();
+
+    console.log("user id: ", user);
+
+    console.log("User data fetched from DB: ", user);
+
     dispatch(login({email: data.user.email, userID: data.user.id}));
     toast.success("You have been logged in");
     navigate("/");

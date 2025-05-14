@@ -205,6 +205,7 @@ const LoggedInMap = () => {
                 setConfirmFlightPath={setConfirmFlightPath}
                 setDrawingMode={setDrawingMode}
                 bottom={flightPathMenuOpen ? 80 + 150 : 80}
+                showDashboard={showDashboard} 
               />
             )}
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
