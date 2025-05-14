@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //--------- LEAFLET------------
 
@@ -18,7 +18,7 @@ import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
-import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
+import { InFlightProvider, useFlightMode } from "./inFlightContext";
 import { EndFlight } from "@/mapScripts/dronepathHandler.js";
 import { useNodes } from "@/mapScripts/nodesContext";
 
@@ -48,6 +48,8 @@ const LoggedInMap = () => {
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const drones = ActiveDronesDisplayer();
   const { clearNodes } = useNodes();
+  const { flightMode } = useFlightMode();
+  const flightModeRef = useRef(flightMode);
 
   //-----------------
   //For draw path menu
@@ -99,7 +101,6 @@ const LoggedInMap = () => {
   const [showDashboard, setShowDashboard] = useState(false);
 
   const handleLaunchClick = () => {
-    setShowDashboard(true);
     setLaunch(!launch);
   };
 
@@ -110,6 +111,11 @@ const LoggedInMap = () => {
     EndFlight();
     clearNodes();
   };
+
+  useEffect(() => {
+    flightModeRef.current = flightMode;
+    setShowDashboard(flightModeRef.current === "inFlightMode" ? true : false);
+  }, [flightMode]);
 
   return (
     //Overall map component generation with styling
@@ -139,7 +145,6 @@ const LoggedInMap = () => {
             zIndex: 1000,
           }}
         ></div>
-        <InFlightProvider>
           <LaunchButton onLaunchClick={handleLaunchClick} onEndClick={handleEndFlightClick} />
           {showDashboard && (
             <div
@@ -164,7 +169,6 @@ const LoggedInMap = () => {
           )}
 
         {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
-        </InFlightProvider>
 
         {/* User tracking functionality*/}
         {!showDashboard && (
