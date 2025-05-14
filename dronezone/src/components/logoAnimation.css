@@ -1,4 +1,4 @@
-.logo-container:hover {
+.logo-container {
   position: relative;
   display: inline-block;
   text-align: center;
@@ -33,7 +33,7 @@
 .shadow{
   display: none;
 }
-.shadow:hover::after {
+.shadow:hover {
   position: absolute;
   top:100%;
   left: 10%;
