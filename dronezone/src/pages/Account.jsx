@@ -1,6 +1,6 @@
-import { Header } from "@/components/header"
-import {Footer} from "@/components/footer"
-import { AccountInfo } from "@/components/accountInfo"
+import { Header } from "@/components/ui/header"
+import {Footer} from "@/components/ui/footer"
+import { AccountInfo } from "@/components/Account/accountInfo"
 
 export function Account(){
 

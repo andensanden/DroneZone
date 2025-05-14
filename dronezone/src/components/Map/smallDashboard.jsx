@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 
-export function SmallDashboard() {
+function SmallDashboard() {
 
 		const { position } = useSelector((state) => state.gpsPos);
 			
@@ -25,5 +25,5 @@ export function SmallDashboard() {
 					</div>
 				</div>
 		)
-}
+} export default SmallDashboard;
 

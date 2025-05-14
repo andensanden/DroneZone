@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/ui/logo";
 import { supabase } from "@/supabase/config.js";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
