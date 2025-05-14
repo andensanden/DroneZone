@@ -4,7 +4,7 @@ export function LogoAnimated() {
   return (
       <div className="logo-container">
           
-        <div className="shadow"></div>
+        {/* <div className="shadow"></div> */}
         <div className="animate-bounce-up-and-down">
         <svg 
         className="animate-rotate"
