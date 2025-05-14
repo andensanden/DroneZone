@@ -1,6 +1,6 @@
-import { Header } from "@/components/header";
-import { InfolineInfo } from "@/components/InfoInfo";
-import { InfoFooter } from "@/components/infoFooter";
+import { Header } from "@/components/ui/header";
+import { InfolineInfo } from "@/components/Navigation/InfoInfo";
+import { InfoFooter } from "@/components/Navigation/infoFooter";
 
 
 

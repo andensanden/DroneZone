@@ -11,9 +11,9 @@ export class Dronepath {
    * Creates a new Dronepath instance.
    * @param {string} owner - Identifier for who created this path.
    */
-    constructor(owner, color) {
-        this.owner = owner;
-        this.color = color ? color : "blue";
+    constructor() {
+        /*this.owner = owner;
+        this.color = color ? color : "blue";*/
     }
     
    /**

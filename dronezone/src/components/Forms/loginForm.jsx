@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/ui/logo";
 import { supabase } from "@/supabase/config.js";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router";
@@ -22,6 +22,12 @@ export function LoginForm() {
       toast.error(error.message);
       return;
     }
+
+    const { data: user } = await supabase.auth.getUser();
+
+    console.log("user id: ", user);
+
+    console.log("User data fetched from DB: ", user);
 
     dispatch(login({email: data.user.email, userID: data.user.id}));
     toast.success("You have been logged in");

@@ -1,10 +1,10 @@
-import { Header } from "@/components/header";
+import { Header } from "@/components/ui/header";
 import { useSelector  } from "react-redux";
 import { useState } from "react";
 //import MapSelector from "@/components/mapSelector";
 
 import Map from "@/components/Map/map";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/ui/footer";
 import LoggedInMap from "@/components/Map/loggedInMap";
 
 

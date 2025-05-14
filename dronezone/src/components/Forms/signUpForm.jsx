@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/ui/logo";
 import { supabase } from "@/supabase/config.js";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -112,8 +112,8 @@ export function SignUpForm() {
         <div className="flex space-x-4 mb-1">
           <input
             type="pnummer"
-            placeholder="SSN "
-            className="mb-4 px-4 py-1 border border-gray-300 rounded-md w-36 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:scale-105 transition-all duration-200"
+            placeholder="Personal Number "
+            className="mb-4 pl-3 py-1 border border-gray-300 rounded-md w-36 shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:scale-105 transition-all duration-200"
             value={pnummer}
             onChange={(e) => setPersonnummer(e.target.value)}
           />

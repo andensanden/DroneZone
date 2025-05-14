@@ -17,22 +17,21 @@ import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
 import { NodesProvider } from "@/mapScripts/nodesContext";
-import { DronepathsProvider } from "@/mapScripts/dronepathsContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
 import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
-import { DronepathHandler, EndFlight } from "@/mapScripts/dronepathHandler";
+import { EndFlight } from "@/mapScripts/dronepathHandler.js";
 
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
 import GPSToggleControl from "@/mapScripts/gpsToggleControl";
 import { DrawFlightPathMenu } from "./drawFlightPath";
 import { YourDevicesMenu } from "./yourDevicesMenu";
-import DashboardPanel from "../dashboard";
+import DashboardPanel from "./dashboard";
 import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
 import { WarningMode } from "./warningMode";
-import { SmallDashboard } from "../smallDashboard";
+import  SmallDashboard  from "./smallDashboard";
 
 //import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
 import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";
@@ -100,7 +99,7 @@ const LoggedInMap = () => {
 
   const handleLaunchClick = () => {
     setShowDashboard(true);
-    setLaunch(!launch);
+    //setLaunch(!launch);
   };
 
   const handleEndFlightClick = () => {
@@ -116,6 +115,8 @@ const LoggedInMap = () => {
       <MapContainer
         center={position}
         zoom={13}
+        minZoom={5}
+        maxZoom={18}
         style={{ height: "100%", width: "100%" }}
       >
         {/* Initializing the leaflet-map*/}
@@ -124,11 +125,8 @@ const LoggedInMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Activation of GPS functionality */}
-        <GPSToggleControl
-          trackingEnabled={trackingEnabled}
-          toggleTracking={toggleTracking}
-        />
+        {/* Recenter to current position */}
+        <GPSToggleControl/>
 
         {/* Testing the Dashboard*/}
         <div
@@ -162,10 +160,14 @@ const LoggedInMap = () => {
               />
             </div>
           )}
+
+        {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
         </InFlightProvider>
 
         {/* User tracking functionality*/}
-        <LocationTracker trackingEnabled={trackingEnabled} />
+        {!showDashboard && (
+          <LocationTracker trackingEnabled={trackingEnabled} />
+        )}
 
         {/* draw flight path Menu*/}
         {/*} {(!devicesMenuOpen || flightPathMenuOpen) && (
@@ -182,7 +184,7 @@ const LoggedInMap = () => {
         {(!flightPathMenuOpen || devicesMenuOpen) && (
           <YourDevicesMenu
             menuOpen={devicesMenuOpen}
-            bottom={devicesMenuOpen ? 40 + 170 : 40}
+            bottom={devicesMenuOpen ? 21 + 170 : 21}
             onToggleMenu={toggleDevicesMenu}
           />
         )}
@@ -201,18 +203,16 @@ const LoggedInMap = () => {
                 confirmFlightPath={confirmFlightPath}
                 setConfirmFlightPath={setConfirmFlightPath}
                 setDrawingMode={setDrawingMode}
-                bottom={flightPathMenuOpen ? 100 + 150 : 100}
+                bottom={flightPathMenuOpen ? 80 + 150 : 80}
+                showDashboard={showDashboard} 
               />
             )}
-            <DronepathsProvider>
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
-            <DronepathHandler/>
-            </DronepathsProvider>
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
           </NodesProvider>
         </ZonesProvider>
 
-        {showActiveDrones && <PopUpDrone  />}
+        
       </MapContainer>
       <WarningMode  />
     </div>

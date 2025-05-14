@@ -2,56 +2,39 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuSepar
 import {Button  } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TbDrone } from "react-icons/tb";
-import { BsPaperclip } from "react-icons/bs";
-import { FaPen } from "react-icons/fa";
-import { FaSave } from "react-icons/fa";
+import { FaPen, FaSave} from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabase/config";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/Redux/auth/authSlice";
+import { setAllDrones } from "@/Redux/gpsPos/gpsPosSlice";
+import { toast } from "react-toastify";
 
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export function AccountInfo() {
 
+  //States used for adding a device
   const [deviceName, setDeviceName] = useState("");
   const [deviceID, setDeviceID] = useState("");
-  const [devices, setDevices] = useState([]);
 
 
-//! Account info fetch from backend
   const dispatch = useDispatch();
-  const { firstname, lastname, phone, email } = useSelector((state) => state.auth);
-
-  useEffect(() => { 
-    const fetchData = async() => {
-
-    const { data, error } = await supabase.auth.getUser();
-
-    const respone = await fetch(`${backendURL}/api/auth/user/${data.user.id}`); //Fetching user data
-    const deviceRespone = await fetch(`${backendURL}/api/device/${data.user.id}`); //Fetching device data
-
-    const parsedData = await respone.json();
-    console.log(parsedData);
-    const parsedDeviceData = await deviceRespone.json()
-    
-    setDevices(parsedDeviceData)
-
-    dispatch(setUser(parsedData));
-  }
-
-  fetchData();
-  }, []);
+  const { firstname, lastname, phone, email, userID } = useSelector((state) => state.auth);
+  const { allDrones } = useSelector((state) => state.gpsPos);
 
 
-  //Add a drone device function
+  //Add a drone function
   async function addDevice() {
 
+    if (!deviceName || !deviceID) {
+      toast.error("Please fill in all fields")
+      return;
+    }
+  
     //Setting device state so UI is updated immediately when adding drone
-    setDevices([...devices, { deviceName, deviceID }])
-
-    const { data } = await supabase.auth.getUser();
+    dispatch(setAllDrones([...allDrones, { deviceName, deviceID }]))
 
     await fetch(`${backendURL}/api/device`, {
       method: "POST",
@@ -59,12 +42,14 @@ export function AccountInfo() {
         "Content-Type": "application/json",
         },
       body: JSON.stringify({
-        user_id: data.user.id,
+        user_id: userID,
         deviceName,
         deviceID,
       }),
     });
 
+    toast.success("Device added successfully")
+    
     setDeviceID("")
     setDeviceName("")
   }
@@ -77,6 +62,13 @@ export function AccountInfo() {
     });
 
     //TODO: Error checking for response
+    if (!response.ok) {
+      toast.error("Failed to remove device")
+      return;
+    }
+
+    toast.success("Device removed successfully")
+    dispatch(setAllDrones(allDrones.filter((device) => device.deviceID !== deviceID))) //deviceID is the id of the drone we want to remove
   }
     
   //TODO: User most be able to change their phone 
@@ -93,20 +85,21 @@ export function AccountInfo() {
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 disabled
-                value={`${firstname} ${lastname}`}
+                value={`${firstname || ""} ${lastname || ""}`}
               ></input>
 
               {/*Email presentation*/}
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 disabled
-                value={email}
+                value={email || ""}
               ></input>
 
               {/*Phone number presentation, is changable*/}
               <input
+                disabled
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
-                value={phone}
+                value={phone || ""}
                 id="phoneInput"
               ></input>
             </div>
@@ -132,15 +125,15 @@ export function AccountInfo() {
         {/*Devices column starts here. använd map funktion för att diplaya all drones */}
         <div className="md:ml-50 flex flex-col">
           <h2 className="text-3xl font-bold my-4 ">Devices</h2>
-          {devices.map((device)=> {
+          {allDrones.map((device)=> {
            return( 
-            <div className="flex flex-row items-center md:justify-center gap-2" key={device.deviceTableID}>
+            <div className="flex flex-row items-center md:justify-center gap-2" key={device.deviceID}>
               <input
                 className="bg-primary-white my-2 px-4 py-1 rounded-md shadow-lg hover:scale-105 transition-all duration-200"
                 disabled
                 value = {device.deviceName}
               />
-              <Button onClick={() => removeDevice(device.deviceTableID)} size="sm" className="bg-red-500 hover:bg-red-600 hover:scale-105 transition-all duration-200" >X</Button>
+              <Button onClick={() => removeDevice(device.deviceID)} size="sm" className="bg-red-500 hover:bg-red-600 hover:scale-105 transition-all duration-200 text-black" > <FaTrashCan size={15} /></Button>
             </div>
           )}
           )}
@@ -156,8 +149,6 @@ export function AccountInfo() {
             </DropdownMenuContent>
         </DropdownMenu>
         </div>
-
-        
       </div>
     </div>
   );
