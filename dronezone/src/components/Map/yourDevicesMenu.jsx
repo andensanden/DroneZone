@@ -53,7 +53,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
           {allDrones.map((deviceName, index)=> {
             return(
                 <div
-                  key={deviceName.deviceTableID}
+                  key={deviceName.deviceTableID ?? index}
                   className="flex justify-between items-center font-bold text-sm" >
                   <input
                     disabled

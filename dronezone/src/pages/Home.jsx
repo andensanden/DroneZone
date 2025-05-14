@@ -7,6 +7,7 @@ import Map from "@/components/Map/map";
 import { Footer } from "@/components/ui/footer";
 import LoggedInMap from "@/components/Map/loggedInMap";
 import { NodesProvider } from "@/mapScripts/nodesContext";
+import { InFlightProvider } from "@/components/Map/inFlightContext";
 
 
 export function Home() {
@@ -16,7 +17,9 @@ export function Home() {
     <>
       <Header />
         <NodesProvider>
+        <InFlightProvider>
           {isAuth ? <LoggedInMap /> : <Map/> }
+        </InFlightProvider>
         </NodesProvider>
       <Footer />
     </>
