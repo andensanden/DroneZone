@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router';
-import { Logo } from "@/components/ui/logo";
+import { LogoAnimated } from "../logoAnimated";
 import { GoChevronDown } from "react-icons/go";
 import { useState, useEffect, useRef } from 'react';
 
@@ -70,7 +70,7 @@ export function Footer() {
       </div>
 
       <div className="hidden sm:flex sm:items-center sm:justify-end lg:justify-end lg:items-center px-10 py-10">
-        <Logo />
+        <LogoAnimated />
       </div>
     </div>
   );
