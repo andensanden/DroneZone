@@ -13,6 +13,7 @@ import { SelectedDronepath } from "./selectedDronepath";
 import { useSelector, useDispatch } from "react-redux";
 import { useFlightMode } from "./inFlightContext";
 import { setCurrentDeviceID } from "@/Redux/gpsPos/gpsPosSlice";
+import { useNodes } from "@/mapScripts/nodesContext";
 
 
 import { createDronepathFromJSON, createSocketClient } from '@/mapScripts/dronepathHandler.js';
@@ -24,7 +25,6 @@ const droneIcon = new L.Icon({
   iconSize: [40, 40],
   iconAnchor: [20, 20],
 });
-
 
 function ArrowPolyline({ positions }) {
     const polylineRef = useRef();
@@ -55,6 +55,7 @@ export function PopUpDrone({ launch }) {
     const { userID } = useSelector((state) => state.auth);
     const { toggleMode } = useFlightMode();
     const dispatch = useDispatch();
+    const { setNodes } = useNodes();
 
     useEffect(() => {
         const handleZoom = () => setZoom(map.getZoom());
@@ -105,6 +106,7 @@ export function PopUpDrone({ launch }) {
               toggleMode();
               createSocketClient(dataObject.userID, dataObject.deviceID, dataObject.currentPosition, dataObject.dronePath, dispatch);
               activateDrone(dataObject.deviceID);
+              createActiveDronepath(dataObject.dronePath);
             }
           });
           hasChecked.current = true;
@@ -112,6 +114,11 @@ export function PopUpDrone({ launch }) {
 
         function activateDrone(droneID) {
           dispatch(setCurrentDeviceID(droneID));
+        }
+
+        function createActiveDronepath(dronepathJSON) {
+          const dronepath = createDronepathFromJSON(dronepathJSON);
+          setNodes(dronepath.nodes);
         }
       
         function getDroneID(activeDrone){
