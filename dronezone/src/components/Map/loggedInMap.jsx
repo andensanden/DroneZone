@@ -16,11 +16,11 @@ import "leaflet/dist/leaflet.css";
 import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
-import { NodesProvider } from "@/mapScripts/nodesContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
 import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
 import { EndFlight } from "@/mapScripts/dronepathHandler.js";
+import { useNodes } from "@/mapScripts/nodesContext";
 
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
@@ -47,6 +47,7 @@ const LoggedInMap = () => {
 
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const drones = ActiveDronesDisplayer();
+  const { clearNodes } = useNodes();
 
   //-----------------
   //For draw path menu
@@ -99,7 +100,7 @@ const LoggedInMap = () => {
 
   const handleLaunchClick = () => {
     setShowDashboard(true);
-    //setLaunch(!launch);
+    setLaunch(!launch);
   };
 
   const handleEndFlightClick = () => {
@@ -107,6 +108,7 @@ const LoggedInMap = () => {
     setLaunch(false);
     setResetTimerCounter(prev => prev + 1); // trigger reset
     EndFlight();
+    clearNodes();
   };
 
   return (
@@ -193,7 +195,6 @@ const LoggedInMap = () => {
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
                           setShowActiveDrones={setShowActiveDrones} />
-          <NodesProvider>
             {(!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
                 flightPathMenuOpen={flightPathMenuOpen}
@@ -209,7 +210,6 @@ const LoggedInMap = () => {
             )}
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
-          </NodesProvider>
         </ZonesProvider>
 
         

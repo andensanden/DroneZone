@@ -6,6 +6,7 @@ import { useState } from "react";
 import Map from "@/components/Map/map";
 import { Footer } from "@/components/ui/footer";
 import LoggedInMap from "@/components/Map/loggedInMap";
+import { NodesProvider } from "@/mapScripts/nodesContext";
 
 
 export function Home() {
@@ -14,7 +15,9 @@ export function Home() {
   return (
     <>
       <Header />
-        {isAuth ? <LoggedInMap /> : <Map/> }
+        <NodesProvider>
+          {isAuth ? <LoggedInMap /> : <Map/> }
+        </NodesProvider>
       <Footer />
     </>
   );
