@@ -1,8 +1,8 @@
-.logo-container {
+.logo-container:hover {
   position: relative;
   display: inline-block;
   text-align: center;
-  min-width: 150px; /* Ensure minimum width */
+  min-width: 150px; 
   left:150px;
 }
 
@@ -30,8 +30,10 @@
     height: 10px;
   }
 }
-
-.shadow {
+.shadow{
+  display: none;
+}
+.shadow:hover::after {
   position: absolute;
   top:100%;
   left: 10%;
@@ -43,7 +45,7 @@
   animation: shadow-resize 2s infinite ease-in-out;
 }
 
-.animate-bounce-up-and-down {
+.animate-bounce-up-and-down:hover {
   animation: bounce 2s infinite ease-in-out;
 }
 
@@ -75,7 +77,7 @@
 }
 
 /* Animation for the circles rotation in the dorne now for drone itself */
-.animate-rotate {
+.animate-rotate:hover {
   transform-box: fill-box;
   transform-origin: center;
   animation: animate-rotate 10s linear infinite;
