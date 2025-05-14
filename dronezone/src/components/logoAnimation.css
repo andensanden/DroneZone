@@ -73,7 +73,7 @@
   }
 }
 
-/* Animation for the circles rotation in the dorne */
+/* Animation for the circles rotation in the dorne now for drone itself */
 .animate-rotate {
   transform-box: fill-box;
   transform-origin: center;
