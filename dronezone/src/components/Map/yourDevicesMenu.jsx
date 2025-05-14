@@ -5,6 +5,9 @@ import { supabase } from "@/supabase/config";
 import { useSelector, useDispatch } from 'react-redux';
 import { setAllDrones, setCurrentDeviceID } from '@/Redux/gpsPos/gpsPosSlice';
 
+//Adding info question mark to the devices menu
+import { GoQuestion } from "react-icons/go";
+
 
 export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) {
   const navigate = useNavigate();
@@ -79,12 +82,25 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
                 )}
                 )}
 
-            <div className="font-bold text-sm" >
+            <div className="font-bold text-sm flex flex-row" >
               <button className='text-primary-yellow hover:scale-107 transition-all duration-200 px-1 py-1.5'
                onClick={() => navigate("/account")}>
               + Add New Device 
               </button>
+              <span>
+              <button className=" p-3 rounded-xl">
+              <GoQuestion
+                size={25}
+                className="text-gray-700  hover:scale-107 transition-all duration-200"
+                onClick={() => navigate("/info")}
+              />
+              {" "}
+              </button>
+            </span>
             </div>
+            {/*Adding info questionmark link */}
+            
+            
           </div>
         </div>
       )}

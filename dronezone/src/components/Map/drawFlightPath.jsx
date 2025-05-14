@@ -4,6 +4,10 @@ import { useEffect } from "react";
 import UndoButton from "@/mapScripts/undoButton";
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+
+//Adding info question mark to the devices menu
+import { GoQuestion } from "react-icons/go";
 
 export function DrawFlightPathMenu({
   flightPathMenuOpen,
@@ -18,6 +22,8 @@ export function DrawFlightPathMenu({
   const { undoLastNode, nodes, clearNodes } = useNodes();
   const map = useMap();
   const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
+  const navigate = useNavigate();
+
 
   // Hanterar ritläge beroende på meny- och bekräftelsestatus
   useEffect(() => {
@@ -135,6 +141,17 @@ export function DrawFlightPathMenu({
               }}
             >
               Clear Selection
+              {/*Adding info questionmark link */}
+              <span>
+              <button className=" p-3 rounded-xl">
+              <GoQuestion
+                size={25}
+                className="text-gray-700  hover:scale-107 transition-all duration-200"
+                onClick={() => navigate("/info")}
+              />
+              {" "}
+              </button>
+            </span>
             </div>
           </div>
         </div>
