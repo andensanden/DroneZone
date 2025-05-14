@@ -29,7 +29,7 @@ async function sendDronepathToDatabase(dronepath, position, currentDeviceID, dis
 
 export function createSocketClient(userID, currentDeviceID, positionJSON, dronepathJSON, dispatch) {
   if (droneClient) return;
-  
+
   droneClient = new DroneClient(userID, currentDeviceID, 
         positionJSON, dronepathJSON, dispatch);
   droneClient.clientInit();
@@ -71,4 +71,5 @@ export function createDronepathFromJSON(pathJSON) {
 export function EndFlight() {
     const temporaryFlightTime = 5;  // For testing, remove when actual time is added
     droneClient.endFlight(temporaryFlightTime);
+    droneClient = null;
 }
