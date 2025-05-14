@@ -99,9 +99,7 @@ const Map = () => {
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
 
-        <InFlightProvider>
           {showActiveDrones && <PopUpDrone />}
-        </InFlightProvider>
       </MapContainer>
     </div>
   );
