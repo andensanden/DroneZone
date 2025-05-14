@@ -1,24 +1,25 @@
-import React from 'react';
-import { useFlightMode } from './inFlightContext';
+import React from "react";
+import { useFlightMode } from "./inFlightContext";
 
+// Komponent för att avsluta en pågående flygning
 export function EndFlightButton({ onClick }) {
   const { toggleMode } = useFlightMode();
 
   const handleClick = () => {
-    toggleMode();
+    toggleMode(); // Växla flightMode (t.ex. "inFlight" → "drawFlight")
     if (onClick) {
-      onClick();
+      onClick(); // Kör eventuell extern funktion (t.ex. stänga paneler eller spara flygdata)
     }
   };
 
   return (
     <div
       style={{
-        position: 'absolute',
-        bottom: '3px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 1000
+        position: "absolute",
+        bottom: "3px",
+        left: "50%", // Centrerad horisontellt
+        transform: "translateX(-50%)",
+        zIndex: 1000, // Ser till att knappen ligger ovanpå andra element
       }}
     >
       <button

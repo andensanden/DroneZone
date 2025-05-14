@@ -27,11 +27,11 @@ import { HamburgerButton } from "./layerHamburgerMenu";
 import GPSToggleControl from "@/mapScripts/gpsToggleControl";
 import { DrawFlightPathMenu } from "./drawFlightPath";
 import { YourDevicesMenu } from "./yourDevicesMenu";
-import DashboardPanel from "../dashboard";
+import DashboardPanel from "./dashboard";
 import { LaunchButton } from "./launchButton";
 import { PopUpDrone } from "./popUpDrone";
 import { WarningMode } from "./warningMode";
-import { SmallDashboard } from "../smallDashboard";
+import  SmallDashboard  from "./smallDashboard";
 
 //import { getAllActiveDrones } from "../ActiveDrones/activeDronesDisplayer";
 import { ActiveDronesDisplayer } from "../ActiveDrones/activeDronesDisplayer";

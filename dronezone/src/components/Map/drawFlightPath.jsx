@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import UndoButton from "@/mapScripts/undoButton";
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
+import { IoLockOpenOutline, IoLockClosedOutline } from "react-icons/io5";
 
 
 export function DrawFlightPathMenu({
@@ -18,15 +19,16 @@ export function DrawFlightPathMenu({
 }) {
   const { undoLastNode, nodes, clearNodes } = useNodes();
   const map = useMap();
-const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
+  const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
 
+  // Hanterar ritläge beroende på meny- och bekräftelsestatus
   useEffect(() => {
     if (!flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0
+      setDrawingMode(null); // B3 = 0, Rensar ritläge
     } else if (flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode("path"); // B3 = 1
+      setDrawingMode("path"); // B3 = 1, Aktiverar ritläge
     } else if (flightPathMenuOpen && confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0
+      setDrawingMode(null); // B3 = 0, Slår av ritläge när flygväg är bekräftad
     }
   }, [flightPathMenuOpen, confirmFlightPath, setDrawingMode]);
 
@@ -34,32 +36,33 @@ const { position } = useSelector((state) => state.gpsPos); // Should be [lat, ln
     <div
       style={{
         position: "absolute",
-        bottom: `${bottom}px`, 
+        bottom: `${bottom}px`,
         left: "12px",
         zIndex: 1000,
         transition: "bottom 0.5s ease",
       }}
     >
+      {/* Huvudknapp för att toggla ritmenyn */}
       <button
-  onClick={() => {
-    const nextState = !flightPathMenuOpen;
+        onClick={() => {
+          const nextState = !flightPathMenuOpen;
 
-    onToggleMenu();
-    setFlightPathMenuOpen(nextState);
-    setDevicesMenuOpen(false);
+          onToggleMenu(); // Toggle meny
+          setFlightPathMenuOpen(nextState);
+          setDevicesMenuOpen(false); // Stänger en eventuell annan meny
 
-    if (
-      nextState &&
-      map &&
-      Array.isArray(position) &&
-      typeof position[0] === "number" &&
-      typeof position[1] === "number" &&
-      map.getZoom() < 14 
-    ) {
-      map.flyTo(position, 14);
-    }
-  }}
-
+          // Zoomar in på användarens position om kartan är för utzoomad
+          if (
+            nextState &&
+            map &&
+            Array.isArray(position) &&
+            typeof position[0] === "number" &&
+            typeof position[1] === "number" &&
+            map.getZoom() < 14
+          ) {
+            map.flyTo(position, 14); // Zooma in till nivå 14
+          }
+        }}
         className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
                     hover:scale-107 transition-all duration-200"
       >
@@ -67,6 +70,7 @@ const { position } = useSelector((state) => state.gpsPos); // Should be [lat, ln
         <GiPathDistance size={24} />
       </button>
 
+      {/* Undermenyn – visas endast om menyn är öppen */}
       {flightPathMenuOpen && (
         <div
           style={{
@@ -82,32 +86,33 @@ const { position } = useSelector((state) => state.gpsPos); // Should be [lat, ln
           }}
         >
           <div style={{ padding: "12px 16px" }}>
+            {/* Bekräfta flygväg */}
             <div
-              style={{
-                padding: "10px 0",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                borderBottom: "1px solid #ddd",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              <span>Confirm Flight Path</span>
-              <input
-                type="checkbox"
-                checked={confirmFlightPath}
-                onChange={() => {
-                  setConfirmFlightPath(!confirmFlightPath);
-                }}
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  accentColor: "#FFD700",
-                }}
-              />
-            </div>
-
+  onClick={() => setConfirmFlightPath(!confirmFlightPath)}
+  style={{
+    padding: "8px 0px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "8px", // Space between icon and text
+    //borderBottom: "1px solid #ddd",
+    fontWeight: "bold",
+    fontSize: "14px",
+    backgroundColor: "#FFFFFF", // Always white
+    borderRadius: "8px",
+    cursor: "pointer",
+    color: confirmFlightPath ? "#333333" : "#333333", 
+    transition: "color 0.2s ease",
+  }}
+>
+  <span>{confirmFlightPath ? "Edit Flight Path" : "Confirm Flight Path"}</span>
+  {confirmFlightPath ? (
+    <IoLockClosedOutline size={16}  />
+  ) : (
+    <IoLockOpenOutline size={16} />
+  )}
+</div>
+            {/* Ångra senaste nod */}
             <div
               onClick={undoLastNode} // Step 3 ✅
               style={{
@@ -120,6 +125,7 @@ const { position } = useSelector((state) => state.gpsPos); // Should be [lat, ln
               <UndoButton />
             </div>
 
+            {/* Rensa alla noder */}
             <div
               onClick={clearNodes}
               style={{

@@ -79,16 +79,18 @@ body {
   min-height: 100vh;
 }
 
+a {
+text-decoration-line: underline;
+}
+
 @apply 
 
-/*Starter CSS*/
-/* a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
+/** Starter CSS **/
+
+/* 
 a:hover {
   color: #535bf2;
+  text-decoration-line: underline;
 }
 
 h1 {
@@ -127,7 +129,7 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-} */
+}  */
 ;
 
 .dark {
