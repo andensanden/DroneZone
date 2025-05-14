@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import UndoButton from "@/mapScripts/undoButton";
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
+import { IoLockOpenOutline, IoLockClosedOutline } from "react-icons/io5";
+
 
 export function DrawFlightPathMenu({
   flightPathMenuOpen,
@@ -86,30 +88,30 @@ export function DrawFlightPathMenu({
           <div style={{ padding: "12px 16px" }}>
             {/* Bekräfta flygväg */}
             <div
-              style={{
-                padding: "10px 0",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                borderBottom: "1px solid #ddd",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              <span>Confirm Flight Path</span>
-              <input
-                type="checkbox"
-                checked={confirmFlightPath}
-                onChange={() => {
-                  setConfirmFlightPath(!confirmFlightPath);
-                }}
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  accentColor: "#FFD700",
-                }}
-              />
-            </div>
+  onClick={() => setConfirmFlightPath(!confirmFlightPath)}
+  style={{
+    padding: "8px 0px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "8px", // Space between icon and text
+    //borderBottom: "1px solid #ddd",
+    fontWeight: "bold",
+    fontSize: "14px",
+    backgroundColor: "#FFFFFF", // Always white
+    borderRadius: "8px",
+    cursor: "pointer",
+    color: confirmFlightPath ? "#333333" : "#333333", 
+    transition: "color 0.2s ease",
+  }}
+>
+  <span>{confirmFlightPath ? "Edit Flight Path" : "Confirm Flight Path"}</span>
+  {confirmFlightPath ? (
+    <IoLockClosedOutline size={16}  />
+  ) : (
+    <IoLockOpenOutline size={16} />
+  )}
+</div>
             {/* Ångra senaste nod */}
             <div
               onClick={undoLastNode} // Step 3 ✅
