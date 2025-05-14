@@ -16,9 +16,7 @@ import "leaflet/dist/leaflet.css";
 import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
-import { NodesProvider } from "@/mapScripts/nodesContext";
 import { InFlightProvider } from "./inFlightContext";
-//import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from "@/mapScripts/locationTracker";
 
 
@@ -93,7 +91,6 @@ const Map = () => {
 
         <ActiveDronesDisplayer/>
 
-        <NodesProvider>
         <ZonesProvider>
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
@@ -101,7 +98,6 @@ const Map = () => {
           {/*<MapClick drawingMode={drawingMode} />*/}
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
-        </NodesProvider>
 
         <InFlightProvider>
           {showActiveDrones && <PopUpDrone />}

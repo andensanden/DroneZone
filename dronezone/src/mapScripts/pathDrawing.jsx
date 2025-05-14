@@ -48,7 +48,7 @@ function MapClick({ drawingMode, isLaunched }) {
 
     useSyncedRef(nodesRef, nodes);
     useSyncedRef(zonesRef, zones);
-    useLaunch(isLaunched, nodes, setNodes, position, currentDeviceID, dispatch);
+    useLaunch(isLaunched, nodes, position, currentDeviceID, dispatch);
 
     return (
         <>
@@ -158,11 +158,10 @@ function useSyncedRef(ref, value) {
     }, [value]);
 }
 
-function useLaunch(isLaunched, nodes, setNodes, position, currentDeviceID, dispatch) {
+function useLaunch(isLaunched, nodes, position, currentDeviceID, dispatch) {
     useEffect(() => {
         if (isLaunched) {
             CreateDronepath(nodes, position, currentDeviceID, dispatch);
-            setNodes([]);
         }
     }, [isLaunched]);
 }
