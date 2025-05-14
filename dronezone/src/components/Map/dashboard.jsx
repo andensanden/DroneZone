@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useFlightTimer from './Map/dashboardTimer';
+import useFlightTimer from './dashboardTimer';
 
 const DashboardPanel = ({ data,launchActive,resetKey }) => {
 

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router';
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/ui/logo";
 import { GoChevronDown } from "react-icons/go";
 import { useState, useEffect, useRef } from 'react';
 
