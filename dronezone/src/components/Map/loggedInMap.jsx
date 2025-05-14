@@ -125,11 +125,8 @@ const LoggedInMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Activation of GPS functionality */}
-        <GPSToggleControl
-          trackingEnabled={trackingEnabled}
-          toggleTracking={toggleTracking}
-        />
+        {/* Recenter to current position */}
+        <GPSToggleControl/>
 
         {/* Testing the Dashboard*/}
         <div

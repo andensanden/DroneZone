@@ -86,13 +86,14 @@ export class DroneClient{
         });
   }
 
-  //Method for ending a flight
+  launchFlight() {
+    this.socket.emit("launchFlight");
+  }
 
   /**
    * Ends the flight and sends the flight time to the server.
    * @param {number} flightTime - The flight time in seconds.
    */
-
   endFlight(flightTime) {
     this.activeFlight = false;
     this.socket.emit("endFlight", 

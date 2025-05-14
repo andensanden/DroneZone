@@ -23,9 +23,16 @@ async function sendDronepathToDatabase(dronepath, position, currentDeviceID, dis
     const dronepathJSON = createPathJSON(dronepath);
     const positionJSON = createPathJSON(position);
     const userID = await getUserID();
-    droneClient = new DroneClient(userID, currentDeviceID, 
+    createSocketClient(userID, currentDeviceID, positionJSON, dronepathJSON, dispatch);
+    droneClient.launchFlight();
+}
+
+export function createSocketClient(userID, currentDeviceID, positionJSON, dronepathJSON, dispatch) {
+  if (droneClient) return;
+  
+  droneClient = new DroneClient(userID, currentDeviceID, 
         positionJSON, dronepathJSON, dispatch);
-    droneClient.clientInit();
+  droneClient.clientInit();
 }
 
 async function getUserID() {
