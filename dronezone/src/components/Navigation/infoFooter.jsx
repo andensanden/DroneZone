@@ -1,4 +1,4 @@
-import { Logo } from "@/components/ui/logo";
+import { LogoAnimated } from "@/components/logoAnimated";
 
 export function InfoFooter() {
   return (
@@ -13,7 +13,7 @@ export function InfoFooter() {
        
       </div>
       <div className="flex items-center justify-end p-5 pr-5 ">
-        <Logo />
+        <LogoAnimated />
       </div>
     </div>
   );
