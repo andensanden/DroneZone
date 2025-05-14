@@ -50,6 +50,7 @@ const LoggedInMap = () => {
   const { clearNodes } = useNodes();
   const { flightMode } = useFlightMode();
   const flightModeRef = useRef(flightMode);
+  const hasCheckedIfInFlight = useRef(false);
 
   //-----------------
   //For draw path menu
@@ -168,7 +169,7 @@ const LoggedInMap = () => {
             </div>
           )}
 
-        {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
+        {showActiveDrones && <PopUpDrone hasCheckedIfInFlight={hasCheckedIfInFlight}/>}
 
         {/* User tracking functionality*/}
         {!showDashboard && (
