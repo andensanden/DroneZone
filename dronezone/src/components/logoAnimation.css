@@ -1,8 +1,4 @@
-.logo-container {
-  /* display: flex;
-  justify-content: end;
-  align-items: center; */
-}
+
 
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
@@ -46,13 +42,13 @@
   transform: translateX(-50%);
   transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s cubic-bezier(0.4,0,0.2,1);
   display: none;
-}
+  }
 
 /* Animate shadow only on hover */
 .logo-container:hover .shadow {
   display:block;
   animation: shadow-resize 2s infinite ease-in-out;
-  overflow: hidden;
+  
 }
 
 .animate-bounce-up-and-down{
@@ -61,11 +57,7 @@
   transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
-  
-  /* animation: bounce 2s infinite ease-in-out; */
-
-
-/* Animate bounce only on hover */
+  /* Animate bounce only on hover */
 .logo-container:hover .animate-bounce-up-and-down {
   animation: bounce 2s infinite ease-in-out;
   display: flex;
