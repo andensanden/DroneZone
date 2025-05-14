@@ -1,5 +1,6 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { FaRegUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";

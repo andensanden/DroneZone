@@ -5,8 +5,8 @@ import UndoButton from "@/mapScripts/undoButton";
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-
-//Adding info question mark to the devices menu
+import { IoLockOpenOutline, IoLockClosedOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 import { GoQuestion } from "react-icons/go";
 
 export function DrawFlightPathMenu({
@@ -18,23 +18,29 @@ export function DrawFlightPathMenu({
   setConfirmFlightPath,
   setDrawingMode,
   bottom,
+  showDashboard
 }) {
+
   const { undoLastNode, nodes, clearNodes } = useNodes();
   const map = useMap();
-  const { position } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
+  const { position, currentDeviceID } = useSelector((state) => state.gpsPos); // Should be [lat, lng]
   const navigate = useNavigate();
-
 
   // Hanterar ritläge beroende på meny- och bekräftelsestatus
   useEffect(() => {
-    if (!flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0, Rensar ritläge
-    } else if (flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode("path"); // B3 = 1, Aktiverar ritläge
-    } else if (flightPathMenuOpen && confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0, Slår av ritläge när flygväg är bekräftad
+    if (showDashboard) {
+      setDrawingMode(null); // ✅ Disable drawing completely during flight or dashboard
+      return;
     }
-  }, [flightPathMenuOpen, confirmFlightPath, setDrawingMode]);
+
+    if (!flightPathMenuOpen && !confirmFlightPath) {
+      setDrawingMode(null);
+    } else if (flightPathMenuOpen && !confirmFlightPath) {
+      setDrawingMode("path");
+    } else if (flightPathMenuOpen && confirmFlightPath) {
+      setDrawingMode(null);
+    }
+  }, [flightPathMenuOpen, confirmFlightPath, setDrawingMode, showDashboard]);
 
   return (
     <div
@@ -67,7 +73,7 @@ export function DrawFlightPathMenu({
             map.flyTo(position, 14); // Zooma in till nivå 14
           }
         }}
-        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm 
+        className="bg-primary-yellow py-[10px] px-[16px] rounded-xl cursor-default font-bold text-sm flex items-center gap-[30px] shadow-sm
                     hover:scale-107 transition-all duration-200"
       >
         <span className="hidden md:block">Draw Flight Path</span>
@@ -92,29 +98,29 @@ export function DrawFlightPathMenu({
           <div style={{ padding: "12px 16px" }}>
             {/* Bekräfta flygväg */}
             <div
+              onClick={() => handleConfirmFlightPath()}
               style={{
-                padding: "10px 0",
+                padding: "8px 0px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                borderBottom: "1px solid #ddd",
+                gap: "8px", // Space between icon and text
+                //borderBottom: "1px solid #ddd",
                 fontWeight: "bold",
                 fontSize: "14px",
+                backgroundColor: "#FFFFFF", // Always white
+                borderRadius: "8px",
+                cursor: "pointer",
+                color: confirmFlightPath ? "#333333" : "#333333",
+                transition: "color 0.2s ease",
               }}
             >
-              <span>Confirm Flight Path</span>
-              <input
-                type="checkbox"
-                checked={confirmFlightPath}
-                onChange={() => {
-                  setConfirmFlightPath(!confirmFlightPath);
-                }}
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  accentColor: "#FFD700",
-                }}
-              />
+              <span>{confirmFlightPath ? "Edit Flight Path" : "Confirm Flight Path"}</span>
+              {confirmFlightPath ? (
+                <IoLockClosedOutline size={16} />
+              ) : (
+                <IoLockOpenOutline size={16} />
+              )}
             </div>
             {/* Ångra senaste nod */}
             <div
@@ -143,19 +149,33 @@ export function DrawFlightPathMenu({
               Clear Selection
               {/*Adding info questionmark link */}
               <span>
-              <button className=" p-3 rounded-xl">
-              <GoQuestion
-                size={25}
-                className="text-gray-700  hover:scale-107 transition-all duration-200"
-                onClick={() => navigate("/info")}
-              />
-              {" "}
-              </button>
-            </span>
+                <button className=" p-3 rounded-xl">
+                  <GoQuestion
+                    size={25}
+                    className="text-gray-700  hover:scale-107 transition-all duration-200"
+                    onClick={() => navigate("/info")}
+                  />
+                </button>
+              </span>
             </div>
           </div>
         </div>
       )}
     </div>
   );
+
+  //Logic for handling and confirming flight
+  function handleConfirmFlightPath() {
+    if (!currentDeviceID) {
+      toast.error("Please select a device");
+      return;
+    }
+    setConfirmFlightPath(!confirmFlightPath);
+  }
 }
+
+
+
+
+ 
+
