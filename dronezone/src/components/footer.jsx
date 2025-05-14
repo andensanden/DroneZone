@@ -1,4 +1,4 @@
-import { LogoFooter } from "@/components/logoFooter";
+import { LogoAnimated } from "@/components/logoAnimated";
 
 export function Footer() {
   return (
@@ -23,7 +23,7 @@ export function Footer() {
         </div>
       </div>
       <div className="hidden sm:flex sm:items-start sm:justify-end lg:items-center p-10 ">
-        <LogoFooter />
+        <LogoAnimated />
       </div>
     </div>
   );

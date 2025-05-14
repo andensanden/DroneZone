@@ -1,6 +1,6 @@
 import './logoAnimation.css';
 
-export function LogoFooter() {
+export function LogoAnimated() {
   return (
       <div className="logo-container">
           
