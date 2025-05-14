@@ -3,7 +3,7 @@
   display: inline-block;
   text-align: center;
   min-width: 150px; /* Ensure minimum width */
-  left:150px;
+  left: 150px;
 }
 
 /* Responsive adjustments */
@@ -12,7 +12,6 @@
     width: 20%;
     height: 20%;
   }
-  
   .shadow {
     width: 40px;
     height: 15px;
@@ -24,7 +23,6 @@
     width: 10%;
     height: 10%;
   }
-  
   .shadow {
     width: 30px;
     height: 10px;
@@ -33,17 +31,30 @@
 
 .shadow {
   position: absolute;
-  top:100%;
+  top: 100%;
   left: 10%;
   width: 50px;
   height: 20px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   transform: translateX(-50%);
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s cubic-bezier(0.4,0,0.2,1);
+  display: none;
+}
+
+/* Animate shadow only on hover */
+.logo-container:hover .shadow {
+  display:block;
   animation: shadow-resize 2s infinite ease-in-out;
 }
 
 .animate-bounce-up-and-down {
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  /* animation: bounce 2s infinite ease-in-out; */
+}
+
+/* Animate bounce only on hover */
+.logo-container:hover .animate-bounce-up-and-down {
   animation: bounce 2s infinite ease-in-out;
 }
 
@@ -74,10 +85,15 @@
   }
 }
 
-/* Animation for the circles rotation in the dorne now for drone itself */
 .animate-rotate {
   transform-box: fill-box;
   transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  /* animation: animate-rotate 10s linear infinite; */
+}
+
+/* Animate rotation only on hover */
+.logo-container:hover .animate-rotate {
   animation: animate-rotate 10s linear infinite;
 }
 
