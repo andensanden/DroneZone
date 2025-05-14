@@ -11,7 +11,7 @@ export function InfolineInfo() {
       {/* 🔶 Header */}
       <div className="bg-primary-yellow pl-5 md:text-center py-12">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
-          How to Navigate in DroneZone
+          How to Navigate the DroneZone
         </h2>
         <h5 className="font-bold text-sm md:text-xl">
           Here is a quick overview of the key features and how to navigate
@@ -23,12 +23,18 @@ export function InfolineInfo() {
       <div className="flex flex-col md:flex-row gap-10 md:gap-20 p-10 justify-center">
         {/* 🔹 Register Section */}
         <div className="flex flex-col md:w-72">
-          <h2 className="font-bold text-xl mb-3">Register your drone</h2>
+          <h2 className="font-bold text-xl mb-3">Register Your Drone</h2>
           <p className="text-sm mb-2 flex justify-between">
-            Can be done under My Account <FaRegUser size={20} />
+            Click on the button to the top right to register a new user
+            or log in.  <FaRegUser size={20} />
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            And also in Your Devices on the homepage{" "}
+            Click on "Account" to view your user information and devices.
+            <FaRegUser size={20} />
+          </p>
+          <p className="text-sm mb-2 flex justify-between">
+            Click on the "Add new Drone" button and enter:
+            the device's name and drone ID.{" "}
             <img
               src={icon}
               alt="Drone icon"
@@ -41,30 +47,31 @@ export function InfolineInfo() {
         <div className="flex flex-col md:w-72">
           <h2 className="font-bold text-xl mb-3">Draw your flight</h2>
           <p className="text-sm mb-2 flex justify-between">
-            Draw your planned flight path with nodes{" "}
+            Click the "Your Devices" button in order to select the drone which you will fly. If you have not 
+            added it yet, please click " + Add New Device".{" "}
             <GiPathDistance size={30} />
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            Use the Undo button to remove the last node you placed
+            Click the "Draw Flight Path" button to begin drawing your flight path. Please "Confirm Flight Path" to 
+            lock in your path. 
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            Confirm the flight path when you are done
+          Finally use the "Launch" at time of takeoff. Enjoy the DroneZone! 
           </p>
         </div>
 
         {/* 🔹 Layers Section */}
         <div className="flex flex-col md:w-72">
-          <h2 className="font-bold text-xl mb-3">Choose your layers</h2>
+          <h2 className="font-bold text-xl mb-3">Map</h2>
           <p className="text-sm mb-2 flex justify-between">
-            You can choose what you want to be displayed on your map with Layers{" "}
+            You can toggle what you want to display on your map, active drones, restricted zones and your current location.{" "}
             <IoMenu size={40} className="text-primary-yellow" />
           </p>
           <ul className="list-disc text-sm space-y-1 pl-5">
-            <li>Active Drones that are near</li>
-            <li>Restricted Zones where you can’t fly</li>
+            <li>Active drones: shows all active drones, click on a drone to select it and display its detailed information and flightpath</li>
+            <li>Restricted Zones: shows all of the zones in which you are not allowed to fly</li>
             <li className="relative pr-8">
-              Current Location: your own coordinates, toggleable in the upper
-              left corner
+              Current Location: shows your current location
               <MdMyLocation size={25} className="absolute right-0 top-0" />
             </li>
           </ul>
