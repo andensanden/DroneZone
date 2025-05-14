@@ -1,6 +1,6 @@
 import { Header } from "@/components/ui/header";
 import { InfolineInfo } from "@/components/Navigation/InfoInfo";
-import { InfoFooter } from "@/components/Navigation/infoFooter";
+import { Footer } from "@/components/footer";
 
 
 
@@ -9,7 +9,7 @@ export function Info() {
     <>
       <Header />
         <InfolineInfo/>
-      <InfoFooter />
+      <Footer />
     </>
   )
 } 
