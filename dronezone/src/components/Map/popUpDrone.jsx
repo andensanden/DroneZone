@@ -43,7 +43,7 @@ function ArrowPolyline({ positions }) {
     return <Polyline ref={polylineRef} positions={positions} color="gray" weight={2} />;
 }
 
-export function PopUpDrone({ launch }) {
+export function PopUpDrone({ hasCheckedIfInFlight }) {
     const [hoveredDrone, setHoveredDrone] = useState(null);
     const [clickedDrone, setClickedDrone] = useState(null);
     const selectedDrone = clickedDrone || hoveredDrone;
@@ -51,7 +51,6 @@ export function PopUpDrone({ launch }) {
     const map = useMap();
     const [zoom, setZoom] = useState(map.getZoom());
     const [allActiveDrones, setAllActiveDrones] = useState([]);
-    const hasChecked = useRef(false);
     const { userID } = useSelector((state) => state.auth);
     const { toggleMode } = useFlightMode();
     const dispatch = useDispatch();
@@ -96,7 +95,7 @@ export function PopUpDrone({ launch }) {
       
         async function updateActiveDrones() {
           const data = await fetchData();
-          if (!hasChecked.current) checkIfUserIsInFlight(data);
+          if (!hasCheckedIfInFlight.current) checkIfUserIsInFlight(data);
           buildActiveDrones(data);
         };
 
@@ -109,7 +108,7 @@ export function PopUpDrone({ launch }) {
               createActiveDronepath(dataObject.dronePath);
             }
           });
-          hasChecked.current = true;
+          hasCheckedIfInFlight.current = true;
         }
 
         function activateDrone(droneID) {

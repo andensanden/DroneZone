@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //--------- LEAFLET------------
 
@@ -51,6 +51,7 @@ const Map = () => {
   const [drawingMode, setDrawingMode] = useState("path");
   const position = [59.3293, 18.0686]; // Stockholm coordinates
   const [showActiveDrones, setShowActiveDrones] = useState(true);
+  const hasCheckedIfInFlight = useRef(false);
   
 
   const toggleTracking = () => {
@@ -99,7 +100,7 @@ const Map = () => {
           <ForbiddenZoneDrawing drawingMode={drawingMode} />
         </ZonesProvider>
 
-          {showActiveDrones && <PopUpDrone />}
+          {showActiveDrones && <PopUpDrone hasCheckedIfInFlight={hasCheckedIfInFlight}/>}
       </MapContainer>
     </div>
   );
