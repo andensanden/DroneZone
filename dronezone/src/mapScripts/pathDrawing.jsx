@@ -37,9 +37,6 @@ function MapClick({ drawingMode, isLaunched }) {
 
             CreateNode(e, setNodes);
         }
-        else if (drawingMode === 'remove') {
-           RemoveNode(e, nodes, setNodes);
-        }
     }
 
     usePathAndBuffer(nodes, setPaths, setBufferZones);
@@ -67,17 +64,6 @@ function MapClick({ drawingMode, isLaunched }) {
 function CreateNode(e, setNodes) {
     const newNode = new Node(e.latlng);
     newNode.addNode(setNodes);
-}
-
-function RemoveNode(e, nodes, setNodes) {
-    const index = nodes.findIndex(node => e.latlng.distanceTo(node.position) <= node.radius);
-    if (index === -1) return;
-
-    for (var node in nodes) {
-        if (ClickOnNode(e, node)) {
-            node.removeNode(setNodes);
-        }
-    }
 }
 
 /**
@@ -224,11 +210,6 @@ function CreateBufferCoords(coords, widthMeters) {
     ]);
     
     return leftSide.concat(rightSide.reverse());
-}
-
-function ClickOnNode(e, node) {
-    const dist = e.latlng.distanceTo(node.position);
-    return dist <= node.radius;
 }
 
 export default MapClick;
