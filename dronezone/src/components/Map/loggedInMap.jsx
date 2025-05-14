@@ -187,7 +187,7 @@ const LoggedInMap = () => {
           />
         )} */}
 
-        {(!flightPathMenuOpen || devicesMenuOpen) && (
+        {(flightMode === "drawFlightMode") && (!flightPathMenuOpen || devicesMenuOpen) && (
           <YourDevicesMenu
             menuOpen={devicesMenuOpen}
             bottom={devicesMenuOpen ? 21 + 170 : 21}
@@ -199,7 +199,7 @@ const LoggedInMap = () => {
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
                           setShowActiveDrones={setShowActiveDrones} />
-            {(!devicesMenuOpen || flightPathMenuOpen) && (
+            {(flightMode === "drawFlightMode") && (!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
                 flightPathMenuOpen={flightPathMenuOpen}
                 onToggleMenu={toggleFlightPathMenu}
