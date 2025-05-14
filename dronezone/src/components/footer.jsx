@@ -7,7 +7,9 @@ export function Footer() {
         <div className="flex flex-col">
           <h2 className="font-bold text-xl">Contact</h2>
           <p className="text-lg text-gray-400">
-            <a href="mailto:teameliza@proton.me"> teameliza@proton.me </a>
+            <a href="mailto:teameliza@proton.me" className="text-blue-500 hover:underline">
+              teameliza@proton.me
+            </a>
           </p>
         </div>
         <div className="flex flex-col">
