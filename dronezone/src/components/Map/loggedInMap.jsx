@@ -115,6 +115,8 @@ const LoggedInMap = () => {
       <MapContainer
         center={position}
         zoom={13}
+        minZoom={5}
+        maxZoom={18}
         style={{ height: "100%", width: "100%" }}
       >
         {/* Initializing the leaflet-map*/}
@@ -123,11 +125,8 @@ const LoggedInMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Activation of GPS functionality */}
-        <GPSToggleControl
-          trackingEnabled={trackingEnabled}
-          toggleTracking={toggleTracking}
-        />
+        {/* Recenter to current position */}
+        <GPSToggleControl/>
 
         {/* Testing the Dashboard*/}
         <div
@@ -161,6 +160,8 @@ const LoggedInMap = () => {
               />
             </div>
           )}
+
+        {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
         </InFlightProvider>
 
         {/* User tracking functionality*/}
@@ -210,7 +211,7 @@ const LoggedInMap = () => {
           </NodesProvider>
         </ZonesProvider>
 
-        {showActiveDrones && <PopUpDrone  />}
+        
       </MapContainer>
       <WarningMode  />
     </div>

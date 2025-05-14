@@ -14,8 +14,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
   const dispatch = useDispatch();
   const { allDrones, currentDeviceID } = useSelector((state) => state.gpsPos);
 
-  useEffect(() => { 
-
+  useEffect(() => {
       const fetchData = async() => {
 
         const { data, error } = await supabase.auth.getUser();
@@ -24,8 +23,6 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
 
         const parsedDeviceData = await deviceRespone.json()
         dispatch(setAllDrones(parsedDeviceData));
-        
-        
       }
       fetchData();
       }, []);

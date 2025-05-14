@@ -17,6 +17,7 @@ import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
 import { NodesProvider } from "@/mapScripts/nodesContext";
+import { InFlightProvider } from "./inFlightContext";
 //import MapClick from '@/mapScripts/pathDrawing';
 import LocationTracker from "@/mapScripts/locationTracker";
 
@@ -74,6 +75,8 @@ const Map = () => {
       <MapContainer
         center={position}
         zoom={13}
+        minZoom={5}
+        maxZoom={18}
         style={{ height: "100%", width: "100%" }}
       >
         {/* Initializing the leaflet-map*/}
@@ -82,11 +85,8 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Activation of GPS functionality */}
-        <GPSToggleControl
-          trackingEnabled={trackingEnabled}
-          toggleTracking={toggleTracking}
-        />
+        {/* Recenter to current position */}
+        <GPSToggleControl/>
 
         {/* User tracking functionality*/}
         <LocationTracker trackingEnabled={trackingEnabled} />
@@ -103,7 +103,9 @@ const Map = () => {
         </ZonesProvider>
         </NodesProvider>
 
-        {showActiveDrones && <PopUpDrone />}
+        <InFlightProvider>
+          {showActiveDrones && <PopUpDrone />}
+        </InFlightProvider>
       </MapContainer>
     </div>
   );
