@@ -14,6 +14,7 @@ export function DrawFlightPathMenu({
   setConfirmFlightPath,
   setDrawingMode,
   bottom,
+  showDashboard
 }) {
   const { undoLastNode, nodes, clearNodes } = useNodes();
   const map = useMap();
@@ -21,14 +22,20 @@ export function DrawFlightPathMenu({
 
   // Hanterar ritläge beroende på meny- och bekräftelsestatus
   useEffect(() => {
-    if (!flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0, Rensar ritläge
-    } else if (flightPathMenuOpen && !confirmFlightPath) {
-      setDrawingMode("path"); // B3 = 1, Aktiverar ritläge
-    } else if (flightPathMenuOpen && confirmFlightPath) {
-      setDrawingMode(null); // B3 = 0, Slår av ritläge när flygväg är bekräftad
-    }
-  }, [flightPathMenuOpen, confirmFlightPath, setDrawingMode]);
+  if ( showDashboard) {
+    setDrawingMode(null); // ✅ Disable drawing completely during flight or dashboard
+    return;
+  }
+
+  if (!flightPathMenuOpen && !confirmFlightPath) {
+    setDrawingMode(null);
+  } else if (flightPathMenuOpen && !confirmFlightPath) {
+    setDrawingMode("path");
+  } else if (flightPathMenuOpen && confirmFlightPath) {
+    setDrawingMode(null);
+  }
+}, [flightPathMenuOpen, confirmFlightPath, setDrawingMode, showDashboard]);
+
 
   return (
     <div
