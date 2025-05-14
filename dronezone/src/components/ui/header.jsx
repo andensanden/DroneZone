@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router";
 import { GrLogin } from "react-icons/gr";
 import { useSelector, useDispatch } from "react-redux";
-import { LoginDropDown } from "@/components/loginDropDown";
+import { LoginDropDown } from "@/components/ui/loginDropDown";
 import { LuInbox } from "react-icons/lu";
 import { GoQuestion } from "react-icons/go";
-import { NavigationMenu } from "./navigationMenu";
+import { NavigationMenu } from "../Navigation/navigationMenu";
 
 export function Header() {
   const navigate = useNavigate();

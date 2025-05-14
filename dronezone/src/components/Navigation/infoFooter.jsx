@@ -1,4 +1,4 @@
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/ui/logo";
 
 export function InfoFooter() {
   return (
