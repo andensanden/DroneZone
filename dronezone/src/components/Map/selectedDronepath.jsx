@@ -1,5 +1,4 @@
 import { DrawDronepath } from "@/mapScripts/drawFunctions";
-import { GiConsoleController } from "react-icons/gi";
 
 export function SelectedDronepath({ selectedDrone, hoveredDrone }) {
     let drone;

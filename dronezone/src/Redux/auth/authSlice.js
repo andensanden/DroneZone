@@ -19,9 +19,12 @@ const authSlice = createSlice({
             state.userID = null;
         },
         login(state, action) {
-            const {email, userID} = action.payload;
+            const {email, userID, firstname, lastname, phone} = action.payload;
 
             state.isAuth = true;
+            state.firstname = firstname;
+            state.lastname = lastname;
+            state.phone = phone;
             state.email = email;
             state.userID = userID;
         },

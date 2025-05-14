@@ -1,9 +1,8 @@
 import React from "react";
-import { useFlightMode } from "./inFlightContext"; // Adjust the path as necessary
+import { useFlightMode } from "./inFlightContext";
 import { EndFlightButton } from "./endFlightButton";
 import { useSelector } from "react-redux";
 
-// Huvudkomponent som visar antingen "Launch" eller "End Flight"-knappen
 export function LaunchButton({ onLaunchClick, onEndClick }) {
   const { flightMode, toggleMode } = useFlightMode();
   const { currentDeviceID } = useSelector((state) => state.gpsPos);
@@ -18,7 +17,6 @@ export function LaunchButton({ onLaunchClick, onEndClick }) {
         zIndex: 1000,
       }}
     >
-      {/* 🔄 Visa Launch eller End Flight beroende på flygläge (och om enhet finns) */}
       {currentDeviceID &&
         (flightMode === "drawFlightMode" ? (
           <ButtonStart onClick={onLaunchClick} toggleMode={toggleMode} />
@@ -30,11 +28,10 @@ export function LaunchButton({ onLaunchClick, onEndClick }) {
 }
 
 function ButtonStart({ onClick, toggleMode }) {
-  // Hanterar klick på Launch-knappen
   const handleClick = () => {
-    toggleMode(); // Växla från ritläge till flygläge
+    toggleMode();
     if (onClick) {
-      onClick(); // Eventuell extern funktion (t.ex. starta timer eller öppna dashboard)
+      onClick();
     }
   };
 

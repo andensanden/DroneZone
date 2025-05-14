@@ -17,8 +17,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
   const dispatch = useDispatch();
   const { allDrones, currentDeviceID } = useSelector((state) => state.gpsPos);
 
-  useEffect(() => { 
-
+  useEffect(() => {
       const fetchData = async() => {
 
         const { data, error } = await supabase.auth.getUser();
@@ -27,8 +26,6 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
 
         const parsedDeviceData = await deviceRespone.json()
         dispatch(setAllDrones(parsedDeviceData));
-        
-        
       }
       fetchData();
       }, []);
@@ -59,7 +56,7 @@ export function YourDevicesMenu({ menuOpen, setMenuOpen,bottom, onToggleMenu }) 
           {allDrones.map((deviceName, index)=> {
             return(
                 <div
-                  key={deviceName.deviceTableID}
+                  key={deviceName.deviceTableID ?? index}
                   className="flex justify-between items-center font-bold text-sm" >
                   <input
                     disabled
