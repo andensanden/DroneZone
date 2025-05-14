@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //--------- LEAFLET------------
 
@@ -16,11 +16,11 @@ import "leaflet/dist/leaflet.css";
 import DrawingModeControl from "@/mapScripts/drawingModeControl";
 import ForbiddenZoneDrawing from "@/mapScripts/forbiddenZoneDrawing";
 import { ZonesProvider } from "@/mapScripts/zonesContext";
-import { NodesProvider } from "@/mapScripts/nodesContext";
 import MapClick from "@/mapScripts/pathDrawing";
 import LocationTracker from "@/mapScripts/locationTracker";
-import { InFlightProvider } from "./inFlightContext"; // Adjust the path as necessary
+import { InFlightProvider, useFlightMode } from "./inFlightContext";
 import { EndFlight } from "@/mapScripts/dronepathHandler.js";
+import { useNodes } from "@/mapScripts/nodesContext";
 
 //--------------- UI Components -----------
 import { HamburgerButton } from "./layerHamburgerMenu";
@@ -47,6 +47,9 @@ const LoggedInMap = () => {
 
   const [showActiveDrones, setShowActiveDrones] = useState(true);
   const drones = ActiveDronesDisplayer();
+  const { clearNodes } = useNodes();
+  const { flightMode } = useFlightMode();
+  const flightModeRef = useRef(flightMode);
 
   //-----------------
   //For draw path menu
@@ -98,8 +101,7 @@ const LoggedInMap = () => {
   const [showDashboard, setShowDashboard] = useState(false);
 
   const handleLaunchClick = () => {
-    setShowDashboard(true);
-    //setLaunch(!launch);
+    setLaunch(!launch);
   };
 
   const handleEndFlightClick = () => {
@@ -107,7 +109,13 @@ const LoggedInMap = () => {
     setLaunch(false);
     setResetTimerCounter(prev => prev + 1); // trigger reset
     EndFlight();
+    clearNodes();
   };
+
+  useEffect(() => {
+    flightModeRef.current = flightMode;
+    setShowDashboard(flightModeRef.current === "inFlightMode" ? true : false);
+  }, [flightMode]);
 
   return (
     //Overall map component generation with styling
@@ -137,7 +145,6 @@ const LoggedInMap = () => {
             zIndex: 1000,
           }}
         ></div>
-        <InFlightProvider>
           <LaunchButton onLaunchClick={handleLaunchClick} onEndClick={handleEndFlightClick} />
           {showDashboard && (
             <div
@@ -162,7 +169,6 @@ const LoggedInMap = () => {
           )}
 
         {showActiveDrones && <PopUpDrone launch={handleLaunchClick}/>}
-        </InFlightProvider>
 
         {/* User tracking functionality*/}
         {!showDashboard && (
@@ -181,7 +187,7 @@ const LoggedInMap = () => {
           />
         )} */}
 
-        {(!flightPathMenuOpen || devicesMenuOpen) && (
+        {(flightMode === "drawFlightMode") && (!flightPathMenuOpen || devicesMenuOpen) && (
           <YourDevicesMenu
             menuOpen={devicesMenuOpen}
             bottom={devicesMenuOpen ? 21 + 170 : 21}
@@ -193,8 +199,7 @@ const LoggedInMap = () => {
           {/* This is the overlay HAMBURGER button */}
           <HamburgerButton position={position} trackingEnabled={trackingEnabled} setTrackingEnabled={setTrackingEnabled} showActiveDrones={showActiveDrones}
                           setShowActiveDrones={setShowActiveDrones} />
-          <NodesProvider>
-            {(!devicesMenuOpen || flightPathMenuOpen) && (
+            {(flightMode === "drawFlightMode") && (!devicesMenuOpen || flightPathMenuOpen) && (
               <DrawFlightPathMenu
                 flightPathMenuOpen={flightPathMenuOpen}
                 onToggleMenu={toggleFlightPathMenu}
@@ -209,7 +214,6 @@ const LoggedInMap = () => {
             )}
             <MapClick drawingMode={drawingMode} isLaunched={launch} />
             <ForbiddenZoneDrawing drawingMode={drawingMode} />
-          </NodesProvider>
         </ZonesProvider>
 
         
