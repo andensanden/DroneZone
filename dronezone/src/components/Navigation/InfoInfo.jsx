@@ -25,21 +25,17 @@ export function InfolineInfo() {
         <div className="flex flex-col md:w-72">
           <h2 className="font-bold text-xl mb-3">Register Your Drone</h2>
           <p className="text-sm mb-2 flex justify-between">
-            Click on the button to the top right to register a new user
-            or log in.  <FaRegUser size={20} />
+            <> <FaRegUser size={20} /> Click on the button to the top right to register a new user or log in. </>
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            Click on "Account" to view your user information and devices.
-            <FaRegUser size={20} />
+            <> <FaRegUser size={20} /> Click on "Account" to view your user information and devices. </>
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            Click on the "Add new Drone" button and enter:
-            the device's name and drone ID.{" "}
-            <img
+            <> <img
               src={icon}
               alt="Drone icon"
               style={{ width: "22px", height: "22px" }}
-            />
+            /> Click on the "Add new Drone" button and enter: the device's name and drone ID. </>
           </p>
         </div>
 
@@ -47,16 +43,13 @@ export function InfolineInfo() {
         <div className="flex flex-col md:w-72">
           <h2 className="font-bold text-xl mb-3">Draw your flight</h2>
           <p className="text-sm mb-2 flex justify-between">
-            Click the "Your Devices" button in order to select the drone which you will fly. If you have not 
-            added it yet, please click " + Add New Device".{" "}
-            <GiPathDistance size={30} />
+            <> <GiPathDistance size={30} /> Click the "Your Devices" button in order to select the drone which you will fly. If you have not added it yet, please click " + Add New Device". </>
           </p>
           <p className="text-sm mb-2 flex justify-between">
-            Click the "Draw Flight Path" button to begin drawing your flight path. Please "Confirm Flight Path" to 
-            lock in your path. 
+            Click the "Draw Flight Path" button to begin drawing your flight path. Please "Confirm Flight Path" to lock in your path.
           </p>
           <p className="text-sm mb-2 flex justify-between">
-          Finally use the "Launch" at time of takeoff. Enjoy the DroneZone! 
+            Finally use the "Launch" at time of takeoff. Enjoy the DroneZone!
           </p>
         </div>
 
@@ -64,8 +57,7 @@ export function InfolineInfo() {
         <div className="flex flex-col md:w-72">
           <h2 className="font-bold text-xl mb-3">Map</h2>
           <p className="text-sm mb-2 flex justify-between">
-            You can toggle what you want to display on your map, active drones, restricted zones and your current location.{" "}
-            <IoMenu size={40} className="text-primary-yellow" />
+            <> <IoMenu size={40} className="text-primary-yellow" /> You can toggle what you want to display on your map, active drones, restricted zones and your current location. </>
           </p>
           <ul className="list-disc text-sm space-y-1 pl-5">
             <li>Active drones: shows all active drones, click on a drone to select it and display its detailed information and flightpath</li>
